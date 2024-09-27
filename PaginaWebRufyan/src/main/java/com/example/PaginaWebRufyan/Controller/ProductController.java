@@ -40,6 +40,7 @@ public class ProductController {
 		Optional<Product> optionalProduct = productService.retrieveProductById(id);
 		if(optionalProduct.isPresent()) {
 			System.out.println(optionalProduct.get().getFavoriteOf());
+			
 			return ResponseEntity.ok(optionalProduct.get());
 		}else {
 			return ResponseEntity.notFound().build();

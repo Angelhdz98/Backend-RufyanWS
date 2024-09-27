@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,20 +66,15 @@ public class UserEntity {
 	@Column(name = "credentialNoExpired")
 	private boolean credentialNoExpired;
 
-	@ManyToMany(fetch = FetchType.EAGER, 
-			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-	
 	/*
 	@JoinTable(name="user_roles",
 	joinColumns = @JoinColumn(name = "user_id"),
 	inverseJoinColumns = @JoinColumn(name= "role_id"))
 	*/
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles",
 	joinColumns = @JoinColumn(name= "user_id"), 
 	inverseJoinColumns = @JoinColumn(name= "role_id"))
-	
-	
-	
 	@Builder.Default
 	private Set<RoleEntity> roles = new HashSet<RoleEntity>(); //ADMIN || CLIENT
 	
@@ -103,16 +99,9 @@ public class UserEntity {
 	private List<Product> copiesBuyed;
 	*/
 	
-	@ManyToMany(fetch = FetchType.LAZY,  
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE, 
-					CascadeType.DETACH, CascadeType.REFRESH }
-
-					)
-	@JoinTable(name= "marked_fav_by", 
-			   joinColumns  = @JoinColumn(name = "user_id"),
-			   inverseJoinColumns = @JoinColumn(name = "product_id"))
-@Builder.Default
-	private Set<Product> favoriteProducts= new HashSet<>();
+	@ManyToMany(mappedBy = "favoriteOf")
+	@JsonIgnore
+	private Set<Product> favoriteProducts= new HashSet<Product>();
 	
 	  // Helper methods to manage bidirectional relationship
     public void addFavoriteProduct(Product product) {

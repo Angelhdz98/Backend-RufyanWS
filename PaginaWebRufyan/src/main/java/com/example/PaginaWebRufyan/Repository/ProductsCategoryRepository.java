@@ -9,5 +9,5 @@ import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 
 public interface ProductsCategoryRepository extends JpaRepository<ProductsCategory, Integer> {
 	
-	Optional<Product> findByCategory(String name);
+	Optional<ProductsCategory> findByName(String name);
 }

@@ -20,6 +20,7 @@ import com.example.PaginaWebRufyan.Entity.Product;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
+import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 
@@ -34,6 +35,8 @@ public class ProductService {
 	private ImageRepository imageRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private ProductsCategoryRepository productsCategoryRepository;
 	
 	private final String UPLOAD_DIR = "C:/Users/PP/Documents/Proyectos Programación/Backends/Back-end rufyan/PaginaWebRufyan/PaginaWebRufyan/src/main/resources/static/";
 
@@ -83,6 +86,7 @@ public class ProductService {
 				product.setFavoriteOf(favoriteBy);
 			}
 			
+			
 			/*List<UserEntity> copyBuyers = List.of();
 
 			if(product.getCopyBuyers()!=null) {
@@ -96,6 +100,11 @@ public class ProductService {
 			*/
 			
 		}
+		product.setCategory(
+		productsCategoryRepository.
+		findByName(product.getCategory().getName())
+		.orElse(productsCategoryRepository.findById(0).get()) );
+		
 		return productsRepository.save(product);		
 	}
 	

@@ -6,9 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.loader.ast.spi.CascadingFetchProfile;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -59,21 +57,22 @@ public class Product {
 	
 	private Integer price;
 	private Boolean favorite;
-	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name= "category_id")//Nombre de la columna 
 	private ProductsCategory category;
 	@OneToMany(fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL)	
 	private List<Image> image;
 
-	
-	@JsonIgnore
- 	@ManyToMany(fetch = FetchType.LAZY
- 		 )
- 	@JoinTable(name= "marked_fav_by",
+	//CascadeType.ALL
+//	cascade={ CascadeType.PERSIST,	CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH }
+ 	@ManyToMany(fetch = FetchType.EAGER)
+ 	@JoinTable(name= "favorite_product_user",
  	joinColumns = @JoinColumn(name= "product_id"),
  	inverseJoinColumns = @JoinColumn(name= "user_id"))
-	@Builder.Default
-	private Set<UserEntity> favoriteOf = new HashSet<>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
+// 	@JsonManagedReference
+ 	@Builder.Default
+	private Set<UserEntity> favoriteOf= new HashSet<UserEntity>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
 	
 	private LinkedHashMap<String, String> adittionalFeatures;
 	

@@ -18,6 +18,8 @@ import com.example.PaginaWebRufyan.Entity.Product;
 import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Entity.RoleEntity;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
+import com.example.PaginaWebRufyan.Repository.PaintingRepository;
+import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.RoleRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
@@ -30,7 +32,9 @@ public class PaginaWebRufyanApplication {
 	}
 	
 	@Bean
-	CommandLineRunner init(UserRepository userRepository, RoleRepository roleRepository) {
+	CommandLineRunner init(UserRepository userRepository,
+			RoleRepository roleRepository, PaintingRepository paintingRepository,
+			ProductsCategoryRepository productsCategoryRepository) {
 		return args ->{
 			
 			PermissionEntity createPermission = PermissionEntity.builder()
@@ -104,7 +108,7 @@ public class PaginaWebRufyanApplication {
 			*/
 			
             
-            //roleRepository.saveAll(List.of(roleAdmin, roleClient, roleDeveloper, roleInvited));
+            roleRepository.saveAll(List.of(roleAdmin, roleClient, roleDeveloper, roleInvited));
 			
 			//roleRepository.saveAll(Set.of(roleAdmin, roleClient, roleDeveloper, roleInvited));
 			//Crear los usuarios 
@@ -244,21 +248,26 @@ public class PaginaWebRufyanApplication {
 			Image obra6Image = new Image();
 			obra6Image.setUrl("../../assets/Images/imgObras/obra7.png");
 			
+			ProductsCategory productoSimple = ProductsCategory.builder().name("producto").build();
+			ProductsCategory pintura = ProductsCategory.builder().name("pintura").build();
+			ProductsCategory arteDigital= ProductsCategory.builder().name("digital").build();
+			ProductsCategory prenda = ProductsCategory.builder().name("prenda").build();
+			ProductsCategory bordado  = ProductsCategory.builder().name("bordado").build();
+			ProductsCategory accesorio = ProductsCategory.builder().name("accesorio").build();
 			
-			ProductsCategory pintura = ProductsCategory.builder().category("Pintura").build();
-			ProductsCategory arteDigital= ProductsCategory.builder().category("Arte digital").build();
-			ProductsCategory Prenda = ProductsCategory.builder().category("Prenda").build();
-			ProductsCategory bordado  = ProductsCategory.builder().category("Bordado").build();
-			ProductsCategory accesorio = ProductsCategory.builder().category("Accesorio").build();
+			List<ProductsCategory> listaCategorias = List.of(productoSimple, pintura, 	
+					arteDigital, prenda, bordado, accesorio );
+		    
+			productsCategoryRepository.saveAll(listaCategorias);
 			
-			
-			
+			ProductsCategory categoriaPinturaGuardada = productsCategoryRepository.findByName("pintura").orElseThrow();
+			//System.out.println(categoriaPinturaGuardada);
 			
 			//agregamos pinturas
 			Painting painting1 = new Painting();
 			painting1.setName("Starry Night");
 			painting1.setDescription("A gorgeous painting by me");
-			painting1.setCategory(pintura);
+			painting1.setCategory(categoriaPinturaGuardada);
 			painting1.setAltura_cm(92);
 			painting1.setLargo_cm(74);
 			painting1.setCopies_made(5);
@@ -274,6 +283,7 @@ public class PaginaWebRufyanApplication {
 			//painting1.setOriginalOwner(userDonRube);
 			//painting1.setCopyBuyers(List.of(userMaria, userBaudelioCliente));
 
+		
 			
 			Painting painting2= new Painting();
 			painting2.setName("The Persistence of Memory");
@@ -323,10 +333,10 @@ public class PaginaWebRufyanApplication {
 			userDonRube.setOriginalBuyed(Set.of(painting2, painting1));
 			*/
 			
-//			List<Painting> paintings = List.of(painting1, painting2, painting3);
-			//paintings.forEach(painting ->{
-			//	paintingService.save(painting);
-			//});
+			List<Painting> paintings = List.of(painting1 , painting2, painting3);
+			paintings.forEach(painting ->{
+			paintingRepository.save(painting);
+			});
 			
 	//		userBaudelioCliente.setCopiesBuyed(List.of(painting1,painting2));
 					

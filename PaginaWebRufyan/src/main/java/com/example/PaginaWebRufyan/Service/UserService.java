@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.PaginaWebRufyan.Entity.Painting;
+import com.example.PaginaWebRufyan.Entity.Product;
 import com.example.PaginaWebRufyan.Entity.RoleEntity;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
@@ -155,6 +156,7 @@ public class UserService {
 		
 	}
 	
+
 	
 	
 }
