@@ -39,7 +39,7 @@ public class UserService {
 
 
 	public Optional<UserEntity> findUserById(Integer id) {
-		return userRepository.findById(id);
+		return userRepository.findByIdWithFavoriteProducts(id);
 		
 		
 	}
