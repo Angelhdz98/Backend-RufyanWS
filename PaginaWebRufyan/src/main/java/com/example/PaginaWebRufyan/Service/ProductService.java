@@ -56,7 +56,7 @@ public class ProductService {
 	}
 	
 	public Optional<Product> retrieveProductById(Integer id) {
-		Optional<Product> optionalProduct = productsRepository.findById(id);
+		Optional<Product> optionalProduct = productsRepository.findByIdWithFavoriteProducts(id);
 
 		return optionalProduct;
 	}
