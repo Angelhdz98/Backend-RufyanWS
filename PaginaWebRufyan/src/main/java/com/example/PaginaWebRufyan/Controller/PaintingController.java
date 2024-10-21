@@ -154,6 +154,25 @@ public class PaintingController {
 		
 	}
 	
+	@DeleteMapping("/paintings/{paintingId}/{imageId}")
+	public ResponseEntity<Painting> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
+			Optional<Painting> optionalOwnerPainting = paintingService.findById(paintingId);
+			if(optionalOwnerPainting.isPresent()) {
+				Painting ownerPainting = optionalOwnerPainting.get();
+				ownerPainting.setImage(ownerPainting.getImage().stream()
+						.filter(image->!image.getId().equals(imageId))
+						.collect(Collectors.toList()));
+				
+				updatePainting(paintingId, ownerPainting);
+				paintingService.deleteImage(imageId);
+				
+				return ResponseEntity.ok(ownerPainting);
+			}
+			else return ResponseEntity.badRequest().build();
+		
+		
+	}
+	
 	@DeleteMapping("/paintings/{id}")
 	public void deletePaintingById(@PathVariable Integer id ) {
 		Optional<Painting> painting = paintingService.findById(id);

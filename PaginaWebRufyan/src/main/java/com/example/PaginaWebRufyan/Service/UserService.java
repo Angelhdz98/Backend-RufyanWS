@@ -15,6 +15,7 @@ import com.example.PaginaWebRufyan.Entity.RoleEntity;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.PaintingRepository;
+import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.RoleRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 
@@ -25,8 +26,8 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-/*	@Autowired
-	private ProductsRepository productsRepository;*/
+	@Autowired
+	private ProductsRepository productsRepository;
 	@Autowired 
 	private PaintingRepository paintingRepository;
 	
@@ -39,7 +40,7 @@ public class UserService {
 
 
 	public Optional<UserEntity> findUserById(Integer id) {
-		return userRepository.findByIdWithFavoriteProducts(id);
+		return userRepository.findById(id);
 		
 		
 	}
@@ -139,21 +140,30 @@ public class UserService {
 		*/
 		 userRepository.deleteById(id);
 		 
-		/* for(Product copy: useeeer.getCopiesBuyed()) {
-			 copy.getCopyBuyers().remove(user);
-			 productsRepository.save(copy);// Guardo los cambios en el producto
-		 }
-		 user.getCopiesBuyed().clear();
-		 */
-		/* for(Painting painting: user.getOriginalBuyed()) {
-			 painting.setOriginalOwner(null);
-			 paintingRepository.save(painting);
-		 }
-		 user.getOriginalBuyed().clear();
-		 */
-		 
+	
 		
+	}
+	
+	public Optional<UserEntity> toggleProductToFavoriteFrom(Integer productId, Integer userId){
+		Optional<UserEntity> optionalUser = userRepository.findById(userId);
+		Optional<Product> optionalProduct = productsRepository.findById(productId);
+		if(optionalProduct.isPresent() && optionalUser.isPresent()) {
+			UserEntity user= optionalUser.get();
+			Product product = optionalProduct.get();
+	
+			Set<Product> setProducts = user.getFavoriteProducts();
+			setProducts.add(product);
+			user.setFavoriteProducts(setProducts);
+			
+			Set<UserEntity> setUser = product.getFavoriteOf();
+			setUser.add(user);
+			product.setFavoriteOf(setUser);
+			
+			//productsRepository.save(product);
+		userRepository.save(user);
+		}
 		
+		return userRepository.findById(userId);
 	}
 	
 

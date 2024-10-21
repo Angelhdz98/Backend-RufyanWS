@@ -17,13 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 //import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 
+import com.example.PaginaWebRufyan.Entity.Product;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
+import com.example.PaginaWebRufyan.Service.ProductService;
 import com.example.PaginaWebRufyan.Service.UserService;
 
 @RestController
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ProductService productService;
 		
 	@GetMapping("/users")
 	@PreAuthorize("permitAll()")
@@ -74,6 +78,22 @@ public class UserController {
 		
 		
 			
+	}
+	
+	@PutMapping("/users/{userId}/favorites/{productId}")
+	public ResponseEntity<UserEntity> toggleProductToFavorite(@PathVariable Integer userId, @PathVariable Integer productId){
+		
+		Optional<UserEntity> user = userService.findUserById(userId);
+		Optional<Product> product = productService.retrieveProductById(productId);
+		if(user.isPresent() && product.isPresent()) {
+			return ResponseEntity.ok(userService.toggleProductToFavoriteFrom(productId, userId).get());
+			
+			
+		}
+		
+		return ResponseEntity.badRequest().build();
+		
+		
 	}
 	
 	

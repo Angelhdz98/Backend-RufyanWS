@@ -248,19 +248,19 @@ public class PaginaWebRufyanApplication {
 			Image obra6Image = new Image();
 			obra6Image.setUrl("../../assets/Images/imgObras/obra7.png");
 			
-			ProductsCategory productoSimple = ProductsCategory.builder().name("producto").build();
-			ProductsCategory pintura = ProductsCategory.builder().name("pintura").build();
+			ProductsCategory productoSimple = ProductsCategory.builder().name("products").build();
+			ProductsCategory pintura = ProductsCategory.builder().name("paintings").build();
 			ProductsCategory arteDigital= ProductsCategory.builder().name("digital").build();
-			ProductsCategory prenda = ProductsCategory.builder().name("prenda").build();
-			ProductsCategory bordado  = ProductsCategory.builder().name("bordado").build();
-			ProductsCategory accesorio = ProductsCategory.builder().name("accesorio").build();
+			ProductsCategory prenda = ProductsCategory.builder().name("clothes").build();
+			ProductsCategory bordado  = ProductsCategory.builder().name("embriodery").build();
+			ProductsCategory accesorio = ProductsCategory.builder().name("accesories").build();
 			
 			List<ProductsCategory> listaCategorias = List.of(productoSimple, pintura, 	
 					arteDigital, prenda, bordado, accesorio );
 		    
 			productsCategoryRepository.saveAll(listaCategorias);
 			
-			ProductsCategory categoriaPinturaGuardada = productsCategoryRepository.findByName("pintura").orElseThrow();
+			ProductsCategory categoriaPinturaGuardada = productsCategoryRepository.findByName("paintings").orElseThrow();
 			//System.out.println(categoriaPinturaGuardada);
 			
 			//agregamos pinturas

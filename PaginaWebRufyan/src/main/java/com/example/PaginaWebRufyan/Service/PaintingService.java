@@ -57,7 +57,8 @@ public class PaintingService {
 		Optional<Painting>optionalPainting = paintingRepository.findById(id);
 		if(optionalPainting.isPresent()) {
 			 paintingData.setId(id);
-/*			Painting painting= optionalPainting.get();
+			Painting painting= optionalPainting.get();
+			
 			painting.setAltura_cm(paintingData.getAltura_cm());
 			painting.setAvailable_copies(paintingData.getAvailable_copies());
 			painting.setCategory(paintingData.getCategory());
@@ -66,7 +67,7 @@ public class PaintingService {
 			painting.setDescription(paintingData.getDescription());
 			painting.setFavorite(paintingData.getFavorite());
 			painting.setId(paintingData.getId());
-			painting.setImage(paintingData.getImage());
+			//painting.setImage(paintingData.getImage());
 			painting.setLargo_cm(paintingData.getLargo_cm());
 			painting.setMedium(paintingData.getMedium());
 			painting.setName(paintingData.getName());
@@ -74,8 +75,9 @@ public class PaintingService {
 			painting.setSupport_material(paintingData.getSupport_material());
 			painting.setAdittionalFeatures(paintingData.getAdittionalFeatures());
 			painting.setPrice_copy(paintingData.getPrice_copy());
-			*/
-			 
+			painting.setStyle(paintingData.getStyle());
+			painting.setSupport_material(paintingData.getSupport_material());
+			
 			//			painting.setCopyBuyers(paintingData.getCopyBuyers());
 			//painting.setOriginalOwner(paintingData.getOriginalOwner());
 			
@@ -140,6 +142,15 @@ public class PaintingService {
 
 	public void deletePaintingByid(Integer id) {
 		paintingRepository.deleteById(id);
+	}
+
+	public void deleteImage(Integer imageId) {
+		// TODO Auto-generated method stub
+		imageRepository.deleteById(imageId);
+		
+	
+		
+		
 	}
 	
 }
