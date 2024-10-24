@@ -233,20 +233,21 @@ public class PaginaWebRufyanApplication {
 			
 			
 			
-	
+			final String HOSTLINK= "http://localhost:8080/static/";
+
 			//Agregamos imagenes 
 			Image obra1Image = new Image();
-			obra1Image.setUrl("../../assets/Images/imgObras/obra2.jpg");
+			obra1Image.setUrl(HOSTLINK+"obra2.jpg");
 			Image obra2Image = new Image();
-			obra2Image.setUrl("../../assets/Images/imgObras/obra3.jpg");
+			obra2Image.setUrl(HOSTLINK+"obra3.jpg");
 			Image obra3Image = new Image();
-			obra3Image.setUrl("../../assets/Images/imgObras/obra3.jpg");
+			obra3Image.setUrl(HOSTLINK+"obra3.jpg");
 			Image obra4Image = new Image();
-			obra4Image.setUrl("../../assets/Images/imgObras/obra5.png");
+			obra4Image.setUrl(HOSTLINK+"obra5.png");
 			Image obra5Image = new Image();
-			obra5Image.setUrl("../../assets/Images/imgObras/obra6.png");
+			obra5Image.setUrl(HOSTLINK+"obra6.png");
 			Image obra6Image = new Image();
-			obra6Image.setUrl("../../assets/Images/imgObras/obra7.png");
+			obra6Image.setUrl(HOSTLINK+"obra7.png");
 			
 			ProductsCategory productoSimple = ProductsCategory.builder().name("products").build();
 			ProductsCategory pintura = ProductsCategory.builder().name("paintings").build();
