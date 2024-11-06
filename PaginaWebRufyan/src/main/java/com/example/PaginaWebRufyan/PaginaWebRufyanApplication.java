@@ -392,17 +392,7 @@ public class PaginaWebRufyanApplication {
 		};
 		
 	}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 }
+

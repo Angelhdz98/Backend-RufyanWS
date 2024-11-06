@@ -79,42 +79,19 @@ public class UserService {
 		//el numero 2 es el valor del Role Enum en la tabla 
  		updatedUser.setUsername(userData.getUsername());
  		*/
-		System.out.println("roles: " + userData.getRoles());
+//		System.out.println("roles: " + userData.getRoles());
 		
 		Set<RoleEntity> rolesUser= new HashSet<>();
 		if(userData.getRoles()!=null) {
 			userData.getRoles().forEach(role->{
-			System.out.println("role repo response: "+	roleRepository.findByRoleEnum(
-						role.getRoleEnum()).orElseThrow(
-						()-> new ResourceNotFoundException("Role not found" + role)));
-			
-			rolesUser.add(roleRepository.findByRoleEnum(role.getRoleEnum()).orElseThrow());
+				
+						
+			rolesUser.add(roleRepository.findByRoleEnum(role.getRoleEnum()).orElseThrow(()-> new ResourceNotFoundException("Role not found" + role)));
 		});
 		}
 		
 		userData.setRoles(rolesUser);
-		
-		/*
-		List<Product> copies = List.of();
-		if(userData.getCopiesBuyed()!=null) {
-			for(Product copy: userData.getCopiesBuyed()) {
-				copies.add(productsRepository.findById(copy.getId()).orElseThrow(() ->new ResourceNotFoundException("Product not found" ) ));
-			}
-			userData.setCopiesBuyed(copies);
-		}
-		*/
-		
-		
-		
-		/*HashSet<Painting> originals =new HashSet<>();
-		if(userData.getOriginalBuyed()!=null) {
-		userData.getOriginalBuyed().forEach(original->{
-			
-			originals.add(paintingRepository.findById(original.getId()).orElseThrow(()->new ResourceNotFoundException("Painting not found")));
-		});
-		}
-		userData.setOriginalBuyed(originals);
-		*/
+	
 		
  		return userRepository.save(userData);
 	}
