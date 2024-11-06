@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
 import com.example.PaginaWebRufyan.Entity.ProductsCategory;
+import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Service.ImageService;
 import com.example.PaginaWebRufyan.Service.PaintingService;
 import com.example.PaginaWebRufyan.Service.ProductsCategoryService;
@@ -85,7 +86,7 @@ public class PaintingController {
 													@RequestParam("price_copy") Integer price_copy,
 													@RequestParam("image") List<MultipartFile> imageFiles,
 													@RequestParam("support_material") String support_material, 
-													@RequestParam("category") ProductsCategory category){
+													@RequestParam("category") String category){
 		
 		
 				
@@ -102,7 +103,7 @@ public class PaintingController {
 				//Files.write(filePath, file.getBytes());
 				// Agregamos el path del archivo a la image
 				Image image = Image.builder() 
-								   .url("/UploadedImages/UploadedPaintingImages/"+fileName) 
+								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
 								  .productName(file.getOriginalFilename()).build();
 				
 				return imageService.saveImage(image);
@@ -118,7 +119,7 @@ public class PaintingController {
 		Painting inputPainting = Painting.builder() 
 				.altura_cm(altura_cm) 
 				.available_copies(available_copies) 
-				.category(category) 
+				.category(categoryService.retrieveCategoryByName(category).orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: " +category))) 
 				.copies_made(copies_made) 
 				.description(description) 
 				.favorite(Boolean.valueOf(favorite)) 
@@ -147,10 +148,10 @@ public class PaintingController {
 		
 	
 	@PutMapping("/paintings/{id}")
-	public ResponseEntity<Painting> updatePainting(@PathVariable Integer id, 
+	public ResponseEntity<Painting> updatePainting(	@PathVariable Integer id, 
 													@RequestParam Integer altura_cm,
 													@RequestParam Integer available_copies,
-													@RequestParam String categoryId,
+													@RequestParam String category,
 													@RequestParam Integer copies_made,
 													@RequestParam String description,
 													@RequestParam Boolean favorite,
@@ -172,18 +173,18 @@ public class PaintingController {
 				try {
 					// Primero se guarda el archivo en el sistema de archivo
 					String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-					Path filePath = Paths.get(UPLOAD_DIR +"/UploadedImages/UploadedPaintingImages"+fileName);
+					Path filePath = Paths.get(UPLOAD_DIR +"/UploadedImages/UploadedPaintingImages");
 					if(!Files.exists(filePath)) {
 						
 						Files.createDirectories(filePath);
 					}
 					Path savedFilePath = filePath.resolve(fileName);
 					
-					Files.copy(file.getInputStream(),filePath, StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
 					//Files.write(filePath, file.getBytes());
 					// Agregamos el path del archivo a la image
 					Image image = Image.builder() 
-									   .url("UploadedImages/UploadedPaintingImages/"+fileName) 
+									   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
 									  .productName(file.getOriginalFilename()).build();
 					
 					return imageService.saveImage(image);
@@ -204,7 +205,8 @@ public class PaintingController {
 			Painting painting = Painting.builder() 
 					.altura_cm(altura_cm) 
 					.available_copies(available_copies) 
-					.category(categoryService.retrieveCategoryById(Integer.valueOf(categoryId)).get()) 
+					.category(categoryService.retrieveCategoryByName(category)
+							.orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: "+category))) 
 					.copies_made(copies_made) 
 					.description(description) 
 					.favorite(Boolean.valueOf(favorite)) 
