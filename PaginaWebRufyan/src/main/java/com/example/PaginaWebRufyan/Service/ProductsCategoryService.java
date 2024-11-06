@@ -13,16 +13,19 @@ public class ProductsCategoryService {
 	@Autowired
 	ProductsCategoryRepository categoryRepository;
 public List<ProductsCategory> retrieveAllCategories() {
-		// TODO Auto-generated method stub
 		return categoryRepository.findAll();
 	}
 
+
 	public Optional<ProductsCategory> retrieveCategoryById(Integer id) {
-		// TODO Auto-generated method stub
 		return categoryRepository.findById(id);
 	}
+	
+	public Optional<ProductsCategory> retrieveCategoryByName(String name) {
+		return categoryRepository.findByName(name);
+	}
+	
 	public ProductsCategory saveCategory(ProductsCategory productCategory) {
-		// TODO Auto-generated method stub
 		return categoryRepository.save(productCategory);
 	}
 
