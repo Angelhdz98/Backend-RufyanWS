@@ -20,12 +20,12 @@ public class ImageService {
 		return imageRepository.findAll();
 			}
 	
-	public Image findbyImageId(Integer id) {
+	public Optional<Image> findImageById(Integer id) {
 		Optional<Image> image= imageRepository.findById(id);
 		if(image.isEmpty()) {
 			throw new RuntimeException(" No se econtró la imagen id: " + id);
 		}
-		return image.get();
+		return image;
 	}
 		
 	public Image saveImage(Image image) {
@@ -52,6 +52,8 @@ public class ImageService {
 		
 		
 	}
+
+
 	
 	
 }

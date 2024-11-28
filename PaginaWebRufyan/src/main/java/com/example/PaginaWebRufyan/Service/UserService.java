@@ -140,7 +140,27 @@ public class UserService {
 		userRepository.save(user);
 		}
 		
+		
+		
 		return userRepository.findById(userId);
+	}
+
+
+	public Optional<UserEntity> findUserByEmail(String username) {
+		// TODO Auto-generated method stub
+		return userRepository.findUserByEmail(username);
+	}
+
+
+	public Optional<UserEntity> findUserByUsername(String username) {
+		// TODO Auto-generated method stub
+		return userRepository.findUserByUsername(username);
+	}
+
+
+	public List<UserEntity> searchUserWithNameMatch(String namePart) {
+		// TODO Auto-generated method stub
+		return userRepository.findByNameContaining(namePart);
 	}
 	
 

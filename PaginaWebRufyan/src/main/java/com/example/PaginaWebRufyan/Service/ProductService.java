@@ -60,10 +60,9 @@ public class ProductService {
 
 		return optionalProduct;
 	}
-	public Product retrieveProductByName(String name){
-		return productsRepository.findByName(name)
-				.orElseThrow(
-				()->new ResourceNotFoundException("Product not found by name: "+name));
+	public Optional<Product> retrieveProductByName(String name){
+		
+		return productsRepository.findByName(name);
 	}
 	
 	
@@ -108,12 +107,8 @@ public class ProductService {
 		return productsRepository.save(product);		
 	}
 	
-	/**
-	 * @PutMapping()
-	public Product updateProductById(Integer id, Product product) {
-		
-	}
-	**/
+
+
 	
 	public Optional<Product> deleteProductById(Integer id) {
 		Optional<Product> product = retrieveProductById(id);
@@ -121,7 +116,8 @@ public class ProductService {
 		productsRepository.deleteById(id);}
 		return product;
 	}
-
+	
+	// Creo que este no se usa 
 	public Product saveProductWithImages(Product product, List<MultipartFile> imageFiles) throws IOException  {
 
 		List<Image> images = imageFiles.stream().map((file)->{
@@ -161,6 +157,11 @@ public class ProductService {
 			return productsRepository.save(productData);
 		}
 			
+	}
+
+	public List<Product> retrieveProductsByNameContainging(String searchTerm) {
+		// TODO Auto-generated method stub
+		return productsRepository.findByNameContainin(searchTerm);
 	}
 
 	
