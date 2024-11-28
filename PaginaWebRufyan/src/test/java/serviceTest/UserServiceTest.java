@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import static org.mockito.BDDMockito.*;
@@ -35,7 +36,10 @@ class UserServiceTest {
 	@InjectMocks
 	UserService userService;
 	
-	private UserEntity user; 
+	private UserEntity user = new UserEntity();
+	private UserEntity user2 = new UserEntity();
+	private UserEntity user3 = new UserEntity();
+	
 	
 	PermissionEntity createPermission = PermissionEntity.builder()
             .name("CREATE")
@@ -52,6 +56,7 @@ class UserServiceTest {
             .build();
 	@BeforeEach
 	void setUp() {
+		
 		user= UserEntity.builder()
 				.birthDate(LocalDate.of(1988, 3, 28))
 				.credentialNoExpired(true)
@@ -61,7 +66,33 @@ class UserServiceTest {
 				.lastname("Machiwi")
 				.password("soyUnChicoEnamorado")
 				.email("ezequielmachiwi@gmail.com")
+				.username("EzequielMach")
 				.build();
+		user2= UserEntity.builder()
+				.birthDate(LocalDate.of(1999, 5, 16))
+				.credentialNoExpired(true)
+				.accountNoExpired(true)
+				.accountNoLocked(true)
+				.name("Ezelik")
+				.lastname("Gamez")
+				.password("soyUnChicoGamez")
+				.email("ezelikgamez@gmail.com")
+				.username("EzelGom")
+				.build();
+		
+		user3= UserEntity.builder()
+				.birthDate(LocalDate.of(1999, 5, 16))
+				.credentialNoExpired(true)
+				.accountNoExpired(true)
+				.accountNoLocked(true)
+				.name("Lorena")
+				.lastname("Copiona")
+				.password("soyUnaCopiona")
+				.email("copiona@gmail.com")
+				.username("Forinconsitentespurposes")
+				.build();
+		
+		
 	}
 	
 	@DisplayName("Test para encontrar un usuario por su id")
@@ -88,7 +119,7 @@ class UserServiceTest {
 		userResponse.setId(id);
 		given(userRepo.findUserByUsername(user.getUsername()).get()).willReturn(userResponse);
 		
-		UserEntity foundUser = userService.findUserByUserName(user.getUsername()).get();
+		UserEntity foundUser = userService.findUserByUsername(user.getUsername()).get();
 		
 		assertThat(foundUser).isNotNull();
 		assertThat(foundUser.getUsername()).isEqualTo(userResponse.getUsername());
@@ -164,20 +195,52 @@ class UserServiceTest {
 		
 	}
 
-	@DisplayName("Test para intentar guardar un usuario con datos inconsistentes")
+	@DisplayName("Test para intentar guardar un usuario con datos inconsistentes: No-username, Weak-password No-email ")
 	@Test
 	void saveNewUserInconsistentData() {
 		UserEntity bornedIn2025 = user;
 		bornedIn2025.setBirthDate(LocalDate.now().plusYears(1));
 		
-		given(userRepo.findUserByUsername(user.getUsername())).willReturn(Optional.empty());
+		UserEntity noUsername = user;
+		noUsername.setUsername("");
 		
-		given(userRepo.findUserByEmail(user.getEmail())).willReturn(Optional.empty());
+		UserEntity noEmailUser = user;
+		noEmailUser.setEmail("");
+		
+		UserEntity weakPasswordUser= user; 
+		weakPasswordUser.setPassword("123");
+		
+		
+		
+		given(userRepo.findUserByUsername(bornedIn2025.getUsername())).willReturn(Optional.empty());
+		given(userRepo.findUserByEmail(bornedIn2025.getEmail())).willReturn(Optional.empty());
+		
+		given(userRepo.findUserByUsername(noUsername.getUsername())).willReturn(Optional.empty());
+		given(userRepo.findUserByEmail(noUsername.getEmail())).willReturn(Optional.empty());
+		
+		given(userRepo.findUserByUsername(noEmailUser.getUsername())).willReturn(Optional.empty());
+		given(userRepo.findUserByEmail(noEmailUser.getEmail())).willReturn(Optional.empty());
+		
+		given(userRepo.findUserByUsername(weakPasswordUser.getUsername())).willReturn(Optional.empty());
+		given(userRepo.findUserByEmail(weakPasswordUser.getEmail())).willReturn(Optional.empty());
+		
+		
 
 		
 		assertThrows(InconsitentDataException.class, ()->{
 			userService.save(bornedIn2025);
 		});
+		assertThrows(InconsitentDataException.class, ()->{
+			userService.save(noUsername);
+		});
+		
+		assertThrows(InconsitentDataException.class, ()->{
+			userService.save(noEmailUser);
+		});
+		assertThrows(InconsitentDataException.class, ()->{
+			userService.save(weakPasswordUser);
+		});
+		
 		
 		verify(userRepo, never()).save(any(UserEntity.class));
 
@@ -199,7 +262,27 @@ class UserServiceTest {
 		
 		
 	}
-	
+
+	@DisplayName("Test para encontrar los usuarios que contengan el String de busqueda")
+	@Test
+	void searchUserBySubstrig () {
+		UserEntity userResponse1 = user;
+		userResponse1.setId(1);
+		
+		UserEntity userResponse2= user2;
+		userResponse2.setId(2);
+		
+		given(userRepo.findByNameContaining("eze")).willReturn(List.of(userResponse1,userResponse2));
+		
+		List<UserEntity> matchedUsers = userService.searchUserWithNameMatch("eze");
+		
+		assertThat(matchedUsers).isNotNull();
+		assertThat(matchedUsers).contains(userResponse1);
+		assertThat(matchedUsers).contains(userResponse2);
+		
+		
+		
+	}
 	
 	
 
