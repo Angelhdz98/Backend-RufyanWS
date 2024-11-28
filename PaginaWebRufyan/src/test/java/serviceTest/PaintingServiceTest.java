@@ -96,7 +96,7 @@ public class PaintingServiceTest {
 		
 		Painting paintingTestOk2 = Painting
 				.builder()
-				.name("1era Obra, datos correctos")
+				.name("2da Obra, datos correctos")
 				.description("Obra con todos los datos correctos ")
 				.creation_date(LocalDate.of(2020, 3, 25))
 				.price(1000)
@@ -121,33 +121,49 @@ public class PaintingServiceTest {
 	@DisplayName("Test para encontrar una Obra por id")
 	@Test
 	void findPaintingByIdTest() {
+		int id = 1;
+		Painting paintingResponse = paintingTestOk1;
+		paintingResponse.setId(id);
+		given(paintingRepo.findById(id)).willReturn(Optional.of(paintingResponse));
 		
-		given(paintingRepo.findById(1)).willReturn(Optional.of(paintingTestOk1));
+			Painting obraEncontrada =  paintingService.findById(id).get();
 		
-			Painting ObraEncontrada =  paintingService.findById(1).get();
-		
-			assertThat(ObraEncontrada).isNotNull();
+			assertThat(obraEncontrada).isNotNull();
+			assertThat(obraEncontrada.getId()).isGreaterThan(0);
+			assertThat(obraEncontrada.getName()).isNotEmpty();
+			assertThat(obraEncontrada.getName()).isNotBlank();
 
 	}
 	
 	@DisplayName("Test para encontrar una Obra por nombre")
 	@Test
 	void findPaintingByNameTest() {
+		int id =1;
+		Painting paintingResponse= paintingTestOk1;
+		paintingResponse.setId(id);
+		String searchTerm = "1era Obra, datos correctos";
 		
-		given(paintingRepo.findByName("1era Obra, datos correctos")).willReturn(Optional.of(paintingTestOk1));
+		given(paintingRepo.findByName("1era Obra, datos correctos")).willReturn(Optional.of(paintingResponse));
 		
-			Painting ObraEncontrada =  paintingService.findPaintingByName("1era Obra, datos correctos").get();
-		
-			assertThat(ObraEncontrada).isNotNull();
+			Optional<Painting> optionalObraEncontrada =  paintingService.findPaintingByName(searchTerm);
+			Painting obraEncontrada = optionalObraEncontrada.get();
+			
+			assertThat(optionalObraEncontrada).isNotNull();
+			assertThat(optionalObraEncontrada).isNotEmpty();
+			assertThat(obraEncontrada);
 
 	}
 	
-	@DisplayName("Test para encontrar una Obra por nombre")
+	@DisplayName("Test para guardar una obra ")
 	@Test
-	void savePaintingTestOk() {
+	void findPaintingTestOk() {
+		
+		int id =1;
+		Painting paintingSavedResponse= paintingTestOk1;
+		paintingSavedResponse.setId(id);
 		
 		given(paintingRepo.findById(1)).willReturn(Optional.empty());
-		given(paintingRepo.save(paintingTestOk1)).willReturn(paintingTestOk1);
+		given(paintingRepo.save(paintingTestOk1)).willReturn(paintingSavedResponse);
 		
 			Painting ObraGuardada =  paintingService.save(paintingTestOk1);
 		
@@ -155,10 +171,13 @@ public class PaintingServiceTest {
 
 	}
 	
+	@DisplayName("Test para intentar crear una obra con datos inconsistentes")
+	@Test
 	void savePaintingTestInconsistentData() {
 		
-		
+		int id = 1;
 		Painting obraGuardada= paintingTestOk1;
+		obraGuardada.setId(id);
 		 // Se agrega el id a obra guardada por que eso distinguiría a la obra que vamos a subir de la obra que ya esta guardada
 		
 		Painting moreAvailableThanMade = obraGuardada;
@@ -176,10 +195,10 @@ public class PaintingServiceTest {
 		wrongPricing.setPrice_copy(20);
 		
 		Painting wrongDate = obraGuardada;
+		wrongDate.setCreation_date(LocalDate.of(2025, 10, 17));
 		 
-		 wrongDate.setCreation_date(LocalDate.of(2025, 10, 17));
-		 
-		 
+		Painting noImages = obraGuardada;
+		noImages.setImage(List.of());
 		 
 		
 		assertThrows(InconsitentDataException.class, ()->{
@@ -199,6 +218,12 @@ public class PaintingServiceTest {
 			paintingService.save(wrongDate);
 		});
 		
+		assertThrows(InconsitentDataException.class, ()->{
+			paintingService.save(noImages);
+		});
+		
+		
+		
 		
 		
 		verify(paintingRepo, never()).save(any(Painting.class));
@@ -207,7 +232,7 @@ public class PaintingServiceTest {
 		
 	}
 	
-	@DisplayName("Test para encontrarlas obras favoritas")
+	@DisplayName("Test para encontrar las obras favoritas")
 	@Test
 	void findFavoritesPaintingTest() {
 		
@@ -228,6 +253,7 @@ public class PaintingServiceTest {
 		
 		Painting responsePainting = paintingTestOk1;
 		Integer id=1;
+		responsePainting.setId(id);
 		
 		given(paintingRepo.findById(id).get()).willReturn(responsePainting);
 		Painting updatedPainting = responsePainting;
@@ -264,7 +290,7 @@ Integer id=12;
 		
 	}
 	
-	@DisplayName("Test para intentar subir obra que tiene datos inconsistentes ")
+	@DisplayName("Test para intentar actualizar una obra que tiene datos inconsistentes ")
 	@Test
 	void updatePaintingInconsistentDataTest() {
 		
@@ -290,6 +316,9 @@ Painting wrongPricing = obraGuardada;
 		
 		 Painting wrongDate = obraGuardada;
 		 
+		 Painting noImages = obraGuardada;
+		 noImages.setImage(List.of());
+		 
 		 wrongDate.setCreation_date(LocalDate.of(2025, 10, 17));
 		 
 		 given(paintingRepo.findById(id).get()).willReturn(obraGuardada);
@@ -310,6 +339,9 @@ Painting wrongPricing = obraGuardada;
 		
 		assertThrows(InconsitentDataException.class, ()->{
 			paintingService.updatePaintingById(id, wrongDate);
+		});
+		assertThrows(InconsitentDataException.class, ()->{
+			paintingService.updatePaintingById(id, noImages);
 		});
 		
 		
