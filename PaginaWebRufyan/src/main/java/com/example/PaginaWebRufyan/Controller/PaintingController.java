@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.Controller;
 
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,18 +19,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Service.ImageService;
 import com.example.PaginaWebRufyan.Service.PaintingService;
