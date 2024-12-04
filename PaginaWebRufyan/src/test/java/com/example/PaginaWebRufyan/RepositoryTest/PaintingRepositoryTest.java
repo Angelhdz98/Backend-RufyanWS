@@ -25,6 +25,7 @@ class PaintingRepositoryTest {
 	private Painting paintingTest1;
 	private Painting paintingTest2;
 	
+	
 	@BeforeEach
 	public void setUp() {
 				paintingTest1 = Painting.builder()

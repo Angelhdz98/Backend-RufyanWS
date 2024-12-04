@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
+import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.PaintingRepository;
@@ -32,17 +33,20 @@ public class PaintingService {
 	  private final String UPLOAD_DIR = "C://Users//PP//Documents//Proyectos_Programación//Backends//Back_end_rufyan//PaginaWebRufyan//PaginaWebRufyan//src//main//resources//static";
 //			  "C:/Users/PP/Documents/Proyectos Programación/Backends/Back-end rufyan/PaginaWebRufyan/PaginaWebRufyan/src/main/resources/static/";
 //
-	  
 	
-	public List<Painting> findAll(){
-		return paintingRepository.findAll();
-	}
+	
 	
 	public Optional<Painting> findById(Integer id){
 		return paintingRepository.findById(id);
 	}
 	public Optional<Painting> findPaintingByName(String name){
 		return paintingRepository.findByName(name);
+	}
+	
+	public List <Painting> findPaintingsSortedAndPaged(String searchTerm){
+		
+		List<Painting> paintingList = List.of();
+		return paintingList;
 	}
 
 	public List<Painting> findFavoritePaintings(){
@@ -67,7 +71,7 @@ public class PaintingService {
 			painting.setDescription(paintingData.getDescription());
 			painting.setFavorite(paintingData.getFavorite());
 			painting.setId(paintingData.getId());
-			//painting.setImage(paintingData.getImage());
+			painting.setImage(paintingData.getImage());
 			painting.setLargo_cm(paintingData.getLargo_cm());
 			painting.setMedium(paintingData.getMedium());
 			painting.setName(paintingData.getName());
@@ -80,20 +84,24 @@ public class PaintingService {
 			
 			//			painting.setCopyBuyers(paintingData.getCopyBuyers());
 			//painting.setOriginalOwner(paintingData.getOriginalOwner());
-			
-			
-			paintingData.getImage().forEach(image->{
+			/* I want to check images if exist
+			Example<Image> imageExample = Example.of(image);
+			Optional<Image> imageToCheck = imageRepository.findOne( imageExample);
+			if(imageToCheck.isEmpty()) {
+				imageRepository.save(image);
+			}
+				*/
+			/*
+			if(paintingData.getImage() ==null || !paintingData.getImage().isEmpty() ) {
+				paintingData.getImage().forEach(image->{
 				
-				/* I want to check images if exist
-				Example<Image> imageExample = Example.of(image);
-				Optional<Image> imageToCheck = imageRepository.findOne( imageExample);
-				if(imageToCheck.isEmpty()) {
-					imageRepository.save(image);
-				}
-					*/
+				
 				
 				imageRepository.save(image);
 			});
+			}
+			*/
+			
 			return paintingRepository.save(paintingData);
 		}
 		else {
@@ -102,13 +110,18 @@ public class PaintingService {
 	}
 	
 	
-@Transactional
-	public Painting save(Painting painting) {
 
+	public Painting save(Painting painting) throws AlreadyExistIdenticatorException {
+		if(paintingRepository.existByName(painting.getName())) {
+			throw new AlreadyExistIdenticatorException("El nombre ya existe en otra obra");
+		}
 		return paintingRepository.save(painting);
 	}
 
-	public Painting saveWithImages(Painting painting, List<MultipartFile> imageFiles ) throws IOException {
+
+// this function is not used, controller does the the repository. save 
+	/*
+public Painting saveWithImages(Painting painting, List<MultipartFile> imageFiles ) throws IOException {
 		
 		List<Image> images = imageFiles.stream().map((file)->{
 			try {
@@ -139,7 +152,9 @@ public class PaintingService {
 		
 		
 	}
+*/
 
+	
 	public void deletePaintingByid(Integer id) {
 		paintingRepository.deleteById(id);
 	}
@@ -152,5 +167,9 @@ public class PaintingService {
 		
 		
 	}
-	
+	public List<Painting> findAll() {
+		// TODO Auto-generated method stub
+		return paintingRepository.findAll();
+	}
+
 }
