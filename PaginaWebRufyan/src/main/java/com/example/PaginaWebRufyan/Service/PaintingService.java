@@ -21,6 +21,7 @@ import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.PaintingRepository;
 
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -30,7 +31,10 @@ public class PaintingService {
 	private PaintingRepository paintingRepository;
 	@Autowired
 	private ImageRepository imageRepository;
-	  private final String UPLOAD_DIR = "C://Users//PP//Documents//Proyectos_Programación//Backends//Back_end_rufyan//PaginaWebRufyan//PaginaWebRufyan//src//main//resources//static";
+	
+	@Autowired
+	private ImageService imageService;
+	  
 //			  "C:/Users/PP/Documents/Proyectos Programación/Backends/Back-end rufyan/PaginaWebRufyan/PaginaWebRufyan/src/main/resources/static/";
 //
 	
@@ -56,7 +60,7 @@ public class PaintingService {
 		return paintingRepository.findAll(example);
 	}
 	
-	@Transactional
+	
 	public Painting updatePaintingById(Integer id, Painting paintingData) {
 		Optional<Painting>optionalPainting = paintingRepository.findById(id);
 		if(optionalPainting.isPresent()) {
@@ -67,7 +71,7 @@ public class PaintingService {
 			painting.setAvailable_copies(paintingData.getAvailable_copies());
 			painting.setCategory(paintingData.getCategory());
 			painting.setCopies_made(paintingData.getCopies_made());
-			painting.setCreation_date(paintingData.getCreation_date());
+			painting.setCreationDate(paintingData.getCreationDate());
 			painting.setDescription(paintingData.getDescription());
 			painting.setFavorite(paintingData.getFavorite());
 			painting.setId(paintingData.getId());
@@ -110,6 +114,7 @@ public class PaintingService {
 	}
 	
 	
+
 
 	public Painting save(Painting painting) throws AlreadyExistIdenticatorException {
 		if(paintingRepository.existByName(painting.getName())) {
