@@ -66,7 +66,7 @@ public class ProductService {
 	}
 	
 	
-	@Transactional
+	// method to create new products
 	public Product saveProduct(Product product) {
 		if(product.getImage()!=null) {
 			product.getImage().forEach(image -> 
@@ -118,7 +118,7 @@ public class ProductService {
 	}
 	
 	// Creo que este no se usa 
-	public Product saveProductWithImages(Product product, List<MultipartFile> imageFiles) throws IOException  {
+	/*public Product saveProductWithImages(Product product, List<MultipartFile> imageFiles) throws IOException  {
 
 		List<Image> images = imageFiles.stream().map((file)->{
 			try {
@@ -145,7 +145,7 @@ public class ProductService {
 			
 			return productsRepository.save(product);
 	}
-	
+	*/
 	public Product updateProductById(Integer id, Product productData) {
 		
 		Optional<Product> optionalProduct = retrieveProductById(id);
