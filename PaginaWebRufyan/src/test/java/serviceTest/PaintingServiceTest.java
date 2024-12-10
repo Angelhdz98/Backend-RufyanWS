@@ -150,7 +150,7 @@ public class PaintingServiceTest {
 									.builder()
 									.name("1era Obra, datos correctos")
 									.description("Obra con todos los datos correctos ")
-									.creation_date(LocalDate.of(2020, 3, 25))
+									.creationDate(LocalDate.of(2020, 3, 25))
 									.price(1000)
 									.category(pinturaCategory)
 									.style("Urbano")
@@ -169,7 +169,7 @@ public class PaintingServiceTest {
 				.builder()
 				.name("2da Obra, datos correctos")
 				.description("Obra con todos los datos correctos ")
-				.creation_date(LocalDate.of(2020, 3, 25))
+				.creationDate(LocalDate.of(2020, 3, 25))
 				.price(1000)
 				.category(pinturaCategory)
 				.style("Urbano")
@@ -186,7 +186,7 @@ public class PaintingServiceTest {
 		Painting paintingTest3 = Painting.builder()
 		        .name("3era Obra, datos correctos")
 		        .description("Obra realista con tonos cálidos")
-		        .creation_date(LocalDate.of(2022, 1, 15))
+		        .creationDate(LocalDate.of(2022, 1, 15))
 		        .price(2000)
 		        .category(pinturaCategory)
 		        .style("Realista")
@@ -204,7 +204,7 @@ public class PaintingServiceTest {
 		Painting paintingTest4 = Painting.builder()
 		        .name("4ta Obra, obra minimalista")
 		        .description("Pintura de estilo minimalista")
-		        .creation_date(LocalDate.of(2020, 7, 20))
+		        .creationDate(LocalDate.of(2020, 7, 20))
 		        .price(800)
 		        .category(pinturaCategory)
 		        .style("Minimalista")
@@ -222,7 +222,7 @@ public class PaintingServiceTest {
 		Painting paintingTest5 = Painting.builder()
 		        .name("5ta Obra, impresionista")
 		        .description("Obra destacada con estilo impresionista")
-		        .creation_date(LocalDate.of(2019, 12, 5))
+		        .creationDate(LocalDate.of(2019, 12, 5))
 		        .price(5000)
 		        .category(pinturaCategory)
 		        .style("Impresionista")
@@ -240,7 +240,7 @@ public class PaintingServiceTest {
 		Painting paintingTest6 = Painting.builder()
 		        .name("6ta Obra, monocromática")
 		        .description("Pintura monocromática en blanco y negro")
-		        .creation_date(LocalDate.of(2023, 3, 3))
+		        .creationDate(LocalDate.of(2023, 3, 3))
 		        .price(3000)
 		        .category(pinturaCategory)
 		        .style("Monocromático")
@@ -258,7 +258,7 @@ public class PaintingServiceTest {
 		Painting paintingTest7 = Painting.builder()
 		        .name("7ma Obra, surrealista")
 		        .description("Obra surrealista con detalles oníricos")
-		        .creation_date(LocalDate.of(2018, 6, 12))
+		        .creationDate(LocalDate.of(2018, 6, 12))
 		        .price(3500)
 		        .category(pinturaCategory)
 		        .style("Surrealista")
@@ -276,7 +276,7 @@ public class PaintingServiceTest {
 		Painting paintingTest8 = Painting.builder()
 		        .name("8va Obra, digital")
 		        .description("Obra digital impresa")
-		        .creation_date(LocalDate.of(2021, 11, 10))
+		        .creationDate(LocalDate.of(2021, 11, 10))
 		        .price(1200)
 		        .category(digitalCategory)
 		        .style("Futurista")
@@ -294,7 +294,7 @@ public class PaintingServiceTest {
 		Painting paintingTest9 = Painting.builder()
 		        .name("9na Obra, paisaje")
 		        .description("Pintura de paisaje natural")
-		        .creation_date(LocalDate.of(2020, 8, 5))
+		        .creationDate(LocalDate.of(2020, 8, 5))
 		        .price(1800)
 		        .category(pinturaCategory)
 		        .style("Paisajismo")
@@ -312,7 +312,7 @@ public class PaintingServiceTest {
 		Painting paintingTest10 = Painting.builder()
 		        .name("10ma Obra, expresionista")
 		        .description("Obra de estilo expresionista")
-		        .creation_date(LocalDate.of(2022, 2, 20))
+		        .creationDate(LocalDate.of(2022, 2, 20))
 		        .price(2500)
 		        .category(pinturaCategory)
 		        .style("Expresionista")
@@ -330,7 +330,7 @@ public class PaintingServiceTest {
 		Painting paintingTest11 = Painting.builder()
 		        .name("11va Obra, abstracto colorido")
 		        .description("Pintura abstracta con colores vivos")
-		        .creation_date(LocalDate.of(2019, 10, 15))
+		        .creationDate(LocalDate.of(2019, 10, 15))
 		        .price(2200)
 		        .category(pinturaCategory)
 		        .style("Abstracto")
@@ -348,7 +348,7 @@ public class PaintingServiceTest {
 		Painting paintingTest12 = Painting.builder()
 		        .name("12va Obra, retrato")
 		        .description("Pintura de un retrato clásico")
-		        .creation_date(LocalDate.of(2023, 4, 1))
+		        .creationDate(LocalDate.of(2023, 4, 1))
 		        .price(4000)
 		        .category(pinturaCategory)
 		        .style("Retrato")
@@ -366,7 +366,7 @@ public class PaintingServiceTest {
 		Painting paintingTest13 = Painting.builder()
 		        .name("13va Obra, técnica mixta")
 		        .description("Obra con técnica mixta sobre madera")
-		        .creation_date(LocalDate.of(2020, 6, 18))
+		        .creationDate(LocalDate.of(2020, 6, 18))
 		        .price(3200)
 		        .category(pinturaCategory)
 		        .style("Técnica Mixta")
@@ -384,7 +384,7 @@ public class PaintingServiceTest {
 		Painting paintingTest14 = Painting.builder()
 		        .name("14va Obra, cubismo")
 		        .description("Obra de estilo cubista")
-		        .creation_date(LocalDate.of(2018, 9, 30))
+		        .creationDate(LocalDate.of(2018, 9, 30))
 		        .price(2800)
 		        .category(pinturaCategory)
 		        .style("Cubismo")
@@ -402,7 +402,7 @@ public class PaintingServiceTest {
 		Painting paintingTest15 = Painting.builder()
 		        .name("15va Obra, hiperrealismo")
 		        .description("Obra de estilo hiperrealista")
-		        .creation_date(LocalDate.of(2021, 12, 25))
+		        .creationDate(LocalDate.of(2021, 12, 25))
 		        .price(5000)
 		        .category(pinturaCategory)
 		        .style("Hiperrealismo")
@@ -423,6 +423,9 @@ public class PaintingServiceTest {
 		
 		
 	}
+	
+	
+	
 	@DisplayName("Test para encontrar una Obra por id")
 	@Test
 	void findPaintingByIdTest() {
@@ -502,7 +505,7 @@ public class PaintingServiceTest {
 		wrongPricing.setPrice_copy(20);
 		
 		Painting wrongDate = obraGuardada;
-		wrongDate.setCreation_date(LocalDate.of(2025, 10, 17));
+		wrongDate.setCreationDate(LocalDate.of(2025, 10, 17));
 		 
 		Painting noImages = obraGuardada;
 		noImages.setImage(List.of());
@@ -629,7 +632,7 @@ Painting wrongPricing = obraGuardada;
 		 Painting noImages = obraGuardada;
 		 noImages.setImage(List.of());
 		 
-		 wrongDate.setCreation_date(LocalDate.of(2025, 10, 17));
+		 wrongDate.setCreationDate(LocalDate.of(2025, 10, 17));
 		 
 		 given(paintingRepo.findById(id)).willReturn(Optional.of(obraGuardada));
 		 

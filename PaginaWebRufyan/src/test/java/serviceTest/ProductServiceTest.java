@@ -1,6 +1,15 @@
 package serviceTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +17,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.BDDMockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Product;
@@ -22,8 +30,8 @@ import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Service.ProductService;
-import com.example.PaginaWebRufyan.Service.UserService;
 
+@ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
 	@Mock
@@ -34,9 +42,9 @@ public class ProductServiceTest {
 	@InjectMocks
 	private ProductService productService;
 	
-	private ProductsCategory cupCategorySaved;
-	 
 	
+	
+	private ProductsCategory cupCategorySaved;
 	 
 	private Product productTest1 = new Product();
 
@@ -138,7 +146,7 @@ public class ProductServiceTest {
 		*/
 			productTest1= Product.builder()
 							.category(cupCategorySaved)
-							.creation_date(LocalDate.of(2022, 8, 20))
+							.creationDate(LocalDate.of(2022, 8, 20))
 							.description("Customized cup with digital art made by Rufyan")
 							.favorite(true)
 							.image(List.of(product1Image, product2Image))
@@ -150,7 +158,7 @@ public class ProductServiceTest {
 		// Producto con una categoría totalmente nueva 
 			
 			productTest2.setCategory(accesoriesCategory);
-			productTest2.setCreation_date(LocalDate.of(2022, 8, 20));
+			productTest2.setCreationDate(LocalDate.of(2022, 8, 20));
 			productTest2.setDescription("Custom large wooden spoon with flowers, branches and other nature elements");
 			productTest2.setFavorite(true);
 			productTest2.setImage(List.of(product4Image, product5Image, product6Image));
@@ -160,7 +168,7 @@ public class ProductServiceTest {
 			productTest2.setAdittionalFeatures(accesoriesAdditionalFeatures);
 			
 			productTest3.setCategory(accesoriesCategory);
-			productTest3.setCreation_date(LocalDate.of(2029, 1, 22));
+			productTest3.setCreationDate(LocalDate.of(2029, 1, 22));
 			productTest3.setDescription("cup with an ditital art made by Rufyan");
 			productTest3.setFavorite(true);
 			productTest3.setImage(List.of(product4Image, product5Image, product6Image));
@@ -295,7 +303,9 @@ public class ProductServiceTest {
 		productResponse1.setId(id);
 		
 		given(productRepo.save(productTest1)).willReturn(productResponse1);
+		//given(imageRepo.save(null))
 		
+		//System.out.println(productResponse1);
 		Product savedProduct = productService.saveProduct(productTest1);
 		
 		assertThat(savedProduct).isNotNull();
@@ -313,7 +323,7 @@ public class ProductServiceTest {
 		wrongPriceProduct.setPrice(lowestPrice-1);
 		
 		Product wrongDateProduct = productTest1;
-		wrongDateProduct.setCreation_date(LocalDate.now().plusWeeks(1));
+		wrongDateProduct.setCreationDate(LocalDate.now().plusWeeks(1));
 		
 		Product noImagesProduct = productTest1;
 		noImagesProduct.setImage(List.of());
@@ -349,7 +359,7 @@ public class ProductServiceTest {
 		wrongPriceProduct.setPrice(lowestPrice-1);
 		
 		Product wrongDateProduct = productResponse;
-		wrongDateProduct.setCreation_date(LocalDate.now().plusWeeks(1));
+		wrongDateProduct.setCreationDate(LocalDate.now().plusWeeks(1));
 		
 		Product noImagesProduct = productResponse;
 		noImagesProduct.setImage(List.of());
@@ -380,16 +390,16 @@ public class ProductServiceTest {
 	@DisplayName("Test para intentar actualizar un producto que no existe ")
 	@Test
 	void updateNotFoundProductTest() {
-	
+		int id =1;
 		String newName = "Pyrospoon";
 		Product responseProduct = productTest1;
-		responseProduct.setId(1);
+		responseProduct.setId(id);
 		responseProduct.setName(newName);
-		List<Image> newImageList = responseProduct.getImage();
+		List<Image> newImageList = new ArrayList<>(responseProduct.getImage());
 		newImageList.add(product3Image);
 		responseProduct.setImage(newImageList);
 
-		given(productRepo.findById(responseProduct.getId())).willReturn(Optional.empty());		
+		given(productRepo.findById(id)).willReturn(Optional.empty());		
 		
 		
 		assertThrows(ResourceNotFoundException.class, () -> {

@@ -59,7 +59,7 @@ public class ImageServiceTests {
 		
 		productTest1= Product.builder()
 				.category(cupCategorySaved)
-				.creation_date(LocalDate.of(2022, 8, 20))
+				.creationDate(LocalDate.of(2022, 8, 20))
 				.description("Customized cup with digital art made by Rufyan")
 				.favorite(true)
 				.name("Digital society cup")
