@@ -25,6 +25,12 @@ public class Painting extends Product {
 	private Integer copies_made;
 	private Integer price_copy;
 	
+public	final Integer largoMin = 14;
+public	final Integer alturaMin= 20;
+	
+public final Integer originalPriceMin= 500;
+public	final Integer copyPriceMin= 200;
+	
 	
 	
 
