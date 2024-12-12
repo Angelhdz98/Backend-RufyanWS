@@ -214,7 +214,7 @@ public class ProductServiceTest {
 		Product productResponse3 = productTest3;
 		productResponse3.setId(3);
 		
-		given(productRepo.findByNameContainin(searchTerm)).willReturn(List.of(productResponse2,productResponse3));
+		given(productRepo.findByNameContainingIgnoreCase(searchTerm)).willReturn(List.of(productResponse2,productResponse3));
 		
 		List<Product> matchedProducts = productService.retrieveProductsByNameContainging(searchTerm);
 		
@@ -408,6 +408,7 @@ public class ProductServiceTest {
 			verify(productRepo, never()).save(any(Product.class));
 
 	}
+	
 	
 	
 	

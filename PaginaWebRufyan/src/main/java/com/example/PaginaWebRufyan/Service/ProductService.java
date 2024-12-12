@@ -161,7 +161,7 @@ public class ProductService {
 
 	public List<Product> retrieveProductsByNameContainging(String searchTerm) {
 		// TODO Auto-generated method stub
-		return productsRepository.findByNameContainin(searchTerm);
+		return productsRepository.findByNameContainingIgnoreCase(searchTerm);
 	}
 
 	
