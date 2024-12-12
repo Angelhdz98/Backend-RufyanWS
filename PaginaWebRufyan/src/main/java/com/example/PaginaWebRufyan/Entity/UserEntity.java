@@ -103,6 +103,10 @@ public class UserEntity {
 	@JsonIgnore
 	private Set<Product> favoriteProducts= new HashSet<Product>();
 	
+	private Set<Order> orders = new HashSet<Order>();
+	
+	private Cart cart;
+
 	  // Helper methods to manage bidirectional relationship
     public void addFavoriteProduct(Product product) {
         this.favoriteProducts.add(product);
