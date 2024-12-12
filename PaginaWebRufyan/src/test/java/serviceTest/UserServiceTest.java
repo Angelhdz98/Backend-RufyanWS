@@ -272,7 +272,7 @@ class UserServiceTest {
 		UserEntity userResponse2= user2;
 		userResponse2.setId(2);
 		
-		given(userRepo.findByNameContaining("eze")).willReturn(List.of(userResponse1,userResponse2));
+		given(userRepo.findByUsernameContaining("eze")).willReturn(List.of(userResponse1,userResponse2));
 		
 		List<UserEntity> matchedUsers = userService.searchUserWithNameMatch("eze");
 		
