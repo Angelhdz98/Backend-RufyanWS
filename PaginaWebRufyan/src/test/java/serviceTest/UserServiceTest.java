@@ -1,13 +1,16 @@
 package serviceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.example.PaginaWebRufyan.Entity.PermissionEntity;
 import com.example.PaginaWebRufyan.Entity.RoleEntity;
@@ -23,6 +31,7 @@ import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.WrongUserDataException;
+import com.example.PaginaWebRufyan.Repository.RoleRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 import com.example.PaginaWebRufyan.Service.UserService;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
@@ -32,6 +41,9 @@ class UserServiceTest {
 	
 	@Mock
 	UserRepository userRepo;
+	
+	@Mock
+	RoleRepository roleRepo;
 
 	@InjectMocks
 	UserService userService;
@@ -39,6 +51,8 @@ class UserServiceTest {
 	private UserEntity user = new UserEntity();
 	private UserEntity user2 = new UserEntity();
 	private UserEntity user3 = new UserEntity();
+	private UserEntity user4 = new UserEntity();
+
 	
 	
 	PermissionEntity createPermission = PermissionEntity.builder()
@@ -92,6 +106,17 @@ class UserServiceTest {
 				.username("Forinconsitentespurposes")
 				.build();
 		
+		user4= UserEntity.builder()
+				.birthDate(LocalDate.of(1980, 5, 16))
+				.credentialNoExpired(true)
+				.accountNoExpired(true)
+				.accountNoLocked(true)
+				.name("Albertano")
+				.lastname("De la candelaria")
+				.password("esperonoolvidaresta")
+				.email("albertano@gmail.com")
+				.username("elAlbertano")
+				.build();
 		
 	}
 	
@@ -101,7 +126,7 @@ class UserServiceTest {
 	Integer id= 1; 
 	UserEntity userResponse= user;
 	userResponse.setId(id);
-	given(userRepo.findById(id).get()).willReturn(userResponse);
+	given(userRepo.findById(id)).willReturn(Optional.of(userResponse));
 	
 	UserEntity foundUser = userService.findUserById(id).get();
 	
@@ -117,12 +142,20 @@ class UserServiceTest {
 		Integer id= 1; 
 		UserEntity userResponse= user;
 		userResponse.setId(id);
-		given(userRepo.findUserByUsername(user.getUsername()).get()).willReturn(userResponse);
+		given(userRepo.findUserByUsername(user.getUsername())).willReturn(Optional.of(userResponse) );
 		
-		UserEntity foundUser = userService.findUserByUsername(user.getUsername()).get();
-		
+		 Optional<UserEntity> optionalFoundUser = userService.findUserByUsername(user.getUsername());
+		 UserEntity foundUser = optionalFoundUser.get();
 		assertThat(foundUser).isNotNull();
 		assertThat(foundUser.getUsername()).isEqualTo(userResponse.getUsername());
+		
+	}
+	
+	void findUserByUserNameTestOk() {
+		Integer id= 1;
+		UserEntity userResponse= user;
+		UserEntity userResponse2= user2;
+		
 		
 	}
 	
@@ -133,9 +166,10 @@ class UserServiceTest {
 		
 		UserEntity userResponse= user;
 		userResponse.setId(id);
-		given(userRepo.findUserByEmail(user.getEmail()).get()).willReturn(userResponse);
+		given(userRepo.findUserByEmail(user.getEmail())).willReturn(Optional.of(userResponse));
 		
-		UserEntity foundUser = userService.findUserByEmail(user.getUsername()).get();
+		Optional<UserEntity> optionalFoundUser = userService.findUserByEmail(user.getEmail());
+		UserEntity foundUser = optionalFoundUser.get();
 		
 		assertThat(foundUser).isNotNull();
 		assertThat(foundUser.getEmail()).isEqualTo(userResponse.getEmail());
@@ -148,14 +182,21 @@ class UserServiceTest {
 	@Test
 	void saveNewUserTestOk() {
 		Integer id = 1;
+		Integer roleId=1;
 		UserEntity userResponse = user;
 		userResponse.setId(id);
 		userResponse.setRoles(Set.of(roleClient));
+		RoleEntity roleClientResponse= roleClient;
+		
+		roleClientResponse.setId(roleId);
+		
 		
 		given(userRepo.findUserByUsername(user.getUsername())).willReturn(Optional.empty());
 		given(userRepo.findUserByEmail(user.getEmail())).willReturn(Optional.empty());
 		given(userRepo.findById(id)).willReturn(Optional.empty());
 		given(userRepo.save(user)).willReturn(userResponse);
+		given(roleRepo.findByRoleEnum(roleClient.getRoleEnum())).willReturn(Optional.of(roleClientResponse));
+		
 		
 		UserEntity nuevoUsuario= userService.save(user);
 		
@@ -271,19 +312,68 @@ class UserServiceTest {
 		
 		UserEntity userResponse2= user2;
 		userResponse2.setId(2);
+		String searchTerm= "Eze";  
 		
-		given(userRepo.findByUsernameContaining("eze")).willReturn(List.of(userResponse1,userResponse2));
+		given(userRepo.findByUsernameContaining(searchTerm))
+		.willReturn(List.of(userResponse1,userResponse2));
 		
-		List<UserEntity> matchedUsers = userService.searchUserWithNameMatch("eze");
+		given(userRepo.findByNameContainingIgnoreCase(searchTerm))
+		.willReturn(List.of(userResponse1,userResponse2));
 		
-		assertThat(matchedUsers).isNotNull();
-		assertThat(matchedUsers).contains(userResponse1);
-		assertThat(matchedUsers).contains(userResponse2);
+		List<UserEntity> matchedUsersByName = 		
+		userService.searchUserWithNameMatch(searchTerm);
 		
+		List<UserEntity> matchedUsersByUsername = 		
+		userService.searchUserWithUsernameMatch(searchTerm);
+		
+		assertThat(matchedUsersByName).isNotNull();
+		assertThat(matchedUsersByName).contains(userResponse1);
+		assertThat(matchedUsersByName).contains(userResponse2);
+		
+		
+		assertThat(matchedUsersByUsername).isNotNull();
+		assertThat(matchedUsersByUsername).contains(userResponse1);
+		assertThat(matchedUsersByUsername).contains(userResponse2);
 		
 		
 	}
-	
+	@DisplayName("Test para encontrar los usuarios que contengan el String de busqueda Paginado y ordenado")
+	@Test
+	void searchUserBySubstrigPagedAndSorted () {
+		UserEntity userResponse1 = user;
+		userResponse1.setId(1);
+		
+		UserEntity userResponse2= user2;
+		userResponse2.setId(2);
+		String searchTerm= "Eze";  
+		
+		Pageable pagedAndOrderedRequest= PageRequest.of(0, 12, Sort.by("birthDate").ascending());
+		
+		Page<UserEntity> pageResponse = new PageImpl<UserEntity>(List.of(userResponse1, userResponse2));
+		
+		given(userRepo.findByUsernameContaining(searchTerm, pagedAndOrderedRequest))
+		.willReturn(pageResponse);
+		
+		given(userRepo.findByNameContainingIgnoreCase(searchTerm, pagedAndOrderedRequest))
+		.willReturn(pageResponse);
+		
+		Page<UserEntity> matchedUsersByName = 		
+		userService.searchUserWithNameMatch(searchTerm, pagedAndOrderedRequest);
+		
+		Page<UserEntity> matchedUsersByUsername = 		
+		userService.searchUserWithUsernameMatch(searchTerm, pagedAndOrderedRequest);
+		
+		assertThat(matchedUsersByName).isNotNull();
+		assertThat(matchedUsersByName).contains(userResponse1);
+		assertThat(matchedUsersByName).contains(userResponse2);
+		
+		
+		assertThat(matchedUsersByUsername).isNotNull();
+		assertThat(matchedUsersByUsername).contains(userResponse1);
+		assertThat(matchedUsersByUsername).contains(userResponse2);
+		
+		
+	}
 	
 
 }

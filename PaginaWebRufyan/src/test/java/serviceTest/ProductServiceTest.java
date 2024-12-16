@@ -28,6 +28,7 @@ import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
+import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Service.ProductService;
 
@@ -38,13 +39,14 @@ public class ProductServiceTest {
 	private ImageRepository imageRepo;
 	@Mock
 	private ProductsRepository productRepo;
-	
+	@Mock
+	private ProductsCategoryRepository productCategoryRepo;
 	@InjectMocks
 	private ProductService productService;
 	
 	
 	
-	private ProductsCategory cupCategorySaved;
+	
 	 
 	private Product productTest1 = new Product();
 
@@ -52,6 +54,10 @@ public class ProductServiceTest {
 
 	private Product productTest3= new Product();
 	
+	private ProductsCategory cupCategorySaved = ProductsCategory.builder()
+			.name("Custom cup")
+			.id(2)
+			.build();
 	
 	private int lowestPrice = 200;
 	private int lowestAmountOfImages = 1; // puede ser una o al menos dos para 2 perspectivas 
@@ -79,10 +85,8 @@ public class ProductServiceTest {
 		ProductsCategory cupCategory = ProductsCategory.builder()
 				.name("Custom cup")
 				.build();
-		ProductsCategory cupCategorySaved = ProductsCategory.builder()
-				.name("bodyClothes")
-				.id(2)
-				.build();
+		
+
 		ProductsCategory accesoriesCategory= ProductsCategory.builder().
 				name("accesories")
 				.build();
@@ -299,13 +303,30 @@ public class ProductServiceTest {
 	@Test
 	void saveProducTestOk() {
 		int id = 1;
+		int idImage1= 1;
+		int idImage2 = idImage1+1;
+		
+		
+		/*
+		 * Image image1Response = product1Image;
+		image1Response.setId(idImage1);
+		Image image2Response = product2Image;
+		image2Response.setId(idImage2);
+		
+		*/
+		
 		Product productResponse1 = productTest1;
 		productResponse1.setId(id);
-		
+			
+		//given(imageRepo.save(product1Image)).willReturn(image1Response);
+		//given(imageRepo.save(product2Image)).willReturn(image2Response);
+		System.out.println(cupCategorySaved);
+		//given(productCategoryRepo.findByName(cupCategorySaved.getName())).willReturn(Optional.of(cupCategorySaved));
 		given(productRepo.save(productTest1)).willReturn(productResponse1);
 		//given(imageRepo.save(null))
 		
 		//System.out.println(productResponse1);
+		
 		Product savedProduct = productService.saveProduct(productTest1);
 		
 		assertThat(savedProduct).isNotNull();
