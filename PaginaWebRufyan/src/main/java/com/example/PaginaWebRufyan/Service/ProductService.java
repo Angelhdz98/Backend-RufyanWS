@@ -68,22 +68,11 @@ public class ProductService {
 	
 	// method to create new products
 	public Product saveProduct(Product product) {
-		if(product.getImage()!=null) {
-			product.getImage().forEach(image -> 
-			{
-			
-			imageRepository.save(image);
-			});
+		
+		
+		
 
-			HashSet<UserEntity> favoriteBy = new HashSet<UserEntity>(Set.of());
-			if(product.getFavoriteOf()!=null) {
-				for(UserEntity fav : product.getFavoriteOf() ) {
-					favoriteBy.add(userRepository
-							.findById(fav.getId())
-							.orElseThrow(()-> new ResourceNotFoundException("User not found with id"+ fav.getId())));
-				}
-				product.setFavoriteOf(favoriteBy);
-			}
+		
 			
 			
 			/*List<UserEntity> copyBuyers = List.of();
@@ -98,11 +87,14 @@ public class ProductService {
 			}
 			*/
 			
-		}
-		product.setCategory(
+		
+		/*product.setCategory(
 		productsCategoryRepository.
-		findByName(product.getCategory().getName())
-		.orElse(productsCategoryRepository.findById(0).get()) );
+		findByName(product.getCategory().getName()).orElseThrow(()->{
+			throw new ResourceNotFoundException(
+				"Role: "+product.getCategory().getName()+" was not found");
+		}));
+		*/
 		
 		return productsRepository.save(product);		
 	}
