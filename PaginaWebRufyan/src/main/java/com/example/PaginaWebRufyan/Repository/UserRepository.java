@@ -1,10 +1,11 @@
 package com.example.PaginaWebRufyan.Repository;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 //import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,18 +28,18 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 	List <UserEntity> findByNameContainingIgnoreCase(String namePart);
 	Page<UserEntity> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 	
-	List <UserEntity> findByUsernameContainingIgnoreCase(String usernamePart);
-	Page<UserEntity> findByUsernameContainingIgnoreCase(String usernamePart, Pageable pageable);
+	List <UserEntity> findByUsernameContaining(String usernamePart);
+	Page<UserEntity> findByUsernameContaining(String usernamePart, Pageable pageable);
 
 	List <UserEntity> findByEmailContainingIgnoreCase(String emailPart);
 	Page<UserEntity> findByEmailContainingIgnoreCase(String emailPart, Pageable pageable);
 	
-	List<UserEntity> findByUsernameContaining(String usernamePart);
-	List<UserEntity> findByEmailContaining(String emailPart);
+	
+
 	
 	
 	boolean existByUserName(String username);
-	boolean existByEmail(String username);
+	boolean existByEmail(String email);
 	
 	
 }
