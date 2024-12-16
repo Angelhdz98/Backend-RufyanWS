@@ -1,6 +1,5 @@
 package com.example.PaginaWebRufyan.Service;
 
-import java.awt.print.Pageable;
 //import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.PaginaWebRufyan.Entity.Painting;
@@ -149,20 +149,27 @@ public class UserService {
 
 
 	public Optional<UserEntity> findUserByEmail(String username) {
-		// TODO Auto-generated method stub
+		
 		return userRepository.findUserByEmail(username);
 	}
-
+	
+	public boolean existByEmail(String email) {
+		return userRepository.existByEmail(email);
+	}
 
 	public Optional<UserEntity> findUserByUsername(String username) {
-		// TODO Auto-generated method stub
+		
 		return userRepository.findUserByUsername(username);
 	}
 
-
+	public boolean existByUsername(String username) {
+		
+		return userRepository.existByUserName(username);
+		
+	}
 	
 	public List<UserEntity> searchUserWithNameMatch(String namePart) {
-		// TODO Auto-generated method stub
+		
 		return userRepository.findByNameContainingIgnoreCase(namePart);
 	}
 	
@@ -171,16 +178,17 @@ public class UserService {
 		return userRepository.findByNameContainingIgnoreCase(namePart, pageable);
 	}
 	
-	public List<UserEntity> searchUserWithUsernameMatch(String namePart) {
+	public List<UserEntity> searchUserWithUsernameMatch(String usernamePart) {
 		// TODO Auto-generated method stub
-		return userRepository.findByUsernameContainingIgnoreCase(namePart);
+		return userRepository.findByUsernameContaining(usernamePart);
 	}
 	
-	public Page<UserEntity> searchUserWithUsernameMatch(String namePart, Pageable pageable) {
+	public Page<UserEntity> searchUserWithUsernameMatch(String usernamePart, Pageable pageable) {
 		// TODO Auto-generated method stub
-		return userRepository.findByUsernameContainingIgnoreCase(namePart, pageable);
+		return userRepository.findByUsernameContaining(usernamePart, pageable);
 	}
 	
+
 	
 
 	
