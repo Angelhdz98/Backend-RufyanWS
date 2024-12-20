@@ -11,8 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.Product;
+
 import com.example.PaginaWebRufyan.Entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
