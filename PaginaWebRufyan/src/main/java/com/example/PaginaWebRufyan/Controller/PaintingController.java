@@ -1,11 +1,5 @@
 package com.example.PaginaWebRufyan.Controller;
 
-import java.io.IOException;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 //import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -16,26 +10,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Service.ImageService;
 import com.example.PaginaWebRufyan.Service.PaintingService;
 import com.example.PaginaWebRufyan.Service.ProductsCategoryService;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+@Validated
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @PreAuthorize("permitAll()")
@@ -47,13 +48,23 @@ public class PaintingController {
 	@Autowired 
 	private ProductsCategoryService categoryService;
 	
+	Painting examplePainting = Painting.builder().build();
 	
-	 private final String UPLOAD_DIR = "src/main/resources/static";
+	final int alturaMin = examplePainting.getAlturaMin();
+	
+	final int largoMin = examplePainting.getLargoMin();
+	
+	final int originalPriceMin = examplePainting.getOriginalPriceMin();
+	
+	final int copyPriceMin = examplePainting.getCopyPriceMin();
+	
+	// @Value("${file.upload-dir}")
+	 //private  String uploadDir;
 	
 	@GetMapping("/paintings")
 	@PreAuthorize("permitAll()")
-	public List<Painting> retrieveAllPaintings(){
-		return paintingService.findAll(); 
+	public ResponseEntity<List<Painting>>  retrieveAllPaintings(){
+		return ResponseEntity.ok(paintingService.findAll()); 
 	}
 	
 	@GetMapping("/paintings/favorites")
@@ -69,52 +80,32 @@ public class PaintingController {
 		return new  ResponseEntity<>(paintingService.findFavoritePaintings(), headers, HttpStatus.OK);
 	 */
 	@GetMapping("/paintings/{id}")
-	public Painting retrievePainting(@PathVariable int id) {
-		Optional<Painting> painting= paintingService.findById(id);
-		return painting.get();
+	public ResponseEntity<Painting> retrievePainting(@PathVariable @Positive(message = "El id debe de ser un numero positivo") int id) {
+		 Painting painting = paintingService.findById(id)
+			        .orElseThrow(() -> new ResourceNotFoundException("No se encontró la obra buscada"));
+			    return ResponseEntity.ok(painting);
+		
 	}
+	@Transactional
 	@PostMapping("/paintings/create")
-	public ResponseEntity<Painting> uploadPainting( @RequestParam("altura_cm") Integer altura_cm,
-													@RequestParam("available_copies") Integer available_copies,
-													@RequestParam("copies_made") Integer copies_made,
-													@RequestParam("description") String description,
-													@RequestParam("favorite") String favorite,
-													@RequestParam("largo_cm") Integer largo_cm,
-													@RequestParam("medium") String medium,
-													@RequestParam("name") String name,
-													@RequestParam("price") Integer price,
-													@RequestParam("price_copy") Integer price_copy,
-													@RequestParam("image") List<MultipartFile> imageFiles,
-													@RequestParam("support_material") String support_material, 
-													@RequestParam("category") String category){
+	public ResponseEntity<Painting> uploadPainting( @RequestParam("altura_cm") @NotNull @Min(20) Integer altura_cm,
+													@RequestParam("available_copies")@NotNull @Min(0) Integer available_copies,
+													@RequestParam("copies_made") @NotNull @Min(0) Integer copies_made,
+													@RequestParam("description") @NotNull @NotBlank @Size(max = 255, min = 10) String description,
+													@RequestParam("favorite") @NotBlank @Pattern(regexp = "^(true|false)$") String favorite,
+													@RequestParam("largo_cm") @NotNull @Min(14) Integer largo_cm,
+													@RequestParam("medium") @NotNull String medium,
+													@RequestParam("name") @NotNull @NotBlank @Size(min = 3, max =127) String name,
+													@RequestParam("price") @NotNull @Min(500) Integer price,
+													@RequestParam("price_copy")@NotNull @Min(200) Integer price_copy,
+													@RequestParam("image")@NotNull @Size(min=1, max= 6) List<MultipartFile> imageFiles,
+													@RequestParam("support_material") @NotNull @NotBlank @Size(min=3, max= 63) String support_material, 
+													@RequestParam("category") @NotNull @NotBlank @Size(min=3, max=63) String category){
 		
 		
 				
-		List<Image> images = imageFiles.stream().map((file)->{
-			try {
-				// Primero se guarda el archivo en el sistema de archivo
-				String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-				Path filePath = Paths.get(UPLOAD_DIR +"/UploadedImages/UploadedPaintingImages");
-				if(!Files.exists(filePath)) {
-					Files.createDirectories(filePath);
-				}
-				Path savedFilePath = filePath.resolve(fileName);
-				Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
-				//Files.write(filePath, file.getBytes());
-				// Agregamos el path del archivo a la image
-				Image image = Image.builder() 
-								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
-								  .productName(file.getOriginalFilename()).build();
-				
-				return imageService.saveImage(image);
-			}
-			catch(IOException e) {
-				throw new RuntimeException();
-			}
+		List<Image> images = imageService.processImages(imageFiles); 
 			
-		}).collect(Collectors.toList());
-		
-
 		
 		Painting inputPainting = Painting.builder() 
 				.altura_cm(altura_cm) 
@@ -134,9 +125,11 @@ public class PaintingController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		headers.add("Cache-Control","no-cache, no-store, must-revalidate");
+		/*headers.add("Cache-Control","no-cache, no-store, must-revalidate");
 		headers.add("Pragma", "no-cache");
 		headers.add("Expires", "0");
+	*/
+		
 		
 		return new ResponseEntity<>(paintingService.save(inputPainting), headers, HttpStatus.OK);		
 		
@@ -146,7 +139,7 @@ public class PaintingController {
 	 * 
 	 */
 		
-	
+	@Transactional
 	@PutMapping("/paintings/{id}")
 	public ResponseEntity<Painting> updatePainting(	@PathVariable Integer id, 
 													@RequestParam Integer altura_cm,
@@ -169,37 +162,9 @@ public class PaintingController {
 			
 			List<Image> allImages = paintingToUpdate.get().getImage();
 			if (imageFiles!=null && !imageFiles.isEmpty()){
-				List<Image> images = imageFiles.stream().map((file)->{
-				try {
-					// Primero se guarda el archivo en el sistema de archivo
-					String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-					Path filePath = Paths.get(UPLOAD_DIR +"/UploadedImages/UploadedPaintingImages");
-					if(!Files.exists(filePath)) {
-						
-						Files.createDirectories(filePath);
-					}
-					Path savedFilePath = filePath.resolve(fileName);
-					
-					Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
-					//Files.write(filePath, file.getBytes());
-					// Agregamos el path del archivo a la image
-					Image image = Image.builder() 
-									   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
-									  .productName(file.getOriginalFilename()).build();
-					
-					return imageService.saveImage(image);
-				}
-				catch(IOException e) {
-					throw new RuntimeException();
-				}
-				
-			}).collect(Collectors.toList());
-			
-			allImages.addAll(images);
+				List<Image> procesedImages=imageService.processImages(imageFiles);
+				allImages.addAll(procesedImages);
 			}
-			
-			
-			
 			
 			
 			Painting painting = Painting.builder() 
@@ -224,7 +189,7 @@ public class PaintingController {
 		}
 		
 	}
-	
+	@Transactional
 	@DeleteMapping("/paintings/{paintingId}/{imageId}")
 	public ResponseEntity<Painting> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
 			Optional<Painting> optionalOwnerPainting = paintingService.findById(paintingId);
@@ -243,17 +208,19 @@ public class PaintingController {
 		
 		
 	}
-	
+	@Transactional
 	@DeleteMapping("/paintings/{id}")
-	public void deletePaintingById(@PathVariable Integer id ) {
+	public ResponseEntity<Void> deletePaintingById(@PathVariable Integer id ) {
 		Optional<Painting> painting = paintingService.findById(id);
 		if(painting.isPresent()) {
 			painting.get().getImage().forEach(image ->{
 				imageService.deleteImageById(image.getId());
 			});	
+		return ResponseEntity.noContent().build();
 		}
+		return ResponseEntity.notFound().build();
 		
-		paintingService.deletePaintingByid(id);
+	
 	}
 	
 	

@@ -1,10 +1,18 @@
 package com.example.PaginaWebRufyan.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
@@ -12,7 +20,11 @@ import com.example.PaginaWebRufyan.Repository.ImageRepository;
 
 
 @Service
-public class ImageService {
+public class ImageService { 
+	//private final String UPLOAD_DIR = "C://Users//PP//Documents//Proyectos_Programación//Backends//Back_end_rufyan//PaginaWebRufyan//PaginaWebRufyan//src//main//resources//static";
+	
+	 @Value("${file.upload-dir}")
+	 private  String uploadDir;
 	@Autowired
 	private ImageRepository imageRepository;
 	
@@ -20,12 +32,12 @@ public class ImageService {
 		return imageRepository.findAll();
 			}
 	
-	public Image findbyImageId(Integer id) {
-		Optional<Image> image= imageRepository.findById(id);
-		if(image.isEmpty()) {
+	public Optional<Image> findImageById(Integer id) {
+		Optional<Image> optionalImage= imageRepository.findById(id);
+	/*	if(image.isEmpty()) {
 			throw new RuntimeException(" No se econtró la imagen id: " + id);
-		}
-		return image.get();
+		}*/
+		return optionalImage;
 	}
 		
 	public Image saveImage(Image image) {
@@ -48,10 +60,38 @@ public class ImageService {
 			throw new ResourceNotFoundException("Image not found with id: "+id);
 		}
 		
-		
-		
-		
 	}
+
+public List<Image> processImages(List<MultipartFile> imageFiles) {
+		
+		List<Image> images = imageFiles.stream().map((file)->{
+			try {
+				// Primero se guarda el archivo en el sistema de archivo
+				String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
+				Path filePath = Paths.get( uploadDir +"/UploadedImages/UploadedPaintingImages");
+				if(!Files.exists(filePath)) {
+					Files.createDirectories(filePath);
+				}
+				Path savedFilePath = filePath.resolve(fileName);
+				Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
+				//Files.write(filePath, file.getBytes());
+				// Agregamos el path del archivo a la image
+				Image image = Image.builder() 
+								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
+								  .productName(file.getOriginalFilename()).build();
+				
+				return imageRepository.save(image);
+			}
+			catch(IOException e) {
+				throw new RuntimeException();
+			}
+			
+		}).collect(Collectors.toList());
+		
+		return images;
+		
+		}
+
 	
 	
 }

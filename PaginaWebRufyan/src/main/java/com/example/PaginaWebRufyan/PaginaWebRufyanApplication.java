@@ -273,7 +273,7 @@ public class PaginaWebRufyanApplication {
 			painting1.setLargo_cm(74);
 			painting1.setCopies_made(5);
 			painting1.setAvailable_copies(3);
-			painting1.setCreation_date(LocalDate.of(2020, 9, 11));
+			painting1.setCreationDate(LocalDate.of(2020, 9, 11));
 			painting1.setFavorite(true);
 			painting1.setImage(List.of(obra1Image,obra2Image));
 			painting1.setMedium("Oil");
@@ -294,7 +294,7 @@ public class PaginaWebRufyanApplication {
 			painting2.setLargo_cm(50);
 			painting2.setCopies_made(10);
 			painting2.setAvailable_copies(8);
-			painting2.setCreation_date(LocalDate.of(2018, 10, 10));
+			painting2.setCreationDate(LocalDate.of(2018, 10, 10));
 			painting2.setFavorite(true);
 			painting2.setImage(List.of(obra3Image,obra4Image));
 			painting2.setMedium("Oil");
@@ -313,7 +313,7 @@ public class PaginaWebRufyanApplication {
 			painting3.setLargo_cm(50);
 			painting3.setCopies_made(10);
 			painting3.setAvailable_copies(10);
-			painting3.setCreation_date(LocalDate.of(2018, 10, 10));
+			painting3.setCreationDate(LocalDate.of(2018, 10, 10));
 			painting3.setFavorite(true);
 			painting3.setImage(List.of(obra5Image, obra6Image));
 			painting3.setMedium("Oil");

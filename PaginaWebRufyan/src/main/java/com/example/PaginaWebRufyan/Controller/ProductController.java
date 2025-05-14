@@ -2,6 +2,8 @@ package com.example.PaginaWebRufyan.Controller;
 
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +22,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Product;
+import com.example.PaginaWebRufyan.Entity.ProductsCategory;
+import com.example.PaginaWebRufyan.Service.ImageService;
 import com.example.PaginaWebRufyan.Service.ProductService;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
@@ -29,10 +43,12 @@ import com.example.PaginaWebRufyan.Service.ProductService;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private ImageService imageService;
 	
 	@GetMapping("/products")
-	public List<Product> getAllProducts(){
-		return productService.retrieveAllProducts();
+	public ResponseEntity<List<Product>> getAllProducts(){
+		return ResponseEntity.ok(productService.retrieveAllProducts());
 	}
 	@PreAuthorize("permitAll()")
 	@GetMapping("/products/{id}")
@@ -47,32 +63,78 @@ public class ProductController {
 		}
 		
 	}
-	
+	//@ModelAttribute Product product,
+	@Transactional
 	@PostMapping("/products/create")
-	public ResponseEntity<Product> createProduct(@ModelAttribute Product product, @RequestParam("image") List<MultipartFile> imageFiles) {
+	public ResponseEntity<Product> createProduct(@RequestParam("name") @NotNull @NotBlank @Size(min=3,max=127) String name,
+			@RequestParam("description")@NotNull @NotBlank @Size(min=12,max=511)String description,
+			@RequestParam("creationDate")@NotNull @PastOrPresent LocalDate creationDate,
+			@RequestParam("style") @NotNull @Size(min=3,max=127) String style,
+			@RequestParam("price") @NotNull @Min(14) int price,
+			@RequestParam("favorite")@NotBlank @Pattern(regexp = "^(true|false)$") String favorite,
+			@RequestParam("category")@NotNull ProductsCategory category,
+			@RequestParam("adittionalFeatures") LinkedHashMap<String, String> adittionalFeatures,
+			@RequestParam("image")@NotNull@Size(min=1,max=6) List<MultipartFile> imageFiles) {
+			
+		List<Image> images= imageService.processImages(imageFiles);
+		Product newProduct = Product.builder()
+							.adittionalFeatures(adittionalFeatures)
+							.category(category)
+							.creationDate(creationDate)
+							.description(description)
+							.favorite(Boolean.valueOf(favorite))
+							.name(name)
+							.price(price)
+							.style(style)
+							.image(images)
+							.build();
 		
-		try {
-			return ResponseEntity.ok(productService.saveProductWithImages( product, imageFiles));
-			}
-		catch(IOException e){
-			return ResponseEntity.badRequest().build();
-		}
+		
+		return ResponseEntity.ok(productService.saveProduct(newProduct));
 		/*catch(IOException e) {
 			return ResponseEntity.badRequest().build();
 		}*/
 		
 	}
+	
+	@Transactional
 	@PutMapping("/products/{id}")
-	public ResponseEntity<Product> updateProductById(@PathVariable Integer id, @RequestBody Product product){
+	public ResponseEntity<Product> updateProductById(@PathVariable Integer id, @RequestParam("name") @NotNull @NotBlank @Size(min=3,max=127) String name,
+			@RequestParam("description")@NotNull @NotBlank @Size(min=12,max=511)String description,
+			@RequestParam("creationDate")@NotNull @PastOrPresent LocalDate creationDate,
+			@RequestParam("style") @NotNull @Size(min=3,max=127) String style,
+			@RequestParam("price") @NotNull @Min(14) int price,
+			@RequestParam("favorite")@NotBlank @Pattern(regexp = "^(true|false)$") String favorite,
+			@RequestParam("category")@NotNull ProductsCategory category,
+			@RequestParam("adittionalFeatures") LinkedHashMap<String, String> adittionalFeatures,
+			@RequestParam("image")@NotNull@Size(min=1,max=6) List<MultipartFile> imageFiles){
 		Optional<Product> optionalProduct = productService.retrieveProductById(id);
 		if(optionalProduct.isPresent()) {
-		return	ResponseEntity.ok(productService.updateProductById(id, product));	
+			List<Image> allImages= optionalProduct.get().getImage();
+			
+			List<Image>UpdatedImage = imageService.processImages(imageFiles);
+			allImages.addAll(UpdatedImage);
+			
+				Product updatedProduct = Product.builder()
+						.adittionalFeatures(adittionalFeatures)
+						.category(category)
+						.creationDate(creationDate)
+						.description(description)
+						.favorite(Boolean.valueOf(favorite))
+						.name(name)
+						.price(price)
+						.style(style)
+						.image(allImages)
+						.build();
+
+		return	ResponseEntity.ok(productService.updateProductById(id, updatedProduct));	
 		}else {
 			return ResponseEntity.notFound().build();		}
 		
 	}
 	
 	
+	@Transactional
 	@DeleteMapping
 	public ResponseEntity<Product> deleteProductById(@PathVariable Integer id){
 		Optional<Product> optionalProductDeleted = productService.deleteProductById(id);

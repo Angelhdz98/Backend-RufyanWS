@@ -29,7 +29,7 @@ public class ImageController {
 	
 	@GetMapping("/images/{id}")
 	public Image findImageById(@PathVariable Integer id) {
-		return imageService.findbyImageId(id);
+		return imageService.findImageById(id).get();
 	}
 	@PostMapping("/images")
 	public void saveImage(@RequestBody Image image) {

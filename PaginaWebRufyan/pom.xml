@@ -54,7 +54,7 @@
 <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
-    <version>5.8.2</version>  <!--Usa la versión que prefieras-->
+     <!--Usa la versión que prefieras-->
     <scope>test</scope>
 </dependency>
 	 <dependency>

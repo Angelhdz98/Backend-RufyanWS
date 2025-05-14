@@ -43,7 +43,7 @@ public class Product {
 	private Integer id;
 	private String name;
 	private String description;
-	private LocalDate creation_date;
+	private LocalDate creationDate;
 	private String style; 
 	
 /*	@ManyToMany(mappedBy = "copiesBuyed",

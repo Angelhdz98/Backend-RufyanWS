@@ -3,11 +3,10 @@ package com.example.PaginaWebRufyan.Exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
-
-	public ResourceNotFoundException(String message){
+@ResponseStatus(code = HttpStatus.CONFLICT)
+public class AlreadyExistIdenticatorException extends RuntimeException{
+ 
+	public AlreadyExistIdenticatorException(String message) {
 		super(message);
 	}
-	
 }
