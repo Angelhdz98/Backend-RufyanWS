@@ -4,19 +4,11 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,13 +17,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder(toBuilder = true)
+@Builder
 @EqualsAndHashCode()
 @ToString
 @Entity
@@ -76,8 +68,9 @@ public class UserEntity {
 	joinColumns = @JoinColumn(name= "user_id"), 
 	inverseJoinColumns = @JoinColumn(name= "role_id"))
 	@Builder.Default
-	private Set<RoleEntity> roles = new HashSet<RoleEntity>(); //ADMIN || CLIENT
-	
+	private Set<RoleEntity> roles = new HashSet<>(); //ADMIN || CLIENT
+
+
 	
 	////
 	
@@ -100,10 +93,24 @@ public class UserEntity {
 	*/
 	
 	@ManyToMany(mappedBy = "favoriteOf")
-	@JsonIgnore
-	private Set<Product> favoriteProducts= new HashSet<Product>();
-	
-	  // Helper methods to manage bidirectional relationship
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private Set<Product> favoriteProducts= new HashSet<>();
+
+	@OneToMany(mappedBy = "originalOwner" ,
+			fetch = FetchType.EAGER)
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private Set<Painting> originalPaintings= new HashSet<>();
+	@OneToOne
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private UserProfilePicture profilePicture;
+
+	private ShoppingCart shoppingCart;
+
+
+	// Helper methods to manage bidirectional relationship
     public void addFavoriteProduct(Product product) {
         this.favoriteProducts.add(product);
         product.getFavoriteOf().add(this);

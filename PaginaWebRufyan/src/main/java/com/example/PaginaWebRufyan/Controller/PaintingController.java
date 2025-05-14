@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
 import com.example.PaginaWebRufyan.Entity.ProductsCategory;
+import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Service.ImageService;
 import com.example.PaginaWebRufyan.Service.PaintingService;
+import com.example.PaginaWebRufyan.Service.ProductsCategoryService;
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @PreAuthorize("permitAll()")
@@ -41,6 +44,8 @@ public class PaintingController {
 	private PaintingService paintingService;
 	@Autowired
 	private ImageService imageService;
+	@Autowired 
+	private ProductsCategoryService categoryService;
 	
 	
 	 private final String UPLOAD_DIR = "src/main/resources/static";
@@ -71,7 +76,6 @@ public class PaintingController {
 	@PostMapping("/paintings/create")
 	public ResponseEntity<Painting> uploadPainting( @RequestParam("altura_cm") Integer altura_cm,
 													@RequestParam("available_copies") Integer available_copies,
-													@RequestParam("category") ProductsCategory category,
 													@RequestParam("copies_made") Integer copies_made,
 													@RequestParam("description") String description,
 													@RequestParam("favorite") String favorite,
@@ -81,7 +85,8 @@ public class PaintingController {
 													@RequestParam("price") Integer price,
 													@RequestParam("price_copy") Integer price_copy,
 													@RequestParam("image") List<MultipartFile> imageFiles,
-													@RequestParam("support_material") String support_material) {
+													@RequestParam("support_material") String support_material, 
+													@RequestParam("category") String category){
 		
 		
 				
@@ -98,7 +103,7 @@ public class PaintingController {
 				//Files.write(filePath, file.getBytes());
 				// Agregamos el path del archivo a la image
 				Image image = Image.builder() 
-								   .url("/UploadedImages/UploadedPaintingImages/"+fileName) 
+								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
 								  .productName(file.getOriginalFilename()).build();
 				
 				return imageService.saveImage(image);
@@ -114,7 +119,7 @@ public class PaintingController {
 		Painting inputPainting = Painting.builder() 
 				.altura_cm(altura_cm) 
 				.available_copies(available_copies) 
-				.category(category) 
+				.category(categoryService.retrieveCategoryByName(category).orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: " +category))) 
 				.copies_made(copies_made) 
 				.description(description) 
 				.favorite(Boolean.valueOf(favorite)) 
@@ -143,14 +148,99 @@ public class PaintingController {
 		
 	
 	@PutMapping("/paintings/{id}")
-	public ResponseEntity<Painting> updatePainting(@PathVariable Integer id, @RequestBody Painting painting){
+	public ResponseEntity<Painting> updatePainting(	@PathVariable Integer id, 
+													@RequestParam Integer altura_cm,
+													@RequestParam Integer available_copies,
+													@RequestParam String category,
+													@RequestParam Integer copies_made,
+													@RequestParam String description,
+													@RequestParam Boolean favorite,
+													@RequestParam Integer largo_cm,
+													@RequestParam String medium,
+													@RequestParam String name,
+													@RequestParam Integer price,
+													@RequestParam Integer price_copy,
+													@RequestParam(value="imageFiles", required = false) List<MultipartFile> imageFiles,
+													@RequestParam String support_material){
 		Optional<Painting> paintingToUpdate= paintingService.findById(id); 
 		if (paintingToUpdate.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}else {
-			 Painting updatedPainting = paintingService.updatePaintingById(id, painting);	
+			
+			List<Image> allImages = paintingToUpdate.get().getImage();
+			if (imageFiles!=null && !imageFiles.isEmpty()){
+				List<Image> images = imageFiles.stream().map((file)->{
+				try {
+					// Primero se guarda el archivo en el sistema de archivo
+					String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
+					Path filePath = Paths.get(UPLOAD_DIR +"/UploadedImages/UploadedPaintingImages");
+					if(!Files.exists(filePath)) {
+						
+						Files.createDirectories(filePath);
+					}
+					Path savedFilePath = filePath.resolve(fileName);
+					
+					Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
+					//Files.write(filePath, file.getBytes());
+					// Agregamos el path del archivo a la image
+					Image image = Image.builder() 
+									   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
+									  .productName(file.getOriginalFilename()).build();
+					
+					return imageService.saveImage(image);
+				}
+				catch(IOException e) {
+					throw new RuntimeException();
+				}
+				
+			}).collect(Collectors.toList());
+			
+			allImages.addAll(images);
+			}
+			
+			
+			
+			
+			
+			Painting painting = Painting.builder() 
+					.altura_cm(altura_cm) 
+					.available_copies(available_copies) 
+					.category(categoryService.retrieveCategoryByName(category)
+							.orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: "+category))) 
+					.copies_made(copies_made) 
+					.description(description) 
+					.favorite(Boolean.valueOf(favorite)) 
+					.image(allImages) 
+					.largo_cm(largo_cm) 
+					.medium(medium) 
+					.name(name) 
+					.price(price) 
+					.price_copy(price_copy) 
+					.support_material(support_material).build();
+			
+			 Painting updatedPainting = paintingService.updatePaintingById(id, painting);
+			 
 			return ResponseEntity.ok(updatedPainting);	
 		}
+		
+	}
+	
+	@DeleteMapping("/paintings/{paintingId}/{imageId}")
+	public ResponseEntity<Painting> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
+			Optional<Painting> optionalOwnerPainting = paintingService.findById(paintingId);
+			if(optionalOwnerPainting.isPresent()) {
+				Painting ownerPainting = optionalOwnerPainting.get();
+				ownerPainting.setImage(ownerPainting.getImage().stream()
+						.filter(image->!image.getId().equals(imageId))
+						.collect(Collectors.toList()));
+				
+				paintingService.updatePaintingById(paintingId, ownerPainting);
+				paintingService.deleteImage(imageId);
+				
+				return ResponseEntity.ok(ownerPainting);
+			}
+			else return ResponseEntity.badRequest().build();
+		
 		
 	}
 	
