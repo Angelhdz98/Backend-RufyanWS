@@ -1,5 +1,7 @@
 package com.example.PaginaWebRufyan.Entity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,8 +26,11 @@ public class Painting extends Product {
 	private Integer available_copies;
 	private Integer copies_made;
 	private Integer price_copy;
-	
-	
+
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	private UserEntity originalOwner;
+
+
 	
 
 }
