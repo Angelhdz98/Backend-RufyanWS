@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,10 +19,17 @@ public class ShoppingCart {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @OneToOne
     private UserEntity user;
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Set<CartItem> itemList = new HashSet<>();
+    @Transient
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 
+    {
+        createdAt = LocalDate.now();
+    }
 
 
 }

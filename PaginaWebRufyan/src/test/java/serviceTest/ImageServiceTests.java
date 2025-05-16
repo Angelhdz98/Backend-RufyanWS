@@ -65,7 +65,7 @@ public class ImageServiceTests {
 				.name("Digital society cup")
 				.price(600)
 				.style("Expresionism")
-				.adittionalFeatures(cupAdditionalFeatures)
+				.additionalFeatures(cupAdditionalFeatures)
 				.build();
 		
 		// el imageService recibe las imagenes sin guardar y las regresa guardadas (entran sin id)

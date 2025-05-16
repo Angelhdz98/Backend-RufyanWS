@@ -19,13 +19,17 @@ import lombok.experimental.SuperBuilder;
 
 public class Painting extends Product {
 	
-	private Integer altura_cm;
-	private Integer largo_cm;
+	private Integer alturaCm;
+	private Integer largoCm;
 	private String medium;
-	private String support_material;
-	private Integer available_copies;
-	private Integer copies_made;
-	private Integer price_copy;
+	private String supportMaterial;
+	private Integer availableCopies;
+	private Integer copiesMade;
+	private Integer pricePerCopy;
+	final private  Integer minHeightCm = 15;
+	final private  Integer minLargeCm= 15;
+	final private  Integer minPrice = 750;
+	final private Integer minPricePerCopy= 300;
 
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	private UserEntity originalOwner;

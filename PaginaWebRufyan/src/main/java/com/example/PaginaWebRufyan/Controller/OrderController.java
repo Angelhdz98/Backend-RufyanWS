@@ -28,21 +28,21 @@ public class OrderController {
 		return  ResponseEntity.ok(orderService.findAllOrders());
 	}
 	
-	@GetMapping("/orders")
+	@GetMapping("/orders/paged")
 	ResponseEntity<Page<Order>> findAllOrdersPaged( Pageable pageable){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersPaged(pageable));	
 	}
 	
-	@GetMapping("/orders")
-	ResponseEntity<List<Order>> findAllOrdersByStatus(OrderStatus orderStatus){
+	@GetMapping(value = "/orders/by-status")
+	ResponseEntity<List<Order>> findAllOrdersByStatus(@RequestParam OrderStatus orderStatus){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersByStatus(orderStatus));	
 	}
 	
-	@GetMapping("/orders")
+	@GetMapping( value = "/orders/by-status/paged", params = "page")
 	ResponseEntity<Page<Order>> findAllOrdersByStatusPaged(
-							@RequestParam("status") OrderStatus orderStatus,
+								OrderStatus orderStatus,
 										Pageable pageable){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersByStatusPaged(orderStatus, pageable));	
@@ -56,7 +56,7 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.findAllOrdersByUserId(userId));	
 	}
 	
-	@GetMapping("/orders/{userId}")
+	@GetMapping("/orders/{userId}/paged")
 	ResponseEntity<Page<Order>> findAllOrdersByStatusPaged(
 							@PathVariable @Positive(message = "El id debe de ser un numero positivo")
 										Integer userId,

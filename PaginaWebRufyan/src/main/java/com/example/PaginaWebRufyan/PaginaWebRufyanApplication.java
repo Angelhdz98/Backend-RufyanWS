@@ -79,34 +79,7 @@ public class PaginaWebRufyanApplication {
                     .build();
 
 			
-	/*		PermissionEntity createPermission= new PermissionEntity();
-			createPermission.setName("CREATE");
-			PermissionEntity readPermission= new PermissionEntity();
-			readPermission.setName("READ");
-			PermissionEntity updatePermission= new PermissionEntity();
-			updatePermission.setName("UPDATE");
-			PermissionEntity deletePermission= new PermissionEntity();;
-			deletePermission.setName("DELETE");
-	*/
-			
-			//Crear los roles 
-			/*RoleEntity roleAdmin = new RoleEntity();
-			roleAdmin.setRoleEnum(RoleEnum.ADMIN);
-			roleAdmin.setPermissionList(Set.of(createPermission, readPermission, updatePermission, deletePermission));
-			
-			RoleEntity roleClient = new RoleEntity();
-			roleClient.setRoleEnum(RoleEnum.CLIENT);
-			roleClient.setPermissionList(Set.of(readPermission ));
-			
-			RoleEntity roleDeveloper = new RoleEntity();
-			roleDeveloper.setRoleEnum(RoleEnum.DEVELOPER);
-			roleDeveloper.setPermissionList(Set.of(createPermission,  readPermission, updatePermission, deletePermission));
-			
-			RoleEntity roleInvited = new RoleEntity();
-			roleInvited.setRoleEnum(RoleEnum.INVITED);
-			roleInvited.setPermissionList(Set.of(readPermission));
-			*/
-			
+
             
             roleRepository.saveAll(List.of(roleAdmin, roleClient, roleDeveloper, roleInvited));
 			
@@ -185,52 +158,7 @@ public class PaginaWebRufyanApplication {
 		
 					
 			
-			/*
-			UserEntity userRufyan = new UserEntity("Rodrigo", "Muñoz Silva", LocalDate.of(1994, 5, 17),
-					"RufyanSilva@gmail.com","RufyanAdmin", "pepeesmipastor",
-					true, true, true, true,
-					new HashSet<>(List.of(roleAdmin)),
-					//Set.of(roleRepository.findById(roleAdmin.getId()).get()),
-					new HashSet<>(List.of())
-					);			
-		
-			UserEntity userPepe = new UserEntity("Jose Angel", "Hernandez Torres", LocalDate.of(1998, 6, 5),
-					"hernandeztorresjoseangel@gmail.com","PepeDev", "yonomasprogramo",
-					true, true, true, true,
-					//Set.of(roleRepository.findById(roleDeveloper.getId()).get()),
-					new HashSet<>(List.of(roleDeveloper)),
-					Set.of());			
-			UserEntity userDonRube = new UserEntity("Don Rube", "Salinas", LocalDate.of(1954, 2, 19),
-					"rubensalinas@gmail.com","DonRube","yonomascompro",
-					true, true, true, true,
-					//Set.of(roleRepository.findById(roleClient.getId()).get()),
-					new HashSet<>(List.of(roleClient)),
-					Set.of());
-			UserEntity userDonaMago = new UserEntity("Dona Mago", "de Salinas", LocalDate.of(1958, 5, 22)
-					, "mago_gonzalez@gmail.com", "MagoSinMangas", "yonomascompro",
-					true, true, true, true,
-//					Set.of(roleRepository.findById(roleInvited.getId()).get()),
-					new HashSet<>(List.of(roleClient)),
-					Set.of());
-				UserEntity userBaudelioCliente = new UserEntity("Baudelio", "Jimenez", LocalDate.of(1980, 9, 1),
-						"BaudelioJ@hotmail.com","Baudi", "yonomascompro",
-						true, true, true, true,
-						//Set.of(roleRepository.findById(roleClient.getId()).get()),
-						new HashSet<>(List.of(roleClient)),
-						Set.of());
-						
-						*/
-			
-		/*	UserEntity userTerCliente = new UserEntity("Ter", "Nomas Ter", LocalDate.of(1996, 5, 12), "spamdeTer@gmail.com","TER", "yonomascompro", true, true, true, true, Set.of(roleRepository.findById(roleClient.getId()).get()),null);
-			UserEntity userMaria = new UserEntity("Maria", "Lopez Sanchez", LocalDate.of(1990, 3, 15), "maria.lopez@example.com","MariaArtLover", commonPassword, true, true, true, true, Set.of(roleRepository.findById(roleClient.getId()).get()),null
-				);
-	*/		
-			
-				
-				 // Guardar usuarios
-	   //         List<UserEntity> users = List.of(userRufyan, userDonRube, userDonaMago, userPepe, userBaudelioCliente);
-	  //          userService.saveAll(users);
-			
+
 			
 			
 			final String HOSTLINK= "http://localhost:8080/static/";
@@ -269,17 +197,17 @@ public class PaginaWebRufyanApplication {
 			painting1.setName("Starry Night");
 			painting1.setDescription("A gorgeous painting by me");
 			painting1.setCategory(categoriaPinturaGuardada);
-			painting1.setAltura_cm(92);
-			painting1.setLargo_cm(74);
-			painting1.setCopies_made(5);
-			painting1.setAvailable_copies(3);
+			painting1.setAlturaCm(92);
+			painting1.setLargoCm(74);
+			painting1.setCopiesMade(5);
+			painting1.setAvailableCopies(3);
 			painting1.setCreationDate(LocalDate.of(2020, 9, 11));
-			painting1.setFavorite(true);
+			painting1.setIsFavorite(true);
 			painting1.setImage(List.of(obra1Image,obra2Image));
 			painting1.setMedium("Oil");
 			painting1.setPrice(2000);
-			painting1.setPrice_copy(400);
-			painting1.setSupport_material("canvas");
+			painting1.setPricePerCopy(400);
+			painting1.setSupportMaterial("canvas");
 			painting1.setStyle("Surrealismo");
 			//painting1.setOriginalOwner(userDonRube);
 			//painting1.setCopyBuyers(List.of(userMaria, userBaudelioCliente));
@@ -290,18 +218,18 @@ public class PaginaWebRufyanApplication {
 			painting2.setName("The Persistence of Memory");
 			painting2.setDescription("A gorgeous painting by me when I was 18 ");
 			painting2.setCategory(pintura);
-			painting2.setAltura_cm(70);
-			painting2.setLargo_cm(50);
-			painting2.setCopies_made(10);
-			painting2.setAvailable_copies(8);
+			painting2.setAlturaCm(70);
+			painting2.setLargoCm(50);
+			painting2.setCopiesMade(10);
+			painting2.setAvailableCopies(8);
 			painting2.setCreationDate(LocalDate.of(2018, 10, 10));
-			painting2.setFavorite(true);
+			painting2.setIsFavorite(true);
 			painting2.setImage(List.of(obra3Image,obra4Image));
 			painting2.setMedium("Oil");
 			painting2.setPrice(2000);
-			painting2.setPrice_copy(400);
-			painting2.setSupport_material("Tempera");
-			//painting2.setOriginalOwner(userDonRube);
+			painting2.setPricePerCopy(400);
+			painting2.setSupportMaterial("Tempera");
+			//painting2.setFavoriteOf(Set.of(userDonRube));
 			//painting2.setCopyBuyers(List.of(userBaudelioCliente, userPepe));
 			
 			
@@ -309,17 +237,17 @@ public class PaginaWebRufyanApplication {
 			painting3.setName("The Scream");
 			painting3.setDescription("A Painting I did when I was sad ");
 			painting3.setCategory(pintura);
-			painting3.setAltura_cm(70);
-			painting3.setLargo_cm(50);
-			painting3.setCopies_made(10);
-			painting3.setAvailable_copies(10);
+			painting3.setAlturaCm(70);
+			painting3.setLargoCm(50);
+			painting3.setCopiesMade(10);
+			painting3.setAvailableCopies(10);
 			painting3.setCreationDate(LocalDate.of(2018, 10, 10));
-			painting3.setFavorite(true);
+			painting3.setIsFavorite(true);
 			painting3.setImage(List.of(obra5Image, obra6Image));
 			painting3.setMedium("Oil");
 			painting3.setPrice(2000);
-			painting3.setPrice_copy(400);
-			painting3.setSupport_material("Tempera");
+			painting3.setPricePerCopy(400);
+			painting3.setSupportMaterial("Tempera");
 			painting3.setStyle("Expressionism");
 			
 			//painting3.setFavoriteOf(Set.of(userBaudelioCliente));
@@ -333,31 +261,16 @@ public class PaginaWebRufyanApplication {
 			userTerCliente.setCopiesBuyed(List.of(painting3));
 			userDonRube.setOriginalBuyed(Set.of(painting2, painting1));
 			*/
-			
+
 			List<Painting> paintings = List.of(painting1 , painting2, painting3);
 			paintings.forEach(painting ->{
 			paintingRepository.save(painting);
 			});
-			
-	//		userBaudelioCliente.setCopiesBuyed(List.of(painting1,painting2));
-					
-					//productRepository.findByName(painting1.getName()).get(),
-					//productRepository.findByName(painting2.getName()).get()
-					
-					/*productService.retrieveProductByName(painting1.getName()),
-					productService.retrieveProductByName(painting2.getName())
-					*/
-					
-			//userBaudelioCliente.setFavoriteProducts(new HashSet<Product>(Set.of(painting1)));
-//			userBaudelioCliente.addFavoriteProduct(painting3);
-					
-					//productRepository.findByName(painting3.getName()).get()
-					
-					//productService.retrieveProductByName(painting3.getName())
-					
-//			userPepe.setCopiesBuyed(List.of(painting2));
-					
-					
+
+			userDonRube.addFavoriteProduct(painting1);
+			userDonRube.addFavoriteProduct(painting2);
+
+
 		var user=	List.of(userRufyan,
 					userDonRube,
 					userDonaMago,
@@ -366,10 +279,11 @@ public class PaginaWebRufyanApplication {
 				/*	userTerCliente,
 					userMaria*/
 		
-		
+
 			userRepository.saveAll(user);
 		
-			
+			paintingRepository.save(painting2);
+			paintingRepository.save(painting1);
 			
 			/*
 			List.of(userRufyan,  userDonRube,userDonaMago, userPepe, userBaudelioCliente, userTerCliente,userMaria ).forEach(user ->{

@@ -1,28 +1,17 @@
 package com.example.PaginaWebRufyan.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Painting;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.PaintingRepository;
-
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class PaintingService {
@@ -55,7 +44,7 @@ public class PaintingService {
 
 	public List<Painting> findFavoritePaintings(){
 		Painting examplePainting = new Painting();
-		examplePainting.setFavorite(true);
+		examplePainting.setIsFavorite(true);
 		Example<Painting> example= Example.of(examplePainting);
 		return paintingRepository.findAll(example);
 	}
@@ -67,24 +56,24 @@ public class PaintingService {
 			 paintingData.setId(id);
 			Painting painting= optionalPainting.get();
 			
-			painting.setAltura_cm(paintingData.getAltura_cm());
-			painting.setAvailable_copies(paintingData.getAvailable_copies());
+			painting.setAlturaCm(paintingData.getAlturaCm());
+			painting.setAvailableCopies(paintingData.getAvailableCopies());
 			painting.setCategory(paintingData.getCategory());
-			painting.setCopies_made(paintingData.getCopies_made());
+			painting.setCopiesMade(paintingData.getCopiesMade());
 			painting.setCreationDate(paintingData.getCreationDate());
 			painting.setDescription(paintingData.getDescription());
-			painting.setFavorite(paintingData.getFavorite());
+			painting.setIsFavorite(paintingData.getIsFavorite());
 			painting.setId(paintingData.getId());
 			painting.setImage(paintingData.getImage());
-			painting.setLargo_cm(paintingData.getLargo_cm());
+			painting.setLargoCm(paintingData.getLargoCm());
 			painting.setMedium(paintingData.getMedium());
 			painting.setName(paintingData.getName());
 			painting.setPrice(paintingData.getPrice());
-			painting.setSupport_material(paintingData.getSupport_material());
-			painting.setAdittionalFeatures(paintingData.getAdittionalFeatures());
-			painting.setPrice_copy(paintingData.getPrice_copy());
+			painting.setSupportMaterial(paintingData.getSupportMaterial());
+			painting.setAdditionalFeatures(paintingData.getAdditionalFeatures());
+			painting.setPricePerCopy(paintingData.getPricePerCopy());
 			painting.setStyle(paintingData.getStyle());
-			painting.setSupport_material(paintingData.getSupport_material());
+			painting.setSupportMaterial(paintingData.getSupportMaterial());
 			
 			//			painting.setCopyBuyers(paintingData.getCopyBuyers());
 			//painting.setOriginalOwner(paintingData.getOriginalOwner());
@@ -117,7 +106,7 @@ public class PaintingService {
 
 
 	public Painting save(Painting painting) throws AlreadyExistIdenticatorException {
-		if(paintingRepository.existByName(painting.getName())) {
+		if(paintingRepository.existsByName(painting.getName())) {
 			throw new AlreadyExistIdenticatorException("El nombre ya existe en otra obra");
 		}
 		return paintingRepository.save(painting);

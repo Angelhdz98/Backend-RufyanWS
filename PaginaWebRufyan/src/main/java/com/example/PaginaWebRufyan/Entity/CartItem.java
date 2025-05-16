@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.Entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +10,11 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class CartItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
     private Product product;
     private Integer quantity;
     private Boolean isOriginalSelected;

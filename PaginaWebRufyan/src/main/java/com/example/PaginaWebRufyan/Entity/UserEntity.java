@@ -8,6 +8,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -95,6 +96,8 @@ public class UserEntity {
 	@ManyToMany(mappedBy = "favoriteOf")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
+	@Builder.Default
+	@JsonManagedReference
 	private Set<Product> favoriteProducts= new HashSet<>();
 
 	@OneToMany(mappedBy = "originalOwner" ,
@@ -107,6 +110,7 @@ public class UserEntity {
 	@EqualsAndHashCode.Exclude
 	private UserProfilePicture profilePicture;
 
+	@OneToOne
 	private ShoppingCart shoppingCart;
 
 
