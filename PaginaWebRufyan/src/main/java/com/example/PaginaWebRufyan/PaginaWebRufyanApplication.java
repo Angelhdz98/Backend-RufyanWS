@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.Service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,8 +35,8 @@ public class PaginaWebRufyanApplication {
 	
 	@Bean
 	CommandLineRunner init(UserRepository userRepository,
-			RoleRepository roleRepository, PaintingRepository paintingRepository,
-			ProductsCategoryRepository productsCategoryRepository) {
+						   RoleRepository roleRepository, PaintingRepository paintingRepository,
+						   ProductsCategoryRepository productsCategoryRepository, UserService userService) {
 		return args ->{
 			
 			PermissionEntity createPermission = PermissionEntity.builder()
@@ -60,22 +62,22 @@ public class PaginaWebRufyanApplication {
             /* Create ROLES */
             RoleEntity roleAdmin = RoleEntity.builder()
                     .roleEnum(RoleEnum.ADMIN)
-                    .permissionList(Set.of(createPermission, readPermission, updatePermission, deletePermission))
+                    .permissionList(new HashSet<>(Set.of(createPermission, readPermission, updatePermission, deletePermission)))
                     .build();
 
             RoleEntity roleClient = RoleEntity.builder()
                     .roleEnum(RoleEnum.CLIENT)
-                    .permissionList(Set.of(createPermission, readPermission))
+                    .permissionList(new HashSet<>(Set.of(createPermission, readPermission)))
                     .build();
 
             RoleEntity roleInvited = RoleEntity.builder()
                     .roleEnum(RoleEnum.INVITED)
-                    .permissionList(Set.of(readPermission))
+                    .permissionList(new HashSet<>(Set.of(readPermission)))
                     .build();
 
             RoleEntity roleDeveloper = RoleEntity.builder()
                     .roleEnum(RoleEnum.DEVELOPER)
-                    .permissionList(Set.of(createPermission, readPermission, updatePermission, deletePermission, refactorPermission))
+                    .permissionList(new HashSet<>(Set.of(createPermission, readPermission, updatePermission, deletePermission, refactorPermission)))
                     .build();
 
 			
@@ -99,7 +101,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleAdmin))
+					.roles(new HashSet<>(Set.of(roleAdmin)))
 					.build();
 			UserEntity userPepe =UserEntity.builder()
 					.name("José Ángel ")
@@ -112,7 +114,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleDeveloper))
+					.roles(new HashSet<>(Set.of(roleDeveloper)))
 					.build();
 			UserEntity userDonRube =UserEntity.builder()
 					.name("Don Rube")
@@ -125,7 +127,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleClient))
+					.roles(new HashSet<>(Set.of(roleClient)))
 					.build();
 			UserEntity userDonaMago =UserEntity.builder()
 					.name("Dona Mago")
@@ -138,7 +140,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleClient))
+					.roles(new HashSet<>(Set.of(roleClient)))
 					.build();
 			UserEntity userBaudelioCliente =UserEntity.builder()
 					.name("Baudelio")
@@ -151,7 +153,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoExpired(true)
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
-					.roles(Set.of(roleClient))
+					.roles(new HashSet<>(Set.of(roleClient)))
 					.build();
 			
 			
@@ -271,7 +273,7 @@ public class PaginaWebRufyanApplication {
 			userDonRube.addFavoriteProduct(painting2);
 
 
-		var user=	List.of(userRufyan,
+		var userList=	List.of(userRufyan,
 					userDonRube,
 					userDonaMago,
 					userPepe,
@@ -280,11 +282,19 @@ public class PaginaWebRufyanApplication {
 					userMaria*/
 		
 
-			userRepository.saveAll(user);
-		
-			paintingRepository.save(painting2);
+			//userRepository.saveAll(user);
+
+			for(UserEntity user:userList){
+				userService.createUser(new UserRegisterDTO(user));
+			}
+
+
+
+			/*paintingRepository.save(painting2);
 			paintingRepository.save(painting1);
-			
+
+			 */
+
 			/*
 			List.of(userRufyan,  userDonRube,userDonaMago, userPepe, userBaudelioCliente, userTerCliente,userMaria ).forEach(user ->{
 				userService.save(user);

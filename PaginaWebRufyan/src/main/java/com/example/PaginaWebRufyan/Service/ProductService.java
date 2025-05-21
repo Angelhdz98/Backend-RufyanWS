@@ -1,33 +1,27 @@
 package com.example.PaginaWebRufyan.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 
 import com.example.PaginaWebRufyan.DTO.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.PaginaWebRufyan.Entity.Image;
+
 import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
+
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 
-//import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
+
+
 @Service
 public class ProductService {
 	@Autowired

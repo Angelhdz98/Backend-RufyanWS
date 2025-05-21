@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.DTO;
 
+import com.example.PaginaWebRufyan.Entity.UserEntity;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,16 @@ private String LastName;
 @Email
 private String email;
 private LocalDate birthDate;
-private String Password;
+private String password;
+private String username;
+
+public UserRegisterDTO(UserEntity user){
+    this.name = user.getName();
+    this.LastName = user.getLastname();
+    this.email = user.getEmail();
+    this.birthDate = user.getBirthDate();
+    this.password = user.getPassword();
+    this.username= user.getUsername();
+}
 
 }

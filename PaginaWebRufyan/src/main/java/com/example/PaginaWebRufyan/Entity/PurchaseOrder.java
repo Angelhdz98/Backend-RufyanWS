@@ -18,7 +18,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Entity
 @Builder
-public class Order {
+public class PurchaseOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

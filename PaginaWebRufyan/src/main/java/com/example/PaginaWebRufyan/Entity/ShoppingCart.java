@@ -1,10 +1,9 @@
 package com.example.PaginaWebRufyan.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -14,22 +13,40 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@ToString
+@Builder
+@Getter
+@Setter
 public class ShoppingCart {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+    @OneToOne(mappedBy = "shoppingCart")
+    @JsonBackReference
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private UserEntity user;
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+   @OneToMany(mappedBy = "shoppingCart",
+           cascade = {CascadeType.ALL},orphanRemoval = true)
+   @ToString.Exclude
+   @EqualsAndHashCode.Exclude
+   @Builder.Default
     private Set<CartItem> itemList = new HashSet<>();
-    @Transient
-    private LocalDate createdAt;
+
     private LocalDate updatedAt;
 
-    {
-        createdAt = LocalDate.now();
+    @PreUpdate
+    void preUpdate(){
+        updatedAt = LocalDate.now();
     }
 
+    public void addCartItem (CartItem cartItem){
+
+        this.itemList.add(cartItem);
+        cartItem.setShoppingCart(this);
+    }
+
+    public void deleteCartItem(CartItem cartItem){
+        this.itemList.remove(cartItem);
+    }
 
 }

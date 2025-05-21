@@ -6,14 +6,10 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString()
@@ -61,10 +57,14 @@ public class Product {
 	@JsonBackReference
 	private Set<UserEntity> favoriteOf= new HashSet<>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
 	private Set<CartItem> cartItems = new HashSet<>();
 
 	@OneToMany(mappedBy = "product")
+	@EqualsAndHashCode.Exclude
 	private Set<OrderItem> orderItems = new HashSet<>();
 	@ElementCollection
 	@CollectionTable(name = "nombre_de_la_tabla_map", joinColumns = @JoinColumn(name = "tu_entidad_id"))

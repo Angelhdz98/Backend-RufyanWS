@@ -1,26 +1,28 @@
 package com.example.PaginaWebRufyan.Service;
 
-//import java.util.ArrayList;
+
+import java.math.BigDecimal;
+
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.example.PaginaWebRufyan.DTO.UserEditableDTO;
-import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
-import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
-import com.example.PaginaWebRufyan.Entity.RoleEntity;
+import com.example.PaginaWebRufyan.DTO.*;
+import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Repository.*;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
+
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.PaintingRepository;
-import com.example.PaginaWebRufyan.Repository.ProductsRepository;
-import com.example.PaginaWebRufyan.Repository.RoleRepository;
-import com.example.PaginaWebRufyan.Repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 @Service
@@ -33,32 +35,47 @@ public class UserService {
 	private ProductsRepository productsRepository;
 	@Autowired 
 	private PaintingRepository paintingRepository;
+	@Autowired
+	CartItemRepository cartItemRepository;
+	@Autowired
+	ShoppingCartRepository shoppingCartRepository;
 
 
 
 
 
 
-	private RoleEntity getClientRole(){
+
+
+	/*private RoleEntity getClientRole(){
 		return roleRepository.findByRoleEnum(RoleEnum.CLIENT)
 				.orElseThrow(()->new ResourceNotFoundException("Role client not found"));
 
-	}
+	}*/
 
 	private UserEntity findUserBydId(Integer id){
 		return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Not foud by id: " +id));
 	}
+	private UserEntity findUserByEmail(String email){
+		return  userRepository.findUserByEmail(email).orElseThrow(()->new ResourceNotFoundException("Not foud by email: " +email));
+	}
+	private UserEntity findUserByUsername(String username) {
+	return userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username " + username));
+	}
 	private Product findProductById(Integer id) {
 		return productsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+ id));
 	}
+
+
 
 	public List<UserEntityDTO> findAllUsers() {
 		return userRepository.findAll().stream().map(UserEntityDTO::new).collect(Collectors.toList());
 
 		
 	}
-
+	@Transactional
 	public UserEntityDTO createUser(UserRegisterDTO userData){
+
 
 		UserEntity newUser = UserEntity.builder()
 				.name(userData.getName())
@@ -66,14 +83,29 @@ public class UserService {
 				.email(userData.getEmail())
 				.birthDate(userData.getBirthDate())
 				.password(userData.getPassword())
-				.roles(Set.of(getClientRole()))
+				.username(userData.getUsername())
+				.roles(
+						 new HashSet<>(Set.of(roleRepository.findByRoleEnum(
+								RoleEnum.CLIENT)
+						.orElseThrow(
+								()->new ResourceNotFoundException("Role client not found")))))
 				.isEnabled(true)
 				.accountNoExpired(true)
 				.accountNoLocked(true)
 				.credentialNoExpired(true)
+				.favoriteProducts(new HashSet<>())
+				.originalPaintings(new HashSet<>())
 				.build();
 
-		return new UserEntityDTO(userRepository.save(newUser));
+		UserEntity createdUser= userRepository.save(newUser);
+
+
+		ShoppingCart shoppingCart = ShoppingCart.builder().user(createdUser).itemList(new HashSet<>()).updatedAt(LocalDate.now()).build();
+
+		createdUser.setShoppingCart(shoppingCart);
+		createdUser.getFavoriteProducts().size();
+		return new UserEntityDTO(userRepository.save(createdUser));
+
 
 	}
 
@@ -82,7 +114,103 @@ public class UserService {
 		return new UserEntityDTO(findUserBydId(id));
 
 	}
+	 public List<UserEntityDTO> retrieveUsersByEmailContaining (String emailPart){
+		return  userRepository.findByEmailContainingIgnoreCase(emailPart).
+				stream().limit(10)
+				.map(UserEntityDTO::new)
+				.collect(Collectors.toList());// solo mostrará los primeros 10 resultados
+	 }
 
+	 public Page<UserEntityDTO> retrieveUsersByEmailContaining(String emailPart, Integer pageNum, Integer size){
+		Page<UserEntity> users =  userRepository.findByEmailContainingIgnoreCase(emailPart, PageRequest.of(pageNum,size, Sort.by("email").ascending()));
+		return  users.map(UserEntityDTO::new);
+
+	 }
+/*
+	@Transactional
+	 public CartItem addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected){
+		 BigDecimal price;
+		 CartItem cartItem;
+		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
+		Product productFound = findProductById(productId);
+			if(productFound instanceof Painting){
+				Painting painting = (Painting) productFound;
+				if(isOriginalSelected){
+					 price = BigDecimal.valueOf(painting.getPrice());
+				} else{
+					price = BigDecimal.valueOf(painting.getPricePerCopy());
+				}
+				//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
+						cartItem = CartItem.builder()
+						.product(painting).quantity(quantity)
+						.isOriginalSelected(isOriginalSelected)
+						.pricePerUnit(price)
+						.build();
+
+			} else {
+				price=  BigDecimal.valueOf(productFound.getPrice());
+				//cartItem = new CartItem(productFound, quantity, false,price);
+						cartItem = CartItem.builder()
+						.product(productFound)
+						.quantity(quantity)
+						.isOriginalSelected(false)
+						.pricePerUnit(price)
+						.build();
+			}
+
+			//userFound.addCartItemToCart(cartItem);
+
+			 userRepository.save(userFound);
+
+			 return cartItem;
+
+
+
+
+	 }
+*/
+	@Transactional
+	public CartItem addProductToCart(CartItemRegisterDTO cartItemRegisterDTO){
+		BigDecimal price;
+		CartItem cartItem;
+		UserEntity userFound = findUserBydId(cartItemRegisterDTO.getUserId());// this function will check if user exists
+		Product productFound = findProductById(cartItemRegisterDTO.getProductId());
+		if(productFound instanceof Painting){
+			Painting painting = (Painting) productFound;
+			if(cartItemRegisterDTO.getIsOriginalSelected()){
+				price = BigDecimal.valueOf(painting.getPrice());
+			} else{
+				price = BigDecimal.valueOf(painting.getPricePerCopy());
+			}
+			//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
+			cartItem = CartItem.builder()
+					.product(painting).quantity(cartItemRegisterDTO.getQuantity())
+					.isOriginalSelected(cartItemRegisterDTO.getIsOriginalSelected())
+					.pricePerUnit(price)
+					.build();
+
+		} else {
+			price=  BigDecimal.valueOf(productFound.getPrice());
+			//cartItem = new CartItem(productFound, quantity, false,price);
+			cartItem = CartItem.builder()
+					.product(productFound)
+					.quantity(cartItemRegisterDTO.getQuantity())
+					.isOriginalSelected(false)
+					.pricePerUnit(price)
+					.build();
+		}
+		cartItem.setShoppingCart(userFound.getShoppingCart());
+
+		userFound.getShoppingCart().addCartItem(cartItem);
+
+		userRepository.save(userFound);
+
+		return cartItem;
+
+
+
+
+	}
 
 
 	public  UserEntityDTO updateUser(Integer id ,UserEditableDTO userData) {
@@ -127,8 +255,54 @@ public class UserService {
 		return new UserEntityDTO(userRepository.save(user));
 
 	}
-	
 
-	
-	
+
+	public UserEntityDTO retrieveUserByUsername(@NotNull String username) {
+		return new UserEntityDTO(findUserByUsername(username));}
+
+	public  UserEntityDTO retrieveUserByEmail(@NotNull String email){
+
+		return new UserEntityDTO(findUserByEmail(email));
+	}
+	@Transactional
+	public CartItem addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
+		BigDecimal price;
+		CartItem cartItem;
+		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
+		Product productFound = findProductById(productId);
+		if(productFound instanceof Painting){
+			Painting painting = (Painting) productFound;
+			if(isOriginalSelected){
+				price = BigDecimal.valueOf(painting.getPrice());
+			} else{
+				price = BigDecimal.valueOf(painting.getPricePerCopy());
+			}
+			//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
+			cartItem = CartItem.builder()
+					.product(painting).quantity(quantity)
+					.isOriginalSelected(isOriginalSelected)
+					.pricePerUnit(price)
+					.build();
+
+		} else {
+			price= BigDecimal.valueOf(productFound.getPrice()) ;
+			//cartItem = new CartItem(productFound, quantity, false,price);
+			cartItem = CartItem.builder()
+					.product(productFound)
+					.quantity(quantity)
+					.isOriginalSelected(false)
+					.pricePerUnit(price)
+					.shoppingCart(userFound.getShoppingCart())
+					.build();
+		}
+
+		userFound.addCartItemToCart(cartItemRepository.save(cartItem));
+		shoppingCartRepository.save(userFound.getShoppingCart());
+		userRepository.save(userFound);
+
+		return cartItem;
+
+
+
+	}
 }

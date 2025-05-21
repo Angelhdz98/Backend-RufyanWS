@@ -1,7 +1,7 @@
 package com.example.PaginaWebRufyan.DTO;
 
-import com.example.PaginaWebRufyan.Entity.Image;
-import com.example.PaginaWebRufyan.Entity.Product;
+
+import com.example.PaginaWebRufyan.Entity.CartItem;
 import com.example.PaginaWebRufyan.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Entity.UserProfilePicture;
 import jakarta.persistence.OneToOne;
@@ -27,6 +27,8 @@ public class UserEntityDTO {
 
     private Set<ProductDTO> favoriteProducts = new HashSet<>();
 
+    private Set<CartItem> cartProducts = new HashSet<>();
+
 
     public UserEntityDTO(UserEntity userEntity){
         this.userName = userEntity.getUsername();
@@ -34,6 +36,7 @@ public class UserEntityDTO {
         this.age = (int) ChronoUnit.YEARS.between(userEntity.getBirthDate(),LocalDate.now());// casting
         this.profilePicture = userEntity.getProfilePicture();
         this.favoriteProducts = userEntity.getFavoriteProducts().stream().map(ProductDTO::new).collect(Collectors.toSet());
+        this.cartProducts = userEntity.getShoppingCart().getItemList();
     }
 
 }

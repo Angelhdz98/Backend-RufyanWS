@@ -104,14 +104,22 @@ public class UserEntity {
 			fetch = FetchType.EAGER)
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
+	@Builder.Default
 	private Set<Painting> originalPaintings= new HashSet<>();
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "profile_picture")
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	private UserProfilePicture profilePicture;
 
-	@OneToOne
-	private ShoppingCart shoppingCart;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "shopping_cart_id")
+	@Builder.Default
+	@JsonManagedReference
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private ShoppingCart shoppingCart = new ShoppingCart();
+
 
 
 	// Helper methods to manage bidirectional relationship
@@ -124,7 +132,14 @@ public class UserEntity {
         this.favoriteProducts.remove(product);
         product.getFavoriteOf().remove(this);
     }
-	
+
+	public void addCartItemToCart(CartItem item){
+		this.getShoppingCart().addCartItem(item);
+	}
+	public void removeCartItem(CartItem cartItem){
+		this.getShoppingCart().deleteCartItem(cartItem);
+	}
+
 	/**/
     
 	
