@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.Controller;
 
 import java.util.List;
 
+import com.example.PaginaWebRufyan.Entity.PurchaseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.PaginaWebRufyan.Entity.Order;
 import com.example.PaginaWebRufyan.Entity.OrderStatus;
 import com.example.PaginaWebRufyan.Service.OrderService;
 
@@ -24,31 +24,31 @@ public class OrderController {
 	OrderService orderService;
 	
 	@GetMapping("/orders")
-	ResponseEntity<List<Order>> getAllOrders(){
+	ResponseEntity<List<PurchaseOrder>> getAllOrders(){
 		return  ResponseEntity.ok(orderService.findAllOrders());
 	}
 	
-	@GetMapping("/orders")
-	ResponseEntity<Page<Order>> findAllOrdersPaged( Pageable pageable){
+	@GetMapping("/orders/paged")
+	ResponseEntity<Page<PurchaseOrder>> findAllOrdersPaged( Pageable pageable){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersPaged(pageable));	
 	}
 	
-	@GetMapping("/orders")
-	ResponseEntity<List<Order>> findAllOrdersByStatus(OrderStatus orderStatus){
+	@GetMapping(value = "/orders/by-status")
+	ResponseEntity<List<PurchaseOrder>> findAllOrdersByStatus(@RequestParam OrderStatus orderStatus){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersByStatus(orderStatus));	
 	}
 	
-	@GetMapping("/orders")
-	ResponseEntity<Page<Order>> findAllOrdersByStatusPaged(
-							@RequestParam("status") OrderStatus orderStatus,
+	@GetMapping( value = "/orders/by-status/paged", params = "page")
+	ResponseEntity<Page<PurchaseOrder>> findAllOrdersByStatusPaged(
+								OrderStatus orderStatus,
 										Pageable pageable){
 		
 		return ResponseEntity.ok(orderService.findAllOrdersByStatusPaged(orderStatus, pageable));	
 	}
 	@GetMapping("/orders/{userId}")
-	ResponseEntity<List<Order>> findAllOrdersByUserId(
+	ResponseEntity<List<PurchaseOrder>> findAllOrdersByUserId(
 					@PathVariable @Positive(message = "El id debe de ser un numero positivo")
 										int userId,
 										Pageable pageable){
@@ -56,8 +56,8 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.findAllOrdersByUserId(userId));	
 	}
 	
-	@GetMapping("/orders/{userId}")
-	ResponseEntity<Page<Order>> findAllOrdersByStatusPaged(
+	@GetMapping("/orders/{userId}/paged")
+	ResponseEntity<Page<PurchaseOrder>> findAllOrdersByStatusPaged(
 							@PathVariable @Positive(message = "El id debe de ser un numero positivo")
 										Integer userId,
 										Pageable pageable){

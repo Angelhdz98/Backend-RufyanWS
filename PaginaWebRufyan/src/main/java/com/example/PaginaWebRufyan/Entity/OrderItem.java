@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.Entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,10 @@ import lombok.ToString;
 @Entity
 @Builder
 public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 private int id;
+    @ManyToOne
 private Product product;
 private int quantity;
 private float priceAtPurchase;

@@ -2,11 +2,12 @@ package com.example.PaginaWebRufyan.Repository;
 
 
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.PaginaWebRufyan.Entity.Painting;
@@ -30,11 +31,11 @@ public interface PaintingRepository extends JpaRepository<Painting, Integer> {
 	Page<Painting> findByMediumContainingIgnoreCase(String mediumPart, Pageable pageable);
 	
 
-	List<Painting> findBySupport_materialContainingIgnoreCase(String support_materialPart);
-	Page<Painting> findBySupport_materialContainingIgnoreCase(String support_materialPart, Pageable pageable);
+	List<Painting> findBySupportMaterialContainingIgnoreCase(String support_materialPart);
+	Page<Painting> findBySupportMaterialContainingIgnoreCase(String support_materialPart, Pageable pageable);
+
 	
-	
-	boolean existByName(String namePart);
+	boolean existsByName(String namePart);
 	
 	
 	

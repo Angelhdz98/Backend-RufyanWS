@@ -1,34 +1,15 @@
 package com.example.PaginaWebRufyan.Entity;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString()
@@ -56,7 +37,7 @@ public class Product {
 	
 	
 	private Integer price;
-	private Boolean favorite;
+	private Boolean isFavorite;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name= "category_id")//Nombre de la columna 
 	private ProductsCategory category;
@@ -66,16 +47,32 @@ public class Product {
 
 	//CascadeType.ALL
 //	cascade={ CascadeType.PERSIST,	CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH }
- 	@ManyToMany(fetch = FetchType.EAGER)
+ 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REFRESH})
  	@JoinTable(name= "favorite_product_user",
  	joinColumns = @JoinColumn(name= "product_id"),
  	inverseJoinColumns = @JoinColumn(name= "user_id"))
-// 	@JsonManagedReference
+ 	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
  	@Builder.Default
-	private Set<UserEntity> favoriteOf= new HashSet<UserEntity>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
-	
-	private LinkedHashMap<String, String> adittionalFeatures;
-	
+	@JsonBackReference
+	private Set<UserEntity> favoriteOf= new HashSet<>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
+	private Set<CartItem> cartItems = new HashSet<>();
+
+	@OneToMany(mappedBy = "product")
+	@EqualsAndHashCode.Exclude
+	private Set<OrderItem> orderItems = new HashSet<>();
+	@ElementCollection
+	@CollectionTable(name = "nombre_de_la_tabla_map", joinColumns = @JoinColumn(name = "tu_entidad_id"))
+	@MapKeyColumn(name = "clave")
+	@Column(name = "valor")
+	private Map<String, String> additionalFeatures = new LinkedHashMap<>();
+
+
 	public void	addToFavoriteOf(UserEntity user) {
 		this.favoriteOf.add(user);
 		user.getFavoriteProducts().add(this);

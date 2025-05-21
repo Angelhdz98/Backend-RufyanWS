@@ -1,32 +1,27 @@
 package com.example.PaginaWebRufyan.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 
+import com.example.PaginaWebRufyan.DTO.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.PaginaWebRufyan.Entity.Image;
+
 import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
+
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 
-//import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
+
+
 @Service
 public class ProductService {
 	@Autowired
@@ -45,24 +40,32 @@ public class ProductService {
 		super();
 	}
 
+	private Product findProductById(Integer id){
+		return productsRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product not found with id: "+ id ));
+	}
+	private Product findProductByName(String name){
+		return productsRepository.findByName(name).orElseThrow(()->new ResourceNotFoundException("Product not found with name: "+ name ));
+	}
+
 	public ProductService(ProductsRepository repository) {
 		super();
 		this.productsRepository = repository;
 	}
 	
 	
-	public List<Product> retrieveAllProducts(){
-		return productsRepository.findAll();
+	public List<ProductDTO> retrieveAllProducts(){
+		return productsRepository.findAll().stream().map(ProductDTO::new).collect(Collectors.toList());
 	}
 	
-	public Optional<Product> retrieveProductById(Integer id) {
-		Optional<Product> optionalProduct = productsRepository.findById(id);
+	public ProductDTO retrieveProductById(Integer id) {
 
-		return optionalProduct;
+		return new ProductDTO(findProductById(id));
+
+
 	}
-	public Optional<Product> retrieveProductByName(String name){
+	public ProductDTO retrieveProductByName(String name){
 		
-		return productsRepository.findByName(name);
+		return new ProductDTO(findProductByName(name));
 	}
 	
 	
@@ -102,11 +105,11 @@ public class ProductService {
 
 
 	
-	public Optional<Product> deleteProductById(Integer id) {
-		Optional<Product> product = retrieveProductById(id);
-		if(product.isPresent()) {
-		productsRepository.deleteById(id);}
-		return product;
+	public void deleteProductById(Integer id) {
+
+	Product productToDelete = findProductById(id);
+	productsRepository.delete(productToDelete);
+
 	}
 	
 	// Creo que este no se usa 
@@ -138,16 +141,20 @@ public class ProductService {
 			return productsRepository.save(product);
 	}
 	*/
-	public Product updateProductById(Integer id, Product productData) {
-		
-		Optional<Product> optionalProduct = retrieveProductById(id);
-		if (optionalProduct.isEmpty()) {
-			throw new ResourceNotFoundException("Product no found with id: "+ id);
-		}
-		else {
-			productData.setId(id);
-			return productsRepository.save(productData);
-		}
+	public ProductDTO updateProductById(Integer id, ProductDTO productData) {
+
+		Product foundProduct = findProductById(id);
+		foundProduct.setCategory(productData.getCategory());
+		foundProduct.setDescription(productData.getDescription());
+		foundProduct.setImage(productData.getImages());
+		foundProduct.setName(productData.getName());
+		foundProduct.setPrice(productData.getPrice());
+		foundProduct.setStyle(productData.getStyle());
+
+		return new ProductDTO(productsRepository.save(foundProduct));
+
+
+
 			
 	}
 

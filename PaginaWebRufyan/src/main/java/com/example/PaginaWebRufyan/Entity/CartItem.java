@@ -1,22 +1,46 @@
 package com.example.PaginaWebRufyan.Entity;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-@ToString
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+
+@Entity
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Data
-@Entity
+
 public class CartItem {
-	private int id; 
-	private Cart cart;
-	private Product product;
-	private int quantity;
-	
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name="product_id")
+    @JsonBackReference
+    private Product product;
+    private Integer quantity;
+    private Boolean isOriginalSelected;
+    private BigDecimal pricePerUnit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="shopping_cart_id")
+    @JsonBackReference
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private ShoppingCart shoppingCart;
+
+   // public CartItem(){}
+
+    public CartItem(Product product,Integer quantity, Boolean isOriginalSelected, BigDecimal pricePerUnit){
+        this.product = product;
+        this.quantity= quantity;
+        this.isOriginalSelected= isOriginalSelected;
+        this.pricePerUnit= pricePerUnit;
+
+    }
+
+
 }

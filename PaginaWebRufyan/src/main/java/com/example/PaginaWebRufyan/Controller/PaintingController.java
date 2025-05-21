@@ -50,13 +50,13 @@ public class PaintingController {
 	
 	Painting examplePainting = Painting.builder().build();
 	
-	final int alturaMin = examplePainting.getAlturaMin();
+	final int alturaMin = examplePainting.getMinHeightCm();
 	
-	final int largoMin = examplePainting.getLargoMin();
+	final int largoMin = examplePainting.getMinLargeCm();
 	
-	final int originalPriceMin = examplePainting.getOriginalPriceMin();
+	final int originalPriceMin = examplePainting.getMinPrice();
 	
-	final int copyPriceMin = examplePainting.getCopyPriceMin();
+	final int copyPriceMin = examplePainting.getMinPricePerCopy();
 	
 	// @Value("${file.upload-dir}")
 	 //private  String uploadDir;
@@ -108,19 +108,19 @@ public class PaintingController {
 			
 		
 		Painting inputPainting = Painting.builder() 
-				.altura_cm(altura_cm) 
-				.available_copies(available_copies) 
+				.alturaCm(altura_cm)
+				.availableCopies(available_copies)
 				.category(categoryService.retrieveCategoryByName(category).orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: " +category))) 
-				.copies_made(copies_made) 
+				.copiesMade(copies_made)
 				.description(description) 
-				.favorite(Boolean.valueOf(favorite)) 
+				.isFavorite(Boolean.valueOf(favorite))
 				.image(images) 
-				.largo_cm(largo_cm) 
+				.largoCm(largo_cm)
 				.medium(medium) 
 				.name(name) 
 				.price(price) 
-				.price_copy(price_copy) 
-				.support_material(support_material).build();
+				.pricePerCopy(price_copy)
+				.supportMaterial(support_material).build();
 		
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -168,20 +168,20 @@ public class PaintingController {
 			
 			
 			Painting painting = Painting.builder() 
-					.altura_cm(altura_cm) 
-					.available_copies(available_copies) 
+					.alturaCm(altura_cm)
+					.availableCopies(available_copies)
 					.category(categoryService.retrieveCategoryByName(category)
 							.orElseThrow(()->new ResourceNotFoundException("No se encontró la categoría: "+category))) 
-					.copies_made(copies_made) 
+					.copiesMade(copies_made)
 					.description(description) 
-					.favorite(Boolean.valueOf(favorite)) 
+					.isFavorite(favorite)
 					.image(allImages) 
-					.largo_cm(largo_cm) 
+					.largoCm(largo_cm)
 					.medium(medium) 
 					.name(name) 
 					.price(price) 
-					.price_copy(price_copy) 
-					.support_material(support_material).build();
+					.pricePerCopy(price_copy)
+					.supportMaterial(support_material).build();
 			
 			 Painting updatedPainting = paintingService.updatePaintingById(id, painting);
 			 

@@ -2,13 +2,11 @@ package serviceTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
-import java.sql.Date;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.type.descriptor.jdbc.LocalDateTimeJdbcType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -471,7 +469,7 @@ public class PaintingServiceTest {
 		Painting paintingSavedResponse= paintingTestOk1;
 		paintingSavedResponse.setId(id);
 		
-		given(paintingRepo.existByName(paintingTestOk1.getName())).willReturn(false);
+		given(paintingRepo.existsByName(paintingTestOk1.getName())).willReturn(false);
 		given(paintingRepo.save(paintingTestOk1)).willReturn(paintingSavedResponse);
 		
 			Painting ObraGuardada =  paintingService.save(paintingTestOk1);

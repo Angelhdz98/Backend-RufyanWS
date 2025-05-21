@@ -157,7 +157,7 @@ public class ProductServiceTest {
 							.name("Digital society cup")
 							.price(600)
 							.style("Expresionism")
-							.adittionalFeatures(cupAdditionalFeatures)
+							.additionalFeatures(cupAdditionalFeatures)
 							.build();
 		// Producto con una categoría totalmente nueva 
 			
@@ -169,7 +169,7 @@ public class ProductServiceTest {
 			productTest2.setName("Pyrography spoon");
 			productTest2.setPrice(250);
 			productTest2.setStyle("Natural clasic");
-			productTest2.setAdittionalFeatures(accesoriesAdditionalFeatures);
+			productTest2.setAdditionalFeatures(accesoriesAdditionalFeatures);
 			
 			productTest3.setCategory(accesoriesCategory);
 			productTest3.setCreationDate(LocalDate.of(2029, 1, 22));
@@ -179,7 +179,7 @@ public class ProductServiceTest {
 			productTest3.setName("Py the reveal cup");
 			productTest3.setPrice(350);
 			productTest3.setStyle("Expresionism");
-			productTest3.setAdittionalFeatures(accesoriesAdditionalFeatures);
+			productTest3.setAdditionalFeatures(accesoriesAdditionalFeatures);
 				
 		
 		
@@ -197,7 +197,7 @@ public class ProductServiceTest {
 		
 		given(productRepo.findAll()).willReturn(List.of(productResponse1,productResponse2, productResponse3));
 		
-		List<Product> allProducts = productService.retrieveAllProducts();
+		List<Productz> allProducts = productService.retrieveAllProducts();
 		
 		assertThat(allProducts.size()).isGreaterThan(0);
 		assertThat(allProducts).contains(productResponse1);
