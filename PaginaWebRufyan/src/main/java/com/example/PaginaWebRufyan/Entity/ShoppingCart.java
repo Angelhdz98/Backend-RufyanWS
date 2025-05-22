@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Entity;
 
+import com.example.PaginaWebRufyan.DTO.CartItemRegisterDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -49,4 +51,12 @@ public class ShoppingCart {
         this.itemList.remove(cartItem);
     }
 
+    public void deleteCartItem(CartItemRegisterDTO cartItem){
+        this.itemList.removeIf(item-> item.getProduct().getId().equals(cartItem.getProductId()) && item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()));
+                /*
+                = this.itemList.stream().filter(( CartItem item)->!(
+
+                item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ) ).collect(Collectors.toSet());
+*/
+    }
 }

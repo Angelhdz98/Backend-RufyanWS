@@ -170,7 +170,7 @@ public class UserService {
 	 }
 */
 	@Transactional
-	public CartItem addProductToCart(CartItemRegisterDTO cartItemRegisterDTO){
+	public CartItemDTO addProductToCart(CartItemRegisterDTO cartItemRegisterDTO){
 		BigDecimal price;
 		CartItem cartItem;
 		UserEntity userFound = findUserBydId(cartItemRegisterDTO.getUserId());// this function will check if user exists
@@ -205,7 +205,7 @@ public class UserService {
 
 		userRepository.save(userFound);
 
-		return cartItem;
+		return  new CartItemDTO(cartItem);
 
 
 
@@ -265,7 +265,7 @@ public class UserService {
 		return new UserEntityDTO(findUserByEmail(email));
 	}
 	@Transactional
-	public CartItem addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
+	public CartItemDTO addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
 		BigDecimal price;
 		CartItem cartItem;
 		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
@@ -300,9 +300,21 @@ public class UserService {
 		shoppingCartRepository.save(userFound.getShoppingCart());
 		userRepository.save(userFound);
 
-		return cartItem;
+		return new CartItemDTO(cartItem);
 
 
+
+	}
+	public void removeCartItemFromCart(CartItemRegisterDTO cartItem){
+		UserEntity foundUser= findUserBydId(cartItem.getUserId());
+		foundUser.getShoppingCart().deleteCartItem(cartItem);
+		userRepository.save(foundUser);
+
+	}
+	public void removeCartItemFromCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected){
+		UserEntity foundUser= findUserBydId(userId);
+		foundUser.getShoppingCart().deleteCartItem(new CartItemRegisterDTO(productId, userId,quantity,isOriginalSelected));
+		userRepository.save(foundUser);
 
 	}
 }

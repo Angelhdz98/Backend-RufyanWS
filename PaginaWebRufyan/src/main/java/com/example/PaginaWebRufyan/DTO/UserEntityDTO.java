@@ -27,7 +27,7 @@ public class UserEntityDTO {
 
     private Set<ProductDTO> favoriteProducts = new HashSet<>();
 
-    private Set<CartItem> cartProducts = new HashSet<>();
+    private Set<CartItemDTO> cartProducts = new HashSet<>();
 
 
     public UserEntityDTO(UserEntity userEntity){
@@ -36,7 +36,7 @@ public class UserEntityDTO {
         this.age = (int) ChronoUnit.YEARS.between(userEntity.getBirthDate(),LocalDate.now());// casting
         this.profilePicture = userEntity.getProfilePicture();
         this.favoriteProducts = userEntity.getFavoriteProducts().stream().map(ProductDTO::new).collect(Collectors.toSet());
-        this.cartProducts = userEntity.getShoppingCart().getItemList();
+        this.cartProducts = userEntity.getShoppingCart().getItemList().stream().map(CartItemDTO::new).collect(Collectors.toSet());
     }
 
 }

@@ -10,8 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
+import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +55,7 @@ public class UserControllerTest {
 	void findAllUsersTestOk() throws Exception {
 		
 		//Given
-		List<UserEntity> userList = List.of();
+		List<UserEntity> userList =new ArrayList<>();
 		userList.add(UserEntity.builder()
 				.birthDate(LocalDate.of(1988, 3, 28))
 				.credentialNoExpired(true)
@@ -75,7 +78,8 @@ public class UserControllerTest {
 				.email("ezelikgamez@gmail.com")
 				.username("EzelGom")
 				.build() );
-		given(userService.findAllUsers()).willReturn(userList);
+		List<UserEntityDTO> userListDto = userList.stream().map(UserEntityDTO::new).toList();
+		given(userService.findAllUsers()).willReturn(userListDto);
 		
 		//When
 		ResultActions response = mockMvc.perform(get("/users"));
@@ -88,7 +92,7 @@ public class UserControllerTest {
 		
 	}
 	
-	@DisplayName("Test para probar el enpoint de guardar un usuario")
+	@DisplayName("Test para probar el endpoint de guardar un usuario")
 	@Test
 	void saveUserTestOk()throws Exception {
 		//given
@@ -108,7 +112,7 @@ public class UserControllerTest {
 		//UserEntity userResponse= user;
 		//userResponse.setId(id);
 		
-		given(userService.save(any(UserEntity.class))).willAnswer((invocation)->{
+		given(userService.createUser(any(UserRegisterDTO.class))).willAnswer((invocation)->{
 			UserEntity userResponse = invocation.getArgument(0);
 			userResponse.setId(id);
 			return userResponse;

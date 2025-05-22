@@ -2,10 +2,7 @@ package com.example.PaginaWebRufyan.Controller;
 
 import java.util.List;
 
-import com.example.PaginaWebRufyan.DTO.CartItemRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.UserEditableDTO;
-import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
-import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.*;
 import com.example.PaginaWebRufyan.Entity.CartItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -73,13 +70,25 @@ public class UserController {
 	}
 
 	@PostMapping("/add-to-cart")
-	public CartItem addCartItemToCart (@RequestBody CartItemRegisterDTO itemRegister){
+	public CartItemDTO addCartItemToCart (@RequestBody CartItemRegisterDTO itemRegister){
 		return userService.addProductToCart(itemRegister);
 	}
 
 	@PostMapping("/add-to-cart-params/{productId}/{userId}/{quantity}/{isOriginalSelected}")
-	public CartItem addCartItemToCart (@PathVariable Integer productId,@PathVariable Integer userId,@PathVariable Integer quantity, @PathVariable Boolean  isOriginalSelected){
+	public CartItemDTO addCartItemToCart (@PathVariable Integer productId,@PathVariable Integer userId,@PathVariable Integer quantity, @PathVariable Boolean  isOriginalSelected){
 		return userService.addProductToCart(productId, userId, quantity, isOriginalSelected);
+	}
+	@DeleteMapping("/delete-to-cart")
+	public ResponseEntity<Void> removeCartItem (@RequestBody CartItemRegisterDTO cartItemRegisterDTO){
+		 userService.removeCartItemFromCart(cartItemRegisterDTO);
+		return ResponseEntity.accepted().build();
+	}
+
+	@DeleteMapping("/delete-to-cart-params/{productId}/{userId}/{quantity}/{isOriginalSelected}")
+	public ResponseEntity<Void> removeCartItem (@PathVariable Integer productId,@PathVariable Integer userId,@PathVariable Integer quantity, @PathVariable Boolean  isOriginalSelected){
+		userService.removeCartItemFromCart(productId,userId, quantity, isOriginalSelected);
+
+		return ResponseEntity.accepted().build();
 	}
 
 
