@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.example.PaginaWebRufyan.DTO.*;
 import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Exceptions.NoStockException;
 import com.example.PaginaWebRufyan.Repository.*;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
 
@@ -272,9 +273,18 @@ public class UserService {
 		Product productFound = findProductById(productId);
 		if(productFound instanceof Painting){
 			Painting painting = (Painting) productFound;
+			if(!painting.getIsOriginalAvailable() && isOriginalSelected){
+				throw new NoStockException("Painting: " + painting.getName() + " is not original available");
+			}
+			//Check stock
+			if(painting.getAvailableCopies()< quantity ){
+				throw new NoStockException("Painting " + painting.getName() + " has no enough copies");
+			}
+
 			if(isOriginalSelected){
 				price = BigDecimal.valueOf(painting.getPrice());
 			} else{
+
 				price = BigDecimal.valueOf(painting.getPricePerCopy());
 			}
 			//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
@@ -285,6 +295,11 @@ public class UserService {
 					.build();
 
 		} else {
+
+			if(productFound.getAvailableStock()<quantity){
+				throw  new NoStockException("Product: " + productFound.getName()+" has no enough stock");
+			}
+
 			price= BigDecimal.valueOf(productFound.getPrice()) ;
 			//cartItem = new CartItem(productFound, quantity, false,price);
 			cartItem = CartItem.builder()

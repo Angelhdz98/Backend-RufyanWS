@@ -251,7 +251,7 @@ public class PaginaWebRufyanApplication {
 			painting3.setPricePerCopy(400);
 			painting3.setSupportMaterial("Tempera");
 			painting3.setStyle("Expressionism");
-			
+			painting3.setIsOriginalAvailable(false);
 			//painting3.setFavoriteOf(Set.of(userBaudelioCliente));
 			//painting3.setCopyBuyers(List.of(userTerCliente));
 			

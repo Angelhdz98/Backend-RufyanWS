@@ -57,7 +57,7 @@ public class Product {
 	@JsonBackReference
 	private Set<UserEntity> favoriteOf= new HashSet<>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
 	@JsonManagedReference
@@ -72,6 +72,7 @@ public class Product {
 	@Column(name = "valor")
 	private Map<String, String> additionalFeatures = new LinkedHashMap<>();
 
+	private Integer availableStock = 5;
 
 	public void	addToFavoriteOf(UserEntity user) {
 		this.favoriteOf.add(user);

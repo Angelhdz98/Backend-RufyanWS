@@ -45,9 +45,11 @@ public class ShoppingCart {
 
         this.itemList.add(cartItem);
         cartItem.setShoppingCart(this);
+        cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()-cartItem.getQuantity());
     }
 
     public void deleteCartItem(CartItem cartItem){
+        cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()+ cartItem.getQuantity());
         this.itemList.remove(cartItem);
     }
 
