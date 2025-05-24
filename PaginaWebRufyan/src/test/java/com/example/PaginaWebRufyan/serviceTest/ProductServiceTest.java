@@ -1,4 +1,4 @@
-package serviceTest;
+package com.example.PaginaWebRufyan.serviceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -152,7 +152,7 @@ public class ProductServiceTest {
 							.category(cupCategorySaved)
 							.creationDate(LocalDate.of(2022, 8, 20))
 							.description("Customized cup with digital art made by Rufyan")
-							.favorite(true)
+					.
 							.image(List.of(product1Image, product2Image))
 							.name("Digital society cup")
 							.price(600)
