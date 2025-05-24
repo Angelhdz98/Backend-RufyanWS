@@ -54,6 +54,7 @@ public class ShoppingCart {
     }
 
     public void deleteCartItem(CartItemRegisterDTO cartItem){
+
         this.itemList.removeIf(item-> item.getProduct().getId().equals(cartItem.getProductId()) && item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()));
                 /*
                 = this.itemList.stream().filter(( CartItem item)->!(

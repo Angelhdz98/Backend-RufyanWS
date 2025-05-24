@@ -270,7 +270,19 @@ public class UserService {
 		BigDecimal price;
 		CartItem cartItem;
 		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
+
+
+
 		Product productFound = findProductById(productId);
+
+		Optional<CartItem> existingCartItem = userFound.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(productFound.getId())&& item.getIsOriginalSelected().equals(isOriginalSelected) ).findFirst();
+
+		if(existingCartItem.isPresent()){
+			userFound.getShoppingCart().deleteCartItem(existingCartItem.get());
+		}
+
+				//.getItemList().removeIf((CartItem item)-> item.getProduct().getId().equals(productFound.getId())&& item.getIsOriginalSelected().equals(isOriginalSelected) );
+
 		if(productFound instanceof Painting){
 			Painting painting = (Painting) productFound;
 			if(!painting.getIsOriginalAvailable() && isOriginalSelected){
@@ -310,6 +322,9 @@ public class UserService {
 					.shoppingCart(userFound.getShoppingCart())
 					.build();
 		}
+		// if exist a CartItem with same product and the same value of isOriginalSelected will deleted before add the new
+
+
 
 		userFound.addCartItemToCart(cartItemRepository.save(cartItem));
 		shoppingCartRepository.save(userFound.getShoppingCart());
