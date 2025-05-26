@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,9 +54,19 @@ public class ShoppingCart {
         this.itemList.remove(cartItem);
     }
 
+
     public void deleteCartItem(CartItemRegisterDTO cartItem){
 
-        this.itemList.removeIf(item-> item.getProduct().getId().equals(cartItem.getProductId()) && item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()));
+      Optional<CartItem>  optionalCartItemToDelete = this.itemList.stream().filter((CartItem item )-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ).findFirst();
+      if (optionalCartItemToDelete.isPresent()){
+
+         CartItem cartItemToDelete =  optionalCartItemToDelete.get();
+                  cartItemToDelete.getProduct().setAvailableStock(cartItemToDelete.getProduct().getAvailableStock()+cartItem.getQuantity());
+          this.itemList.remove(cartItemToDelete);
+      }
+
+
+
                 /*
                 = this.itemList.stream().filter(( CartItem item)->!(
 

@@ -67,6 +67,13 @@ public class UserService {
 		return productsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Product not found with id: "+ id));
 	}
 
+	private CartItem findCartItem(CartItemRegisterDTO cartRegister){
+
+		UserEntity user = findUserBydId(cartRegister.getUserId());
+
+		 return user.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartRegister.getProductId()) && item.getIsOriginalSelected().equals(cartRegister.getIsOriginalSelected())).findFirst().orElseThrow(()-> new ResourceNotFoundException("Cart item with product id: "+ cartRegister.getProductId()+ "doesn't exist with actual value of isOriginalSelected: " + String.valueOf(cartRegister.getIsOriginalSelected())));
+
+	}
 
 
 	public List<UserEntityDTO> findAllUsers() {
@@ -337,10 +344,17 @@ public class UserService {
 	}
 	public void removeCartItemFromCart(CartItemRegisterDTO cartItem){
 		UserEntity foundUser= findUserBydId(cartItem.getUserId());
-		foundUser.getShoppingCart().deleteCartItem(cartItem);
+		Optional<CartItem> existingCartItem = foundUser.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ).findFirst();
+
+		if(existingCartItem.isPresent()){
+			foundUser.getShoppingCart().deleteCartItem(existingCartItem.get());
+		}
+		//foundUser.getShoppingCart().deleteCartItem();
+
 		userRepository.save(foundUser);
 
 	}
+
 	public void removeCartItemFromCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected){
 		UserEntity foundUser= findUserBydId(userId);
 		foundUser.getShoppingCart().deleteCartItem(new CartItemRegisterDTO(productId, userId,quantity,isOriginalSelected));
