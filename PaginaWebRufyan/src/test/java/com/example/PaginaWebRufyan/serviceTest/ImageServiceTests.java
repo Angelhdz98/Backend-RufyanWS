@@ -24,7 +24,7 @@ import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Service.ImageService;
 
 @ExtendWith(MockitoExtension.class)
-public class ImageServiceTests {
+public class  ImageServiceTests {
 
 	@Mock
 	private ImageRepository imageRepo;
@@ -61,7 +61,7 @@ public class ImageServiceTests {
 				.category(cupCategorySaved)
 				.creationDate(LocalDate.of(2022, 8, 20))
 				.description("Customized cup with digital art made by Rufyan")
-				.favorite(true)
+				.isFavorite(true)
 				.name("Digital society cup")
 				.price(600)
 				.style("Expresionism")
