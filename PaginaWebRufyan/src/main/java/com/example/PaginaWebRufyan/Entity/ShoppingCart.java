@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class ShoppingCart {
    @EqualsAndHashCode.Exclude
    @Builder.Default
     private Set<CartItem> itemList = new HashSet<>();
-
+    private BigDecimal totalAmount = BigDecimal.ZERO;
     private LocalDate updatedAt;
 
     @PreUpdate
@@ -42,16 +43,25 @@ public class ShoppingCart {
         updatedAt = LocalDate.now();
     }
 
+    public void updateTotal (){
+        this.totalAmount = itemList.stream().map((CartItem item)->
+        {
+           return item.getPricePerUnit().multiply(BigDecimal.valueOf(item.getQuantity()));
+        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     public void addCartItem (CartItem cartItem){
 
         this.itemList.add(cartItem);
         cartItem.setShoppingCart(this);
         cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()-cartItem.getQuantity());
+        updateTotal();
     }
 
     public void deleteCartItem(CartItem cartItem){
         cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()+ cartItem.getQuantity());
         this.itemList.remove(cartItem);
+        updateTotal();
     }
 
 
@@ -71,6 +81,8 @@ public class ShoppingCart {
                 = this.itemList.stream().filter(( CartItem item)->!(
 
                 item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ) ).collect(Collectors.toSet());
+
 */
+        updateTotal();
     }
 }

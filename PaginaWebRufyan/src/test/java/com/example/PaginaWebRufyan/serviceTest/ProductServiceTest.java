@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.PaginaWebRufyan.DTO.ProductDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -152,7 +153,7 @@ public class ProductServiceTest {
 							.category(cupCategorySaved)
 							.creationDate(LocalDate.of(2022, 8, 20))
 							.description("Customized cup with digital art made by Rufyan")
-					.
+
 							.image(List.of(product1Image, product2Image))
 							.name("Digital society cup")
 							.price(600)
@@ -164,7 +165,7 @@ public class ProductServiceTest {
 			productTest2.setCategory(accesoriesCategory);
 			productTest2.setCreationDate(LocalDate.of(2022, 8, 20));
 			productTest2.setDescription("Custom large wooden spoon with flowers, branches and other nature elements");
-			productTest2.setFavorite(true);
+			productTest2.setIsFavorite(true);
 			productTest2.setImage(List.of(product4Image, product5Image, product6Image));
 			productTest2.setName("Pyrography spoon");
 			productTest2.setPrice(250);
@@ -174,7 +175,7 @@ public class ProductServiceTest {
 			productTest3.setCategory(accesoriesCategory);
 			productTest3.setCreationDate(LocalDate.of(2029, 1, 22));
 			productTest3.setDescription("cup with an ditital art made by Rufyan");
-			productTest3.setFavorite(true);
+			productTest3.setIsFavorite(true);
 			productTest3.setImage(List.of(product4Image, product5Image, product6Image));
 			productTest3.setName("Py the reveal cup");
 			productTest3.setPrice(350);
@@ -188,16 +189,13 @@ public class ProductServiceTest {
 	@DisplayName("Test para tener todos los usuarios de manera exitosa")
 	@Test
 	void findAllProductsTestOk() {
-		Product productResponse1 = productTest1;
-		productResponse1.setId(1);
-		Product productResponse2 = productTest2;
-		productResponse2.setId(2);
-		Product productResponse3 = productTest3;
-		productResponse3.setId(3);
+		ProductDTO productResponse1 = new ProductDTO(productTest1);
+		ProductDTO productResponse2 = new ProductDTO(productTest2);
+		ProductDTO productResponse3 = new ProductDTO(productTest3);
+
+		given(productRepo.findAll()).willReturn(List.of(productTest1,productTest2, productTest3));
 		
-		given(productRepo.findAll()).willReturn(List.of(productResponse1,productResponse2, productResponse3));
-		
-		List<Productz> allProducts = productService.retrieveAllProducts();
+		List<ProductDTO> allProducts = productService.retrieveAllProducts();
 		
 		assertThat(allProducts.size()).isGreaterThan(0);
 		assertThat(allProducts).contains(productResponse1);
@@ -232,15 +230,16 @@ public class ProductServiceTest {
 	@Test
 	void findProductByIdTestOk () {
 	int id = 1;
-	Product productResponse1= productTest1;
-	productResponse1.setId(id);
+	ProductDTO productResponse1= new ProductDTO(productTest1);
+
+	given(productRepo.findById(id)).willReturn(Optional.of(productTest1));
 	
-	given(productRepo.findById(id)).willReturn(Optional.of(productResponse1));
-	
-	Optional<Product> foundProduct = productService.retrieveProductById(id);
+	ProductDTO foundProduct = productService.retrieveProductById(id);
 	
 	assertThat(foundProduct).isNotNull();
-	assertThat(foundProduct.get()).isEqualTo(productResponse1);
+	assertThat(foundProduct).isEqualTo(productResponse1);
+	assertThat(foundProduct.getName()).isEqualTo(productResponse1.getName());
+
 		
 		
 	}
@@ -267,15 +266,14 @@ public class ProductServiceTest {
 	@Test
 	void findProductByNameTestOk() {
 			int id = 1;
-			Product productResponse1= productTest1;
-			productResponse1.setId(id);
+			ProductDTO productResponse1= new ProductDTO(productTest1);
+
 			String nameSearch= productResponse1.getName();
 			
-			given(productRepo.findByName(nameSearch)).willReturn(Optional.of(productResponse1));
+			given(productRepo.findByName(nameSearch)).willReturn(Optional.of(productTest1));
 			
-			Optional<Product> optionalfoundProduct = productService.retrieveProductByName(nameSearch);
-			Product foundProduct = optionalfoundProduct.get();
-			
+			ProductDTO foundProduct = productService.retrieveProductByName(nameSearch);
+
 			
 			assertThat(foundProduct).isNotNull();
 			assertThat(foundProduct).isEqualTo(productResponse1);
@@ -371,33 +369,35 @@ public class ProductServiceTest {
 	@DisplayName("test para intentar actualizar un producto con información inconsistente, precio incorrecto, fecha incorrecta, sin imagenes")
 	@Test
 	void updateProductInconsitentDataTest() {
+
 		int id = 1;
 		Product productResponse = productTest1;
 		productResponse.setId(id);
+
+		Product product = new Product();
 		
-		
-		Product wrongPriceProduct = productResponse;
+		Product wrongPriceProduct = new Product();
 		wrongPriceProduct.setPrice(lowestPrice-1);
 		
-		Product wrongDateProduct = productResponse;
+		Product wrongDateProduct = new Product();
 		wrongDateProduct.setCreationDate(LocalDate.now().plusWeeks(1));
 		
-		Product noImagesProduct = productResponse;
+		Product noImagesProduct = new Product();
 		noImagesProduct.setImage(List.of());
 		
-		given(productRepo.findById(id)).willReturn(Optional.of(productResponse));
+		given(productRepo.findById(id)).willReturn(Optional.of(product));
 		
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id, noImagesProduct);
+			productService.updateProductById(id, new ProductDTO(noImagesProduct));
 		});
 
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id,wrongDateProduct);
+			productService.updateProductById(id,new ProductDTO( wrongDateProduct));
 		});
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id, noImagesProduct);
+			productService.updateProductById(id, new ProductDTO(noImagesProduct));
 		});
 		
 		
@@ -424,7 +424,7 @@ public class ProductServiceTest {
 		
 		
 		assertThrows(ResourceNotFoundException.class, () -> {
-			productService.updateProductById(responseProduct.getId(), responseProduct);
+			productService.updateProductById(responseProduct.getId(), new ProductDTO(responseProduct));
 		});
 			verify(productRepo, never()).save(any(Product.class));
 

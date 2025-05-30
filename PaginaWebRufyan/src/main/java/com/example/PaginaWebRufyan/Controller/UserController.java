@@ -1,9 +1,11 @@
 package com.example.PaginaWebRufyan.Controller;
 
 import java.util.List;
+import java.util.Set;
 
 import com.example.PaginaWebRufyan.DTO.*;
 import com.example.PaginaWebRufyan.Entity.CartItem;
+import com.example.PaginaWebRufyan.Entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,7 +64,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{userId}/favorites/{productId}")
-	public ResponseEntity<UserEntityDTO> toggleProductToFavorite(@PathVariable Integer userId, @PathVariable Integer productId){
+	public ResponseEntity<Set<ProductDTO>> toggleProductToFavorite(@PathVariable Integer userId, @PathVariable Integer productId){
 
 		return ResponseEntity.ok(userService.toggleProductToFavoriteFrom(productId, userId));
 		

@@ -4,6 +4,7 @@ package com.example.PaginaWebRufyan.Service;
 import java.math.BigDecimal;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,8 @@ import java.util.stream.Collectors;
 
 import com.example.PaginaWebRufyan.DTO.*;
 import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
+import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.NoStockException;
 import com.example.PaginaWebRufyan.Repository.*;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
@@ -84,7 +87,18 @@ public class UserService {
 	@Transactional
 	public UserEntityDTO createUser(UserRegisterDTO userData){
 
-
+		if (userRepository.existsByUsername(userData.getUsername())){
+			throw new AlreadyExistIdenticatorException("username: "+ userData.getUsername()+" already exist");
+		}
+		if(userRepository.findUserByEmail(userData.getEmail()).isPresent()){
+			throw new AlreadyExistIdenticatorException("Email: "+ userData.getEmail()+ " already registered" );
+		}
+		if(ChronoUnit.YEARS.between( userData.getBirthDate(),LocalDate.now())<13 ){
+			throw  new InconsitentDataException("User must be at least 13 years old and its: " + ChronoUnit.YEARS.between(userData.getBirthDate(),LocalDate.now()));
+		}
+		if(userRepository.findUserByUsername(userData.getUsername()).isPresent()){
+			throw new AlreadyExistIdenticatorException("username: "+ userData.getUsername()+"already occupied");
+		}
 		UserEntity newUser = UserEntity.builder()
 				.name(userData.getName())
 				.lastname(userData.getLastName())
@@ -183,6 +197,9 @@ public class UserService {
 		CartItem cartItem;
 		UserEntity userFound = findUserBydId(cartItemRegisterDTO.getUserId());// this function will check if user exists
 		Product productFound = findProductById(cartItemRegisterDTO.getProductId());
+		if(productFound.getAvailableStock()<cartItemRegisterDTO.getQuantity()){
+			throw new NoStockException("el producto con id: "+ productFound.getId() + "no cuenta con "+ cartItemRegisterDTO.getQuantity() +" piezas de stock");
+		}
 		if(productFound instanceof Painting){
 			Painting painting = (Painting) productFound;
 			if(cartItemRegisterDTO.getIsOriginalSelected()){
@@ -246,7 +263,7 @@ public class UserService {
 		
 	}
 	// should be changed this method?
-	public UserEntityDTO toggleProductToFavoriteFrom(Integer productId, Integer userId){
+	public Set<ProductDTO> toggleProductToFavoriteFrom(Integer productId, Integer userId){
 
 
 		UserEntity user = findUserBydId(userId);
@@ -259,8 +276,8 @@ public class UserService {
 		}else {
 			user.removeFavoriteProduct(product);
 		}
-
-		return new UserEntityDTO(userRepository.save(user));
+		userRepository.save(user);
+		return user.getFavoriteProducts().stream().map(ProductDTO::new).collect(Collectors.toSet());
 
 	}
 
@@ -274,6 +291,7 @@ public class UserService {
 	}
 	@Transactional
 	public CartItemDTO addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
+		if(quantity<1)throw new InconsitentDataException("Quantity should be 1 at least");
 		BigDecimal price;
 		CartItem cartItem;
 		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
@@ -296,12 +314,13 @@ public class UserService {
 				throw new NoStockException("Painting: " + painting.getName() + " is not original available");
 			}
 			//Check stock
-			if(painting.getAvailableCopies()< quantity ){
+			if(painting.getAvailableStock()< quantity ){
 				throw new NoStockException("Painting " + painting.getName() + " has no enough copies");
 			}
 
 			if(isOriginalSelected){
 				price = BigDecimal.valueOf(painting.getPrice());
+				painting.setIsOriginalAvailable(false);
 			} else{
 
 				price = BigDecimal.valueOf(painting.getPricePerCopy());
@@ -342,12 +361,18 @@ public class UserService {
 
 
 	}
-	public void removeCartItemFromCart(CartItemRegisterDTO cartItem){
+	public void  removeCartItemFromCart(CartItemRegisterDTO cartItem){
 		UserEntity foundUser= findUserBydId(cartItem.getUserId());
+
+
+
 		Optional<CartItem> existingCartItem = foundUser.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ).findFirst();
+
 
 		if(existingCartItem.isPresent()){
 			foundUser.getShoppingCart().deleteCartItem(existingCartItem.get());
+		} else {
+			throw new ResourceNotFoundException("Cart item is not present");
 		}
 		//foundUser.getShoppingCart().deleteCartItem();
 

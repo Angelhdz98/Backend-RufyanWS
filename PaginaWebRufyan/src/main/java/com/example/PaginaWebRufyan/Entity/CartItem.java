@@ -34,11 +34,25 @@ public class CartItem {
 
    // public CartItem(){}
 
-    public CartItem(Product product,Integer quantity, Boolean isOriginalSelected, BigDecimal pricePerUnit){
+    public CartItem(Product product,Integer quantity, Boolean isOriginalSelected){
         this.product = product;
         this.quantity= quantity;
         this.isOriginalSelected= isOriginalSelected;
-        this.pricePerUnit= pricePerUnit;
+        //this.pricePerUnit= pricePerUnit;
+
+        if(product instanceof Painting){
+            if(isOriginalSelected){
+                this.pricePerUnit = BigDecimal.valueOf(product.getPrice());
+            }
+            else{
+                Painting painting = (Painting) product;
+                this.pricePerUnit = BigDecimal.valueOf(painting.getPricePerCopy());
+            }
+
+        }else{
+            this.pricePerUnit = BigDecimal.valueOf(product.getPrice());
+        }
+
 
     }
 
