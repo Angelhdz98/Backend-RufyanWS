@@ -30,14 +30,14 @@ class PaintingRepositoryTest {
 	public void setUp() {
 				paintingTest1 = Painting.builder()
 						.name("El llanto perfecto")
-						.copies_made(10)
-						.available_copies(7)
+						.copiesMade(10)
+						.availableStock(7)
 						.build();
 				
 				paintingTest2 = Painting.builder()
 						.name("La cueva de platón")
-						.copies_made(10)
-						.available_copies(3)
+						.copiesMade(10)
+						.availableStock(3)
 						.build();
 	}
 				
@@ -65,13 +65,13 @@ class PaintingRepositoryTest {
 		Painting savedPainting = paintingRepository.save(paintingTest1);
 		
 		savedPainting.setName("El llanto perfecto del afligido");
-		savedPainting.setAvailable_copies(2);
+		savedPainting.setAvailableStock(2);
 		
 		Painting updatedPainting = paintingRepository.save(savedPainting);
 		
 		Assertions.assertThat(updatedPainting.getName()).isEqualTo("El llanto perfecto del afligido");
 		Assertions.assertThat(updatedPainting.getId()).isEqualTo(savedPainting.getId());
-		Assertions.assertThat(updatedPainting.getAvailable_copies()).isEqualTo(2);
+		Assertions.assertThat(updatedPainting.getAvailableStock()).isEqualTo(2);
 		
 		
 	}
