@@ -46,30 +46,17 @@ public class ProductController {
 		return ResponseEntity.ok(productService.retrieveProductById(id));
 
 	}
+	//Factory pattern
 	//@ModelAttribute Product product,
 	@Transactional
 	@PostMapping("/products/create")
-	public ResponseEntity<Product> createProduct(ProductRegisterDTO productData) {
+	public ResponseEntity<ProductDTO> createProduct(ProductRegisterDTO productData) {
 			
 		List<Image> images= imageService.processImages(productData.getImageFiles());
 
-		Product newProduct = Product.builder()
-							.additionalFeatures(productData.getAdditionalFeatures())
-							.category(productData.getProductsCategory())
-							.creationDate(productData.getCreationDate())
-							.description(productData.getDescription())
-							.isFavorite(productData.getIsFavorite())
-							.name(productData.getName())
-							.price(productData.getPrice())
-							.style(productData.getStyle())
-							.image(images)
-							.cartItems(new HashSet<>())
-							.orderItems(new HashSet<>())
-							.favoriteOf(new HashSet<>())
-							.build();
+
 		
-		
-		return ResponseEntity.ok(productService.saveProduct(newProduct));
+		return ResponseEntity.ok(new ProductDTO(productService.createProduct(productData)));
 		/*catch(IOException e) {
 			return ResponseEntity.badRequest().build();
 		}*/

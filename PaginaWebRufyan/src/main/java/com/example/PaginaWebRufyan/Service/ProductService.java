@@ -1,23 +1,26 @@
 package com.example.PaginaWebRufyan.Service;
 
 
-import java.util.List;
-
-import java.util.stream.Collectors;
-
-
+import com.example.PaginaWebRufyan.Components.OriginalStock;
+import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
 import com.example.PaginaWebRufyan.DTO.ProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-
-import com.example.PaginaWebRufyan.Entity.Product;
-
+import com.example.PaginaWebRufyan.DTO.ProductImagesRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.Entity.*;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 
@@ -27,7 +30,7 @@ public class ProductService {
 	@Autowired
 	private ProductsRepository productsRepository;
 	@Autowired
-	private ImageRepository imageRepository;
+	private ImageService imageService;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -144,11 +147,11 @@ public class ProductService {
 	public ProductDTO updateProductById(Integer id, ProductDTO productData) {
 
 		Product foundProduct = findProductById(id);
-		foundProduct.setCategory(productData.getCategory());
+
 		foundProduct.setDescription(productData.getDescription());
 		foundProduct.setImage(productData.getImages());
 		foundProduct.setName(productData.getName());
-		foundProduct.setPrice(productData.getPrice());
+		//foundProduct.setPrice(productData.getPrice());
 		foundProduct.setStyle(productData.getStyle());
 
 		return new ProductDTO(productsRepository.save(foundProduct));
@@ -156,6 +159,11 @@ public class ProductService {
 
 
 			
+	}
+		//FactoryPattern
+	public Product createProduct(ProductRegisterDTO productData){
+	List<Image> images	= imageService.processImages(productData.getImageFiles());
+		return productsRepository.save(ProductFactory.createProductFromRegister(new ProductImagesRegisterDTO(productData,images)));
 	}
 
 	public List<Product> retrieveProductsByNameContainging(String searchTerm) {

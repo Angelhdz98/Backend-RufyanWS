@@ -21,8 +21,9 @@ private BigDecimal  pricePerUnit;
 public CartItemDTO (CartItem cartItem){
     this.product = new ProductDTO(cartItem.getProduct());
     this.quantity = cartItem.getQuantity();
-    this.isOriginalSelected = cartItem.getIsOriginalSelected();
+    this.isOriginalSelected =Boolean.valueOf(cartItem.getDetails().get("isOriginalSelected"));
     this.pricePerUnit = cartItem.getPricePerUnit();
+
 }
 
 }

@@ -72,8 +72,9 @@ public class UserController {
 	}
 
 	@PostMapping("/add-to-cart")
-	public CartItemDTO addCartItemToCart (@RequestBody CartItemRegisterDTO itemRegister){
-		return userService.addProductToCart(itemRegister);
+	public CartItemDTO addCartItemToCart (@RequestBody CartItemRegisterNew itemRegister){
+		CartItemDTO cartItemDTO = userService.addProductToCart(itemRegister);
+		return cartItemDTO;
 	}
 
 	@PostMapping("/add-to-cart-params/{productId}/{userId}/{quantity}/{isOriginalSelected}")
@@ -81,8 +82,8 @@ public class UserController {
 		return userService.addProductToCart(productId, userId, quantity, isOriginalSelected);
 	}
 	@DeleteMapping("/delete-to-cart")
-	public ResponseEntity<Void> removeCartItem (@RequestBody CartItemRegisterDTO cartItemRegisterDTO){
-		 userService.removeCartItemFromCart(cartItemRegisterDTO);
+	public ResponseEntity<Void> removeCartItem (@RequestBody CartItemRegisterNew cartItemRegisterNew){
+		 userService.removeCartItemFromCart(cartItemRegisterNew);
 		return ResponseEntity.accepted().build();
 	}
 

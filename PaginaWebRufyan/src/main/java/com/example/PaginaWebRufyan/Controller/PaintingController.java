@@ -86,6 +86,8 @@ public class PaintingController {
 			    return ResponseEntity.ok(painting);
 		
 	}
+	/*
+	//This method is Replaced with ProductFactory
 	@Transactional
 	@PostMapping("/paintings/create")
 	public ResponseEntity<Painting> uploadPainting( @RequestParam("altura_cm") @NotNull @Min(20) Integer altura_cm,
@@ -125,20 +127,21 @@ public class PaintingController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		/*headers.add("Cache-Control","no-cache, no-store, must-revalidate");
+		headers.add("Cache-Control","no-cache, no-store, must-revalidate");
 		headers.add("Pragma", "no-cache");
 		headers.add("Expires", "0");
-	*/
+
 		
 		
 		return new ResponseEntity<>(paintingService.save(inputPainting), headers, HttpStatus.OK);		
 		
 		}
-		
+		*/
 	/*
 	 * 
 	 */
-		
+
+	/*
 	@Transactional
 	@PutMapping("/paintings/{id}")
 	public ResponseEntity<Painting> updatePainting(	@PathVariable Integer id, 
@@ -189,6 +192,9 @@ public class PaintingController {
 		}
 		
 	}
+
+	 */
+
 	@Transactional
 	@DeleteMapping("/paintings/{paintingId}/{imageId}")
 	public ResponseEntity<Painting> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
@@ -199,7 +205,7 @@ public class PaintingController {
 						.filter(image->!image.getId().equals(imageId))
 						.collect(Collectors.toList()));
 				
-				paintingService.updatePaintingById(paintingId, ownerPainting);
+				//paintingService.updatePaintingById(paintingId, ownerPainting);
 				paintingService.deleteImage(imageId);
 				
 				return ResponseEntity.ok(ownerPainting);

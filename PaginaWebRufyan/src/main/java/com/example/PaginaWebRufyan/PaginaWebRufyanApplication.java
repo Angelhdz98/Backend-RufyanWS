@@ -1,30 +1,33 @@
 package com.example.PaginaWebRufyan;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.*;
 //import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
+import com.example.PaginaWebRufyan.Components.OriginalStock;
+import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
+import com.example.PaginaWebRufyan.DTO.ProductImagesRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
 import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Repository.*;
+import com.example.PaginaWebRufyan.Service.ImageService;
+import com.example.PaginaWebRufyan.Service.ProductService;
 import com.example.PaginaWebRufyan.Service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.example.PaginaWebRufyan.Entity.Image;
-import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.PermissionEntity;
-import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
-import com.example.PaginaWebRufyan.Entity.RoleEntity;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
-import com.example.PaginaWebRufyan.Repository.PaintingRepository;
-import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
-import com.example.PaginaWebRufyan.Repository.RoleRepository;
-import com.example.PaginaWebRufyan.Repository.UserRepository;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @SpringBootApplication
 public class PaginaWebRufyanApplication {
@@ -36,7 +39,7 @@ public class PaginaWebRufyanApplication {
 	@Bean
 	CommandLineRunner init(UserRepository userRepository,
 						   RoleRepository roleRepository, PaintingRepository paintingRepository,
-						   ProductsCategoryRepository productsCategoryRepository, UserService userService) {
+						   ProductsCategoryRepository productsCategoryRepository, UserService userService, ImageService imageService, ProductService productService, ProductsRepository productsRepository) {
 		return args ->{
 			
 			PermissionEntity createPermission = PermissionEntity.builder()
@@ -128,6 +131,7 @@ public class PaginaWebRufyanApplication {
 					.accountNoLocked(true)
 					.credentialNoExpired(true)
 					.roles(new HashSet<>(Set.of(roleClient)))
+					.favoriteProducts(new HashSet<>())
 					.build();
 			UserEntity userDonaMago =UserEntity.builder()
 					.name("Dona Mago")
@@ -164,7 +168,7 @@ public class PaginaWebRufyanApplication {
 			
 			
 			final String HOSTLINK= "http://localhost:8080/static/";
-
+			final String ASSETS= "../java/static/";
 			//Agregamos imagenes 
 			Image obra1Image = new Image();
 			obra1Image.setUrl(HOSTLINK+"obra2.jpg");
@@ -193,8 +197,116 @@ public class PaginaWebRufyanApplication {
 			
 			ProductsCategory categoriaPinturaGuardada = productsCategoryRepository.findByName("paintings").orElseThrow();
 			//System.out.println(categoriaPinturaGuardada);
-			
+
 			//agregamos pinturas
+
+			Map<String, Object> stockMapPainting1 = new HashMap<>();
+			stockMapPainting1.put("stockCopies",10);
+			stockMapPainting1.put("isOriginalAvailable",true);
+			Map<String, Object> priceMapPainting1 = new HashMap<>();
+			priceMapPainting1.put("pricePerCopy", BigDecimal.valueOf(300));
+			priceMapPainting1.put("pricePerOriginal", BigDecimal.valueOf(1200));
+			Map<String, String> additionalFeaturesPainting1  = new HashMap<>();
+			additionalFeaturesPainting1.put("alturaCm", "40");
+			additionalFeaturesPainting1.put("largoCm","25");
+			additionalFeaturesPainting1.put("medium", "Oil");
+			additionalFeaturesPainting1.put("supportMaterial","Canvas");
+
+
+
+			ProductRegisterDTO productRegisterPainting1 =
+					ProductRegisterDTO.builder()
+							.name("Starry Night")
+							.type(ProductsEnum.PAINTING)
+							.description("A gorgeous painting by me")
+							.creationDate(LocalDate.now().minusWeeks(132))
+							.style("Surrealism")
+							.isFavorite(true)
+							//.imageFiles()
+							.stock(stockMapPainting1)
+							.priceManage(priceMapPainting1)
+							.additionalFeatures(additionalFeaturesPainting1)
+							.build();
+						//whit File it is assuming that the file is in a "brother" directory but when the project
+						// is compiled all files are copied and compressed to classpath and aren't available for
+                    /*    File to read
+					File img1file = new File(ASSETS+"obra4.png");
+					File img2file = new File(ASSETS+"obra5.png");
+			FileInputStream image1Input = new FileInputStream(img1file);
+			FileInputStream image2Input = new FileInputStream(img2file);
+
+                     */
+			ClassPathResource resource1 = new ClassPathResource("static/obra4.png");
+			ClassPathResource resource2 = new ClassPathResource("static/obra5.png");
+			MockMultipartFile multiPartFile1;
+			MockMultipartFile multiPartFile2;
+			try(InputStream image1 = resource1.getInputStream();
+				InputStream image2 = resource2.getInputStream();){
+				multiPartFile1 = new MockMultipartFile("image1",resource1.getFilename(),"image/jpeg",image1);
+				 multiPartFile2 = new MockMultipartFile("image2",resource2.getFilename(),"image/jpeg",image2);
+			}
+
+
+
+
+			List<MultipartFile> painting2Images = List.of(multiPartFile1,multiPartFile2);
+
+			ProductRegisterDTO productRegisterPainting2 =
+					ProductRegisterDTO.builder()
+							.name("The Persistence of Memory")
+							.type(ProductsEnum.PAINTING)
+							.description("A Painting I did when I was sad ")
+							.creationDate(LocalDate.now().minusWeeks(152))
+							.style("Surrealism")
+							.isFavorite(true)
+							.imageFiles(painting2Images)
+							.stock(stockMapPainting1)
+							.priceManage(priceMapPainting1)
+							.additionalFeatures(additionalFeaturesPainting1)
+							.build();
+			List<Image> images = imageService.processImages(painting2Images);
+
+			Product painting1 = ProductFactory.createProductFromRegister(new ProductImagesRegisterDTO(productRegisterPainting2,images));
+
+		/*	Painting painting2 = Painting.builder().name("The Scream")
+							.description("A Painting I did when I was sad ")
+					.creationDate(LocalDate.of(2012, 5,18))
+					.style("Expressionism")
+					.stockManager(new OriginalStock(10,true,false))
+					.priceManager(new PaintingPriceManager(BigDecimal.valueOf(350),BigDecimal.valueOf(1200)))
+					.isFavorite(true)
+					.image(List.of(obra5Image, obra6Image))
+					.favoriteOf(new HashSet<>(Set.of()))
+					.cartItems(new HashSet<>(Set.of()))
+					.orderItems(new HashSet<>(Set.of()))
+					.alturaCm(70)
+					.largoCm(50)
+					.medium("Oil")
+					.supportMaterial("Tempera")
+					.build();
+
+Painting painting3= new Painting();
+			painting3.setName("The Scream");
+			painting3.setDescription("A Painting I did when I was sad ");
+			painting3.setCategory(pintura);
+			painting3.setAlturaCm(70);
+			painting3.setLargoCm(50);
+			painting3.setCopiesMade(10);
+			painting3.setAvailableCopies(10);
+			painting3.setCreationDate(LocalDate.of(2018, 10, 10));
+			painting3.setIsFavorite(true);
+			painting3.setImage(List.of(obra5Image, obra6Image));
+			painting3.setMedium("Oil");
+			painting3.setPrice(2000);
+			painting3.setPricePerCopy(400);
+			painting3.setSupportMaterial("Tempera");
+			painting3.setStyle("Expressionism");
+			painting3.setIsOriginalAvailable(false);
+			//painting3.setFavoriteOf(Set.of(userBaudelioCliente));
+			//painting3.setCopyBuyers(List.of(userTerCliente));
+
+
+
 			Painting painting1 = new Painting();
 			painting1.setName("Starry Night");
 			painting1.setDescription("A gorgeous painting by me");
@@ -214,8 +326,8 @@ public class PaginaWebRufyanApplication {
 			//painting1.setOriginalOwner(userDonRube);
 			//painting1.setCopyBuyers(List.of(userMaria, userBaudelioCliente));
 
-		
-			
+
+
 			Painting painting2= new Painting();
 			painting2.setName("The Persistence of Memory");
 			painting2.setDescription("A gorgeous painting by me when I was 18 ");
@@ -233,44 +345,31 @@ public class PaginaWebRufyanApplication {
 			painting2.setSupportMaterial("Tempera");
 			//painting2.setFavoriteOf(Set.of(userDonRube));
 			//painting2.setCopyBuyers(List.of(userBaudelioCliente, userPepe));
-			
-			
-			Painting painting3= new Painting();
-			painting3.setName("The Scream");
-			painting3.setDescription("A Painting I did when I was sad ");
-			painting3.setCategory(pintura);
-			painting3.setAlturaCm(70);
-			painting3.setLargoCm(50);
-			painting3.setCopiesMade(10);
-			painting3.setAvailableCopies(10);
-			painting3.setCreationDate(LocalDate.of(2018, 10, 10));
-			painting3.setIsFavorite(true);
-			painting3.setImage(List.of(obra5Image, obra6Image));
-			painting3.setMedium("Oil");
-			painting3.setPrice(2000);
-			painting3.setPricePerCopy(400);
-			painting3.setSupportMaterial("Tempera");
-			painting3.setStyle("Expressionism");
-			painting3.setIsOriginalAvailable(false);
-			//painting3.setFavoriteOf(Set.of(userBaudelioCliente));
-			//painting3.setCopyBuyers(List.of(userTerCliente));
-			
-			
-			
-			
-			/*//	userMaria.setCopiesBuyed(List.of(painting1));
-			
-			userTerCliente.setCopiesBuyed(List.of(painting3));
-			userDonRube.setOriginalBuyed(Set.of(painting2, painting1));
-			*/
 
-			List<Painting> paintings = List.of(painting1 , painting2, painting3);
+ */
+
+
+
+
+			
+			
+			
+				//userMaria.setCopiesBuyed(List.of(painting1));
+			
+			//userTerCliente.setCopiesBuyed(List.of(painting3));
+			//userDonRube.setOriginalPaintings(Set.of(painting2, (Painting) painting1));
+			System.out.println(painting1);
+			System.out.println(painting1.getPriceManager().getPriceData());
+
+			List<Product> paintings = List.of(painting1);
 			paintings.forEach(painting ->{
-			paintingRepository.save(painting);
+				productsRepository.save(painting);
 			});
 
+
+
 			userDonRube.addFavoriteProduct(painting1);
-			userDonRube.addFavoriteProduct(painting2);
+		//	userDonRube.addFavoriteProduct(painting2);
 
 
 		var userList=	List.of(userRufyan,
@@ -278,8 +377,9 @@ public class PaginaWebRufyanApplication {
 					userDonaMago,
 					userPepe,
 					userBaudelioCliente);
-				/*	userTerCliente,
-					userMaria*/
+
+
+
 		
 
 			//userRepository.saveAll(user);
@@ -290,10 +390,7 @@ public class PaginaWebRufyanApplication {
 
 
 
-			/*paintingRepository.save(painting2);
-			paintingRepository.save(painting1);
 
-			 */
 
 			/*
 			List.of(userRufyan,  userDonRube,userDonaMago, userPepe, userBaudelioCliente, userTerCliente,userMaria ).forEach(user ->{

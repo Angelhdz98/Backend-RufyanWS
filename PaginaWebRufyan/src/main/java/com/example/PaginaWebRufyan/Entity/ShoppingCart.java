@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.Entity;
 
-import com.example.PaginaWebRufyan.DTO.CartItemRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.CartItemRegisterNew;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -54,24 +53,27 @@ public class ShoppingCart {
 
         this.itemList.add(cartItem);
         cartItem.setShoppingCart(this);
-        cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()-cartItem.getQuantity());
+        cartItem.getProduct().getStockManager().decreaseStock(cartItem.getProduct(),cartItem.getDetails());
+                //setAvailableStock(cartItem.getProduct().getAvailableStock()-cartItem.getQuantity());
         updateTotal();
     }
 
     public void deleteCartItem(CartItem cartItem){
-        cartItem.getProduct().setAvailableStock(cartItem.getProduct().getAvailableStock()+ cartItem.getQuantity());
+        cartItem.getProduct().getStockManager().increaseStock(cartItem.getProduct(),cartItem.getDetails());
+                //setAvailableStock(cartItem.getProduct().getAvailableStock()+ cartItem.getQuantity());
         this.itemList.remove(cartItem);
         updateTotal();
     }
 
 
-    public void deleteCartItem(CartItemRegisterDTO cartItem){
+    public void deleteCartItem(CartItemRegisterNew cartItem){
 
-      Optional<CartItem>  optionalCartItemToDelete = this.itemList.stream().filter((CartItem item )-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ).findFirst();
+      Optional<CartItem>  optionalCartItemToDelete = this.itemList.stream().filter((CartItem item )-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getDetails().get("isOriginalSelected").equals(cartItem.getDetails().get("isOriginalSelected"))).findFirst();
       if (optionalCartItemToDelete.isPresent()){
 
          CartItem cartItemToDelete =  optionalCartItemToDelete.get();
-                  cartItemToDelete.getProduct().setAvailableStock(cartItemToDelete.getProduct().getAvailableStock()+cartItem.getQuantity());
+                  cartItemToDelete.getProduct().getStockManager().increaseStock(cartItemToDelete.getProduct(), cartItem.getDetails());
+                          //.setAvailableStock(cartItemToDelete.getProduct().getAvailableStock()+cartItem.getQuantity());
           this.itemList.remove(cartItemToDelete);
       }
 

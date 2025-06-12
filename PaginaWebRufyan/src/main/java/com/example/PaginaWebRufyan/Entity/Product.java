@@ -1,32 +1,36 @@
 package com.example.PaginaWebRufyan.Entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.example.PaginaWebRufyan.Components.PriceManagerBase;
+import com.example.PaginaWebRufyan.Components.StockManagerBase;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString()
-@SuperBuilder(toBuilder = true)
-@Entity
-@EqualsAndHashCode()
-
+@SuperBuilder
+@DiscriminatorColumn(name = "product_type", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Product {
+@Entity
+public abstract class Product {
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private String description;
 	private LocalDate creationDate;
-	private String style; 
-	
+	private String style;
+	@Embedded
+	private PriceManagerBase priceManager;
+	@Embedded
+	private StockManagerBase stockManager;
+	//private StockManager stock;// a implementation of StockManager and PriceManager will be added on subclass
 /*	@ManyToMany(mappedBy = "copiesBuyed",
 			cascade = {CascadeType.MERGE, CascadeType.PERSIST}
 			)
@@ -36,13 +40,15 @@ public class Product {
 	*/
 	
 	
-	private Integer price;
+	//private PriceManager priceManager;
 	private Boolean isFavorite;
+	/*
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name= "category_id")//Nombre de la columna 
 	private ProductsCategory category;
+	*/
 	@OneToMany(fetch = FetchType.EAGER,
-			cascade = CascadeType.ALL)	
+			cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Image> image;
 
 	//CascadeType.ALL
@@ -55,7 +61,7 @@ public class Product {
 	@EqualsAndHashCode.Exclude
  	@Builder.Default
 	@JsonBackReference
-	private Set<UserEntity> favoriteOf= new HashSet<>(); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
+	private Set<UserEntity> favoriteOf= new HashSet<>(Set.of()); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@ToString.Exclude
@@ -66,13 +72,18 @@ public class Product {
 	@OneToMany(mappedBy = "product")
 	@EqualsAndHashCode.Exclude
 	private Set<OrderItem> orderItems = new HashSet<>();
-	@ElementCollection
-	@CollectionTable(name = "nombre_de_la_tabla_map", joinColumns = @JoinColumn(name = "tu_entidad_id"))
-	@MapKeyColumn(name = "clave")
-	@Column(name = "valor")
-	private Map<String, String> additionalFeatures = new LinkedHashMap<>();
 
-	private Integer availableStock = 5;
+	@ElementCollection
+	@CollectionTable(name = "additional",
+			joinColumns = @JoinColumn(name = "product_id"))
+	@MapKeyColumn(name = "feature_key")
+	@Column(name = "feature_value")
+	//@Builder.Default
+	private Map<String, String> additionalFeatures = new HashMap<>();
+
+	//public abstract void increaseStock(CartItem cartItem);
+
+	//public abstract void decreaseStock(CartItem cartItem);
 
 	public void	addToFavoriteOf(UserEntity user) {
 		this.favoriteOf.add(user);
@@ -86,7 +97,17 @@ public class Product {
 		
 	}
 
-	
+	public void decreaseStock(Map<String, String> details) {
+		stockManager.decreaseStock(this, details);
+	}
+
+	public void increaseStock(Map<String, String> details) {
+		stockManager.increaseStock(this, details);
+	}
+
+	public BigDecimal getPriceWithDetails(Map<String, String> details) {
+		return priceManager.getPriceWithDetails(details);
+	}
 	
 	
 	

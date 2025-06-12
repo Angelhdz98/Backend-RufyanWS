@@ -49,7 +49,7 @@ public class PaintingService {
 		return paintingRepository.findAll(example);
 	}
 	
-	
+	/*
 	public Painting updatePaintingById(Integer id, Painting paintingData) {
 		Optional<Painting>optionalPainting = paintingRepository.findById(id);
 		if(optionalPainting.isPresent()) {
@@ -77,14 +77,14 @@ public class PaintingService {
 			
 			//			painting.setCopyBuyers(paintingData.getCopyBuyers());
 			//painting.setOriginalOwner(paintingData.getOriginalOwner());
-			/* I want to check images if exist
+			 I want to check images if exist
 			Example<Image> imageExample = Example.of(image);
 			Optional<Image> imageToCheck = imageRepository.findOne( imageExample);
 			if(imageToCheck.isEmpty()) {
 				imageRepository.save(image);
 			}
-				*/
-			/*
+
+
 			if(paintingData.getImage() ==null || !paintingData.getImage().isEmpty() ) {
 				paintingData.getImage().forEach(image->{
 				
@@ -93,7 +93,7 @@ public class PaintingService {
 				imageRepository.save(image);
 			});
 			}
-			*/
+
 			
 			return paintingRepository.save(paintingData);
 		}
@@ -101,6 +101,8 @@ public class PaintingService {
 			throw new ResourceNotFoundException("Painting no found with id: "+id);
 		}
 	}
+
+	 */
 	
 	
 

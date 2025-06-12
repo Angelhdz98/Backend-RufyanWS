@@ -64,7 +64,7 @@ public class ImageService {
 
 public List<Image> processImages(List<MultipartFile> imageFiles) {
 		
-		List<Image> images = imageFiles.stream().map((file)->{
+		return imageFiles.stream().map((file)->{
 			try {
 				// Primero se guarda el archivo en el sistema de archivo
 				String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
@@ -80,15 +80,15 @@ public List<Image> processImages(List<MultipartFile> imageFiles) {
 								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
 								  .productName(file.getOriginalFilename()).build();
 				
-				return imageRepository.save(image);
+				return image;
 			}
 			catch(IOException e) {
-				throw new RuntimeException();
+				throw new RuntimeException(e);
 			}
 			
 		}).collect(Collectors.toList());
 		
-		return images;
+
 		
 		}
 
