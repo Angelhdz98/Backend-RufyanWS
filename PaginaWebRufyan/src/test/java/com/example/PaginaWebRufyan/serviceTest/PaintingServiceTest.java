@@ -3,10 +3,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.PaginaWebRufyan.Components.OriginalStock;
+import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
+import com.example.PaginaWebRufyan.DTO.PaintingDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,7 +56,7 @@ public class PaintingServiceTest {
 	Painting paintingTestOk13= new Painting();
 	Painting paintingTestOk14= new Painting();
 	Painting paintingTestOk15= new Painting();
-	
+
 	
 	
 	
@@ -149,18 +153,15 @@ public class PaintingServiceTest {
 									.name("1era Obra, datos correctos")
 									.description("Obra con todos los datos correctos ")
 									.creationDate(LocalDate.of(2020, 3, 25))
-									.price(1000)
-									.category(pinturaCategory)
+									.priceManager(new PaintingPriceManager())
 									.style("Urbano")
-									.favorite(true)
+									.isFavorite(true)
 									.image(List.of(obra1Image, obra2Image))
-									.altura_cm(60)
-									.largo_cm(80)
+									.alturaCm(60)
+									.largoCm(80)
 									.medium("Aceite")
-									.support_material("Lienzo")
-									.available_copies(8)
-									.copies_made(12)
-									.price_copy(300)
+									.supportMaterial("Lienzo")
+									.stockManager(new OriginalStock(5,10,true))
 									.build();
 		
 		Painting paintingTestOk2 = Painting
@@ -168,252 +169,16 @@ public class PaintingServiceTest {
 				.name("2da Obra, datos correctos")
 				.description("Obra con todos los datos correctos ")
 				.creationDate(LocalDate.of(2020, 3, 25))
-				.price(1000)
-				.category(pinturaCategory)
+				.priceManager(new PaintingPriceManager())
 				.style("Urbano")
-				.favorite(true)
+				.isFavorite(true)
 				.image(List.of(obra1Image, obra2Image))
-				.altura_cm(60)
-				.largo_cm(80)
+				.alturaCm(60)
+				.largoCm(80)
 				.medium("Aceite")
-				.support_material("Lienzo")
-				.available_copies(8)
-				.copies_made(12)
-				.price_copy(300)
+				.supportMaterial("Lienzo")
+				.stockManager(new OriginalStock(5,10,true))
 				.build();
-		Painting paintingTest3 = Painting.builder()
-		        .name("3era Obra, datos correctos")
-		        .description("Obra realista con tonos cálidos")
-		        .creationDate(LocalDate.of(2022, 1, 15))
-		        .price(2000)
-		        .category(pinturaCategory)
-		        .style("Realista")
-		        .favorite(true)
-		        .image(List.of(obra4Image, obra5Image))
-		        .altura_cm(80)
-		        .largo_cm(100)
-		        .medium("Acuarela")
-		        .support_material("Cartón")
-		        .available_copies(10)
-		        .copies_made(15)
-		        .price_copy(400)
-		        .build();
-
-		Painting paintingTest4 = Painting.builder()
-		        .name("4ta Obra, obra minimalista")
-		        .description("Pintura de estilo minimalista")
-		        .creationDate(LocalDate.of(2020, 7, 20))
-		        .price(800)
-		        .category(pinturaCategory)
-		        .style("Minimalista")
-		        .favorite(true)
-		        .image(List.of(obra6Image))
-		        .altura_cm(40)
-		        .largo_cm(50)
-		        .medium("Óleo")
-		        .support_material("Papel")
-		        .available_copies(5)
-		        .copies_made(10)
-		        .price_copy(150)
-		        .build();
-
-		Painting paintingTest5 = Painting.builder()
-		        .name("5ta Obra, impresionista")
-		        .description("Obra destacada con estilo impresionista")
-		        .creationDate(LocalDate.of(2019, 12, 5))
-		        .price(5000)
-		        .category(pinturaCategory)
-		        .style("Impresionista")
-		        .favorite(false)
-		        .image(List.of(obra7Image, obra8Image))
-		        .altura_cm(120)
-		        .largo_cm(150)
-		        .medium("Tempera")
-		        .support_material("Lienzo")
-		        .available_copies(2)
-		        .copies_made(3)
-		        .price_copy(1000)
-		        .build();
-		
-		Painting paintingTest6 = Painting.builder()
-		        .name("6ta Obra, monocromática")
-		        .description("Pintura monocromática en blanco y negro")
-		        .creationDate(LocalDate.of(2023, 3, 3))
-		        .price(3000)
-		        .category(pinturaCategory)
-		        .style("Monocromático")
-		        .favorite(true)
-		        .image(List.of(obra9Image))
-		        .altura_cm(50)
-		        .largo_cm(70)
-		        .medium("Carboncillo")
-		        .support_material("Tela")
-		        .available_copies(4)
-		        .copies_made(6)
-		        .price_copy(250)
-		        .build();
-
-		Painting paintingTest7 = Painting.builder()
-		        .name("7ma Obra, surrealista")
-		        .description("Obra surrealista con detalles oníricos")
-		        .creationDate(LocalDate.of(2018, 6, 12))
-		        .price(3500)
-		        .category(pinturaCategory)
-		        .style("Surrealista")
-		        .favorite(false)
-		        .image(List.of(obra10Image, obra11Image))
-		        .altura_cm(100)
-		        .largo_cm(120)
-		        .medium("Acrílico")
-		        .support_material("Lienzo")
-		        .available_copies(1)
-		        .copies_made(2)
-		        .price_copy(800)
-		        .build();
-
-		Painting paintingTest8 = Painting.builder()
-		        .name("8va Obra, digital")
-		        .description("Obra digital impresa")
-		        .creationDate(LocalDate.of(2021, 11, 10))
-		        .price(1200)
-		        .category(digitalCategory)
-		        .style("Futurista")
-		        .favorite(true)
-		        .image(List.of(obra12Image))
-		        .altura_cm(60)
-		        .largo_cm(90)
-		        .medium("Digital")
-		        .support_material("Impresión")
-		        .available_copies(15)
-		        .copies_made(20)
-		        .price_copy(100)
-		        .build();
-
-		Painting paintingTest9 = Painting.builder()
-		        .name("9na Obra, paisaje")
-		        .description("Pintura de paisaje natural")
-		        .creationDate(LocalDate.of(2020, 8, 5))
-		        .price(1800)
-		        .category(pinturaCategory)
-		        .style("Paisajismo")
-		        .favorite(true)
-		        .image(List.of(obra13Image, obra14Image))
-		        .altura_cm(80)
-		        .largo_cm(120)
-		        .medium("Óleo")
-		        .support_material("Lienzo")
-		        .available_copies(6)
-		        .copies_made(8)
-		        .price_copy(400)
-		        .build();
-
-		Painting paintingTest10 = Painting.builder()
-		        .name("10ma Obra, expresionista")
-		        .description("Obra de estilo expresionista")
-		        .creationDate(LocalDate.of(2022, 2, 20))
-		        .price(2500)
-		        .category(pinturaCategory)
-		        .style("Expresionista")
-		        .favorite(false)
-		        .image(List.of(obra15Image))
-		        .altura_cm(70)
-		        .largo_cm(100)
-		        .medium("Acrílico")
-		        .support_material("Cartón")
-		        .available_copies(3)
-		        .copies_made(5)
-		        .price_copy(500)
-		        .build();
-
-		Painting paintingTest11 = Painting.builder()
-		        .name("11va Obra, abstracto colorido")
-		        .description("Pintura abstracta con colores vivos")
-		        .creationDate(LocalDate.of(2019, 10, 15))
-		        .price(2200)
-		        .category(pinturaCategory)
-		        .style("Abstracto")
-		        .favorite(true)
-		        .image(List.of(obra16Image))
-		        .altura_cm(90)
-		        .largo_cm(110)
-		        .medium("Óleo")
-		        .support_material("Madera")
-		        .available_copies(7)
-		        .copies_made(9)
-		        .price_copy(450)
-		        .build();
-
-		Painting paintingTest12 = Painting.builder()
-		        .name("12va Obra, retrato")
-		        .description("Pintura de un retrato clásico")
-		        .creationDate(LocalDate.of(2023, 4, 1))
-		        .price(4000)
-		        .category(pinturaCategory)
-		        .style("Retrato")
-		        .favorite(false)
-		        .image(List.of(obra17Image, obra18Image))
-		        .altura_cm(100)
-		        .largo_cm(150)
-		        .medium("Acuarela")
-		        .support_material("Lienzo")
-		        .available_copies(2)
-		        .copies_made(4)
-		        .price_copy(900)
-		        .build();
-
-		Painting paintingTest13 = Painting.builder()
-		        .name("13va Obra, técnica mixta")
-		        .description("Obra con técnica mixta sobre madera")
-		        .creationDate(LocalDate.of(2020, 6, 18))
-		        .price(3200)
-		        .category(pinturaCategory)
-		        .style("Técnica Mixta")
-		        .favorite(true)
-		        .image(List.of(obra19Image))
-		        .altura_cm(75)
-		        .largo_cm(100)
-		        .medium("Mixta")
-		        .support_material("Madera")
-		        .available_copies(5)
-		        .copies_made(10)
-		        .price_copy(350)
-		        .build();
-
-		Painting paintingTest14 = Painting.builder()
-		        .name("14va Obra, cubismo")
-		        .description("Obra de estilo cubista")
-		        .creationDate(LocalDate.of(2018, 9, 30))
-		        .price(2800)
-		        .category(pinturaCategory)
-		        .style("Cubismo")
-		        .favorite(false)
-		        .image(List.of(obra20Image))
-		        .altura_cm(90)
-		        .largo_cm(120)
-		        .medium("Óleo")
-		        .support_material("Lienzo")
-		        .available_copies(4)
-		        .copies_made(6)
-		        .price_copy(600)
-		        .build();
-
-		Painting paintingTest15 = Painting.builder()
-		        .name("15va Obra, hiperrealismo")
-		        .description("Obra de estilo hiperrealista")
-		        .creationDate(LocalDate.of(2021, 12, 25))
-		        .price(5000)
-		        .category(pinturaCategory)
-		        .style("Hiperrealismo")
-		        .favorite(true)
-		        .image(List.of(obra21Image, obra22Image))
-		        .altura_cm(100)
-		        .largo_cm(130)
-		        .medium("Óleo")
-		        .support_material("Lienzo")
-		        .available_copies(3)
-		        .copies_made(4)
-		        .price_copy(1200)
-		        .build();
 
 
 		
@@ -432,10 +197,10 @@ public class PaintingServiceTest {
 		paintingResponse.setId(id);
 		given(paintingRepo.findById(id)).willReturn(Optional.of(paintingResponse));
 		
-			Painting obraEncontrada =  paintingService.findById(id).get();
+			PaintingDTO obraEncontrada =  paintingService.retrievePaintingById(id);
 		
 			assertThat(obraEncontrada).isNotNull();
-			assertThat(obraEncontrada.getId()).isGreaterThan(0);
+			//assertThat(obraEncontrada.getId()).isGreaterThan(0);
 			assertThat(obraEncontrada.getName()).isNotEmpty();
 			assertThat(obraEncontrada.getName()).isNotBlank();
 
@@ -452,12 +217,11 @@ public class PaintingServiceTest {
 		given(paintingRepo.findByName("1era Obra, datos correctos"))
 		.willReturn(Optional.of(paintingResponse));
 		
-			Optional<Painting> optionalObraEncontrada =  paintingService.findPaintingByName(searchTerm);
-			Painting obraEncontrada = optionalObraEncontrada.get();
-			
-			assertThat(optionalObraEncontrada).isNotNull();
-			assertThat(optionalObraEncontrada).isNotEmpty();
-			assertThat(obraEncontrada);
+			PaintingDTO obraEncontrada =  paintingService.retrievePaintingByName(searchTerm);
+
+			assertThat(obraEncontrada).isNotNull();
+			assertThat(obraEncontrada.getName()).isEqualTo(paintingResponse.getName());
+			assertThat(obraEncontrada.getDescription()).isEqualTo(paintingResponse.getDescription());
 
 	}
 	
@@ -472,7 +236,7 @@ public class PaintingServiceTest {
 		given(paintingRepo.existsByName(paintingTestOk1.getName())).willReturn(false);
 		given(paintingRepo.save(paintingTestOk1)).willReturn(paintingSavedResponse);
 		
-			Painting ObraGuardada =  paintingService.save(paintingTestOk1);
+			PaintingDTO ObraGuardada =  paintingService.createPainting(paintingTestOk1);
 		
 			assertThat(ObraGuardada).isNotNull();
 
@@ -483,51 +247,52 @@ public class PaintingServiceTest {
 	void savePaintingTestInconsistentData() {
 		
 		int id = 1;
-		Painting obraGuardada= paintingTestOk1;
-		obraGuardada.setId(id);
+
 		 // Se agrega el id a obra guardada por que eso distinguiría a la obra que vamos
 		//a subir de la obra que ya esta guardada
 		
-		Painting moreAvailableThanMade = obraGuardada;
-		moreAvailableThanMade.setAvailable_copies(15);
-		moreAvailableThanMade.setCopies_made(10);
+		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStock(15,10,true)).build();
+
 		
-		Painting wrongMeasures = obraGuardada;
-		
-		wrongMeasures.setAltura_cm(0);
-		wrongMeasures.setLargo_cm(-1);
-		
-		Painting wrongPricing = obraGuardada;
-		
-		wrongPricing.setPrice(10);
-		wrongPricing.setPrice_copy(20);
-		
-		Painting wrongDate = obraGuardada;
-		wrongDate.setCreationDate(LocalDate.of(2025, 10, 17));
-		 
-		Painting noImages = obraGuardada;
-		noImages.setImage(List.of());
-		 
-		
-		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.save( wrongMeasures);
-		});
+		Painting wrongMeasureHeight = Painting.builder().alturaCm(Painting.minHeightCm).build();
+		Painting wrongMeasureLarge = Painting.builder().largoCm(Painting.minLargeCm).build();
+
+
+
+		Painting wrongPricing = Painting.builder().priceManager(new PaintingPriceManager(Painting.minPricePerCopy ,Painting.minPrice)).build();
+
+		Painting wrongPricingInCopy = Painting.builder().priceManager(new PaintingPriceManager(Painting.minPricePerCopy.subtract(BigDecimal.ONE),Painting.minPrice.subtract(BigDecimal.ONE))).build();
 		
 
+		Painting wrongDate = Painting.builder().creationDate(LocalDate.now().plusDays(1L)).build();
+
+		 
+		Painting noImages = Painting.builder()
+				.image(List.of()).build();
+		 
+		
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.save( wrongPricing);
+			paintingService.createPainting(wrongMeasureHeight);
+		});
+
+		assertThrows(InconsitentDataException.class, ()->{
+			paintingService.createPainting(wrongMeasureLarge);
+		});
+
+		assertThrows(InconsitentDataException.class, ()->{
+			paintingService.createPainting( wrongPricing);
 		});
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.save( wrongPricing);
+			paintingService.createPainting( wrongPricing);
 		});
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.save(wrongDate);
+			paintingService.createPainting(wrongDate);
 		});
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.save(noImages);
+			paintingService.createPainting(noImages);
 		});
 		
 		
@@ -544,12 +309,12 @@ public class PaintingServiceTest {
 	@Test
 	void findFavoritesPaintingTest() {
 		
-		Painting obraFavorita = Painting.builder().favorite(true).build();
+		Painting obraFavorita = Painting.builder().isFavorite(true).build();
 		Example<Painting> ejemploObraFavorita = Example.of(obraFavorita);
 		given(paintingRepo.findAll(ejemploObraFavorita))
 		.willReturn(List.of(paintingTestOk1, paintingTestOk2));
 		
-			List<Painting> ObrasFavoritas =  paintingService.findFavoritePaintings();
+			List<PaintingDTO> ObrasFavoritas =  paintingService.findFavoritePaintings();
 		
 			assertThat(ObrasFavoritas).isNotNull();
 			assertThat(ObrasFavoritas).isNotEmpty();
@@ -570,10 +335,9 @@ public class PaintingServiceTest {
 		updatedPainting.setName(newName);
 		given(paintingRepo.save(updatedPainting)).willReturn(updatedPainting);
 		
-		Painting updatedResponse = paintingService.updatePaintingById(id,updatedPainting);
+		PaintingDTO updatedResponse = paintingService.updatePaintingById(id,updatedPainting);
 		
 		assertThat(updatedResponse).isNotNull();
-		assertThat(updatedResponse.getId()).isEqualTo(id);
 		assertThat(updatedResponse.getName()).isEqualTo(newName);
 	
 	}
@@ -611,42 +375,46 @@ Integer id=12;
 		obraGuardada.setId(id);
 
 		
-		Painting moreAvailableThanMade = obraGuardada;
-		moreAvailableThanMade.setAvailable_copies(15);
-		moreAvailableThanMade.setCopies_made(10);
+		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStock(15,10)).build();
+
 		
-		Painting wrongMeasures = obraGuardada;
+		Painting wrongMeasureHeigth = Painting.builder().alturaCm(Painting.minHeightCm-1).build();
+		Painting wrongMeasureLarge = Painting.builder().largoCm(Painting.minLargeCm-1).build();
 		
-		wrongMeasures.setAltura_cm(0);
-		wrongMeasures.setLargo_cm(-1);
-		
-Painting wrongPricing = obraGuardada;
-		
-		wrongPricing.setPrice(10);
-		wrongPricing.setPrice_copy(20);
-		
-		 Painting wrongDate = obraGuardada;
+Painting wrongPricingPerCopy = Painting.builder()
+		.priceManager(new PaintingPriceManager(Painting.minPricePerCopy.subtract(BigDecimal.ONE), Painting.minPrice)).build();
+
+		Painting wrongPricingPerOriginal = Painting.builder()
+				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy, Painting.minPrice.subtract(BigDecimal.ONE))).build();
+
+
+		Painting wrongDate = Painting.builder()
+				.creationDate(LocalDate.now().plusDays(1L))
+				.build();
 		 
-		 Painting noImages = obraGuardada;
-		 noImages.setImage(List.of());
-		 
-		 wrongDate.setCreationDate(LocalDate.of(2025, 10, 17));
-		 
-		 given(paintingRepo.findById(id)).willReturn(Optional.of(obraGuardada));
+		 Painting noImages = Painting.builder()
+				 .image(List.of())
+				 .build();
+
+		 given(paintingRepo.findById(id)).willReturn(Optional.of(any(Painting.class)));
 		 
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.updatePaintingById(id, wrongMeasures);
+			paintingService.updatePaintingById(id, wrongMeasureHeigth);
 		});
-		
+		assertThrows(InconsitentDataException.class, ()->{
+			paintingService.updatePaintingById(id, wrongMeasureLarge);
+		});
 
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.updatePaintingById(id, wrongPricing);
+			paintingService.updatePaintingById(id, wrongPricingPerCopy);
 		});
-		
+
 		assertThrows(InconsitentDataException.class, ()->{
-			paintingService.updatePaintingById(id, wrongPricing);
+			paintingService.updatePaintingById(id, wrongPricingPerOriginal);
 		});
+
+
 		
 		assertThrows(InconsitentDataException.class, ()->{
 			paintingService.updatePaintingById(id, wrongDate);
@@ -660,10 +428,6 @@ Painting wrongPricing = obraGuardada;
 		verify(paintingRepo, never()).save(any(Painting.class));
 		
 
-		
-		
-		
-		
 	}
 	
 	@DisplayName("Test para eliminar una obra de manera exitosa")

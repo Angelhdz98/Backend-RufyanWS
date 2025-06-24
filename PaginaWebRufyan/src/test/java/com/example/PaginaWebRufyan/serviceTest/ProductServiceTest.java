@@ -4,17 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
 import com.example.PaginaWebRufyan.DTO.ProductDTO;
+import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
+import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,40 +24,39 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.PaginaWebRufyan.Entity.Image;
-import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Service.ProductService;
-
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
+
+	@InjectMocks
+	private ProductService productService;
 	@Mock
-	private ImageRepository imageRepo;
+	private ImageService imageService;
 	@Mock
 	private ProductsRepository productRepo;
 	@Mock
 	private ProductsCategoryRepository productCategoryRepo;
-	@InjectMocks
-	private ProductService productService;
-	
 	
 	
 	
 	 
-	private Product productTest1 = new Product();
+	//private Product productTest1 = new Painting();
 
-	private Product productTest2= new Product();
+	//private Product productTest2= new Product();
 
-	private Product productTest3= new Product();
+	//private Product productTest3= new Product();
 	
 	private ProductsCategory cupCategorySaved = ProductsCategory.builder()
-			.name("Custom cup")
+			.name("Arte urbano")
 			.id(2)
 			.build();
 	
@@ -64,8 +64,11 @@ public class ProductServiceTest {
 	private int lowestAmountOfImages = 1; // puede ser una o al menos dos para 2 perspectivas 
 	private int maxAmountOfImages =5;
 	final String HOSTLINK= "http://localhost:8080/static/";
-	
 
+	ProductUpdateRegisterDTO wrongPrice= new ProductUpdateRegisterDTO();
+	ProductUpdateRegisterDTO wrongPricePerCopy= new ProductUpdateRegisterDTO();
+	ProductUpdateRegisterDTO wrongDate= new ProductUpdateRegisterDTO();
+	ProductUpdateRegisterDTO noImages = new ProductUpdateRegisterDTO();
 	Image product1Image = new Image();
 	Image product2Image = new Image();
 	Image product3Image = new Image();
@@ -134,9 +137,51 @@ public class ProductServiceTest {
 		
 		accesoriesAdditionalFeatures.put("Material", "Wood");
 		accesoriesAdditionalFeatures.put("Technique", "Pyrography");
-		
-		
-		
+
+		Map<String,Object> wrongPriceMap = new HashMap<>();
+		wrongPriceMap.put("pricePerCopy",Painting.minPricePerCopy);
+		wrongPriceMap.put("pricePerOriginal", Painting.minPrice.subtract(BigDecimal.ONE));
+
+		Map<String,Object> wrongPricePerCopyMap = new HashMap<>();
+		wrongPriceMap.put("pricePerCopy",Painting.minPricePerCopy.subtract(BigDecimal.ONE));
+		wrongPriceMap.put("pricePerOriginal", Painting.minPrice);
+
+		Map<String,Object> paintingStock = new HashMap<>();
+		paintingStock.put("stockCopies",10);
+		paintingStock.put("isOriginalAvailable",true);
+		paintingStock.put("copiesMade", 15);
+		paintingStock.put("isInCart",false);
+
+		Map<String,Object> wrongPaintingStock = new HashMap<>();
+		wrongPaintingStock.put("stockCopies",10);
+		wrongPaintingStock.put("isOriginalAvailable",true);
+		wrongPaintingStock.put("copiesMade", 15);
+		wrongPaintingStock.put("isInCart",false);
+
+
+		ProductUpdateRegisterDTO wrongPrice = ProductUpdateRegisterDTO.builder()
+				.type(ProductsEnum.PAINTING)
+				.priceManage(wrongPriceMap)
+				.oldImages(List.of(new Image()))
+				.stock(paintingStock)
+				.build();
+
+		ProductUpdateRegisterDTO wrongPricePerCopy = ProductUpdateRegisterDTO.builder()
+				.type(ProductsEnum.PAINTING)
+				.oldImages(List.of(new Image()))
+				.priceManage(wrongPricePerCopyMap)
+				.stock(paintingStock)
+				.build();
+
+
+
+		ProductUpdateRegisterDTO wrongDate = ProductUpdateRegisterDTO.builder()
+				.creationDate(LocalDate.now().plusDays(1l))
+				.stock(paintingStock)
+				.build();
+		ProductUpdateRegisterDTO noImages = ProductUpdateRegisterDTO.builder().type(ProductsEnum.PAINTING).oldImages(List.of()).build();
+
+
 		// Producto con una categoría anteriormente guardada
 		/*	
 		productTest1.setCategory(cupCategorySaved);
@@ -149,58 +194,41 @@ public class ProductServiceTest {
 			productTest1.setStyle("Expresionism");
 			productTest1.setAdittionalFeatures(cupAdditionalFeatures);
 		*/
-			productTest1= Product.builder()
-							.category(cupCategorySaved)
-							.creationDate(LocalDate.of(2022, 8, 20))
-							.description("Customized cup with digital art made by Rufyan")
 
-							.image(List.of(product1Image, product2Image))
-							.name("Digital society cup")
-							.price(600)
-							.style("Expresionism")
-							.additionalFeatures(cupAdditionalFeatures)
-							.build();
-		// Producto con una categoría totalmente nueva 
-			
-			productTest2.setCategory(accesoriesCategory);
-			productTest2.setCreationDate(LocalDate.of(2022, 8, 20));
-			productTest2.setDescription("Custom large wooden spoon with flowers, branches and other nature elements");
-			productTest2.setIsFavorite(true);
-			productTest2.setImage(List.of(product4Image, product5Image, product6Image));
-			productTest2.setName("Pyrography spoon");
-			productTest2.setPrice(250);
-			productTest2.setStyle("Natural clasic");
-			productTest2.setAdditionalFeatures(accesoriesAdditionalFeatures);
-			
-			productTest3.setCategory(accesoriesCategory);
-			productTest3.setCreationDate(LocalDate.of(2029, 1, 22));
-			productTest3.setDescription("cup with an ditital art made by Rufyan");
-			productTest3.setIsFavorite(true);
-			productTest3.setImage(List.of(product4Image, product5Image, product6Image));
-			productTest3.setName("Py the reveal cup");
-			productTest3.setPrice(350);
-			productTest3.setStyle("Expresionism");
-			productTest3.setAdditionalFeatures(accesoriesAdditionalFeatures);
-				
 		
 		
 	}
 	
-	@DisplayName("Test para tener todos los usuarios de manera exitosa")
+	@DisplayName("Test para listar los productos")
 	@Test
 	void findAllProductsTestOk() {
-		ProductDTO productResponse1 = new ProductDTO(productTest1);
-		ProductDTO productResponse2 = new ProductDTO(productTest2);
-		ProductDTO productResponse3 = new ProductDTO(productTest3);
+		BigDecimal copyPrice = BigDecimal.valueOf(350);
+		BigDecimal originalPrice= BigDecimal.valueOf(1800);
+		BigDecimal clothePrice=  BigDecimal.valueOf(600);
 
-		given(productRepo.findAll()).willReturn(List.of(productTest1,productTest2, productTest3));
-		
+		Product painting1 = new Painting();
+		painting1.setName("Pintura 1");
+		painting1.setPriceManager(new PaintingPriceManager(copyPrice,originalPrice));
+
+		Product painting2 = new Painting();
+		painting2.setName("Pintura 2");
+
+		Product clothing = new BodyClothing();
+		clothing.setName("Sudadera");
+
+		given(productRepo.findAll()).willReturn( List.of(painting1,painting2,clothing));
 		List<ProductDTO> allProducts = productService.retrieveAllProducts();
-		
+
+
 		assertThat(allProducts.size()).isGreaterThan(0);
-		assertThat(allProducts).contains(productResponse1);
-		assertThat(allProducts).contains(productResponse2);
-		assertThat(allProducts).contains(productResponse3);
+		assertThat(allProducts).contains(new ProductDTO(painting1));
+		assertThat(allProducts).contains(new ProductDTO(painting2));
+		assertThat(allProducts).contains(new ProductDTO(clothing));
+
+		assertThat(new ProductDTO(painting1).getPrice()).isInstanceOf(Map.class);
+
+
+
 		
 		
 		
@@ -211,9 +239,9 @@ public class ProductServiceTest {
 	void findProductsByNamePartTestOk() {
 		
 		String searchTerm= "py";
-		Product productResponse2 = productTest2;
+		Product productResponse2 = new Painting();
 		productResponse2.setId(2);
-		Product productResponse3 = productTest3;
+		Product productResponse3 = new Painting();
 		productResponse3.setId(3);
 		
 		given(productRepo.findByNameContainingIgnoreCase(searchTerm)).willReturn(List.of(productResponse2,productResponse3));
@@ -230,9 +258,11 @@ public class ProductServiceTest {
 	@Test
 	void findProductByIdTestOk () {
 	int id = 1;
-	ProductDTO productResponse1= new ProductDTO(productTest1);
-
-	given(productRepo.findById(id)).willReturn(Optional.of(productTest1));
+	Product painting1 = new Painting();
+	painting1.setId(id);
+	painting1.setName("pintura 1");
+	ProductDTO productResponse1= new ProductDTO(painting1);
+	given(productRepo.findById(id)).willReturn(Optional.of(painting1));
 	
 	ProductDTO foundProduct = productService.retrieveProductById(id);
 	
@@ -266,17 +296,20 @@ public class ProductServiceTest {
 	@Test
 	void findProductByNameTestOk() {
 			int id = 1;
-			ProductDTO productResponse1= new ProductDTO(productTest1);
+			String searchParam = "night";
+			Product painting1 = new Painting();
+			painting1.setName("the last night");
+			//ProductDTO productResponse1= new ProductDTO(painting);
 
-			String nameSearch= productResponse1.getName();
 			
-			given(productRepo.findByName(nameSearch)).willReturn(Optional.of(productTest1));
+			given(productRepo.findByName(searchParam)).willReturn(Optional.of(painting1));
 			
-			ProductDTO foundProduct = productService.retrieveProductByName(nameSearch);
+			ProductDTO foundProduct = productService.retrieveProductByName(searchParam);
 
 			
 			assertThat(foundProduct).isNotNull();
-			assertThat(foundProduct).isEqualTo(productResponse1);
+			assertThat(foundProduct.getName()).isEqualTo(painting1.getName());
+
 				
 		
 	}
@@ -303,33 +336,25 @@ public class ProductServiceTest {
 		int id = 1;
 		int idImage1= 1;
 		int idImage2 = idImage1+1;
-		
-		
-		/*
-		 * Image image1Response = product1Image;
-		image1Response.setId(idImage1);
-		Image image2Response = product2Image;
-		image2Response.setId(idImage2);
-		
-		*/
-		
-		Product productResponse1 = productTest1;
-		productResponse1.setId(id);
+		String responseName= "nombreGenerico";
+		Product productTest1 = Painting.builder().id(id)
+				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy, Painting.minPrice))
+				.name(responseName)
+				.build();
+
 			
-		//given(imageRepo.save(product1Image)).willReturn(image1Response);
-		//given(imageRepo.save(product2Image)).willReturn(image2Response);
-		System.out.println(cupCategorySaved);
-		//given(productCategoryRepo.findByName(cupCategorySaved.getName())).willReturn(Optional.of(cupCategorySaved));
-		given(productRepo.save(productTest1)).willReturn(productResponse1);
+
+		given(productRepo.save(productTest1)).willReturn(productTest1);
 		//given(imageRepo.save(null))
 		
 		//System.out.println(productResponse1);
 		
-		Product savedProduct = productService.saveProduct(productTest1);
+		ProductDTO savedProduct = productService.saveProduct(productTest1);
 		
 		assertThat(savedProduct).isNotNull();
 		assertThat(savedProduct.getName()).isNotNull();
-		assertThat(savedProduct.getId()).isGreaterThan(0);
+		assertThat(savedProduct.getName()).isEqualTo(responseName);
+		assertThat(savedProduct.getClass()).isEqualTo(ProductDTO.class);
 		
 		
 	}
@@ -337,26 +362,47 @@ public class ProductServiceTest {
 	@DisplayName("test para intentar guardar un producto con información inconsistente")
 	@Test
 	void saveProductInconsitentDataTest() {
+
+
+// wrong priece
+/*
+		Product wrongCopyPriceProduct = Painting.builder()
+				.name("wrong price")
+				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy.subtract(new BigDecimal("0.1")),Painting.minPrice))
+				.build();
+
+		Product wrongPriceProduct = Painting.builder()
+				.name("wrong price")
+				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy,Painting.minPrice.subtract(new BigDecimal("0.1"))))
+				.build();
 		
-		Product wrongPriceProduct = productTest1;
-		wrongPriceProduct.setPrice(lowestPrice-1);
+		Product wrongDateProduct = Painting.builder()
+				.creationDate(LocalDate.now().plusWeeks(1))
+				.build();
+
 		
-		Product wrongDateProduct = productTest1;
-		wrongDateProduct.setCreationDate(LocalDate.now().plusWeeks(1));
-		
-		Product noImagesProduct = productTest1;
-		noImagesProduct.setImage(List.of());
+		Product noImagesProduct = Painting.builder()
+				.image(List.of())
+				.build();
+
+ */
+
+
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.saveProduct(wrongPriceProduct);
+			productService.createProduct(wrongPrice);
 		});
 
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.saveProduct(wrongDateProduct);
+			productService.createProduct(wrongPricePerCopy);
+		});
+
+		assertThrows(InconsitentDataException.class, ()->{
+			productService.createProduct(wrongDate);
 		});
 		
 		assertThrows(InconsitentDataException.class, ()->{
-			productService.saveProduct(noImagesProduct);
+			productService.createProduct(noImages);
 		});
 		
 		
@@ -368,38 +414,38 @@ public class ProductServiceTest {
 	
 	@DisplayName("test para intentar actualizar un producto con información inconsistente, precio incorrecto, fecha incorrecta, sin imagenes")
 	@Test
-	void updateProductInconsitentDataTest() {
+	void updateProductInconsistentDataTest() {
 
+		//doNothing().when(imageService).deleteAllImages(any());
 		int id = 1;
-		Product productResponse = productTest1;
-		productResponse.setId(id);
+		Product productResponse = Painting.builder().id(id).image(List.of(new Image())).build();
 
-		Product product = new Product();
+		//paintings
 		
-		Product wrongPriceProduct = new Product();
-		wrongPriceProduct.setPrice(lowestPrice-1);
+
+
+
+		given(productRepo.findById(id)).willReturn(Optional.of(productResponse));
+
+		//given(imageService.processImages(any())).willReturn(List.of(new Image(),new Image()));
+
 		
-		Product wrongDateProduct = new Product();
-		wrongDateProduct.setCreationDate(LocalDate.now().plusWeeks(1));
-		
-		Product noImagesProduct = new Product();
-		noImagesProduct.setImage(List.of());
-		
-		given(productRepo.findById(id)).willReturn(Optional.of(product));
-		
-		
-		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id, new ProductDTO(noImagesProduct));
+
+		assertThrows(InputMismatchException.class, ()->{
+			productService.updateProductById(id,wrongPrice);
 		});
 
-		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id,new ProductDTO( wrongDateProduct));
+		assertThrows(InputMismatchException.class, ()->{
+			productService.updateProductById(id,wrongPricePerCopy);
 		});
 		
-		assertThrows(InconsitentDataException.class, ()->{
-			productService.updateProductById(id, new ProductDTO(noImagesProduct));
+		assertThrows(InputMismatchException.class, ()->{
+			productService.updateProductById(id, wrongDate);
 		});
-		
+		assertThrows(InputMismatchException.class, ()->{
+			productService.updateProductById(id, noImages);
+		});
+
 		
 		verify(productRepo, never()).save(any(Product.class));
 		
@@ -413,7 +459,10 @@ public class ProductServiceTest {
 	void updateNotFoundProductTest() {
 		int id =1;
 		String newName = "Pyrospoon";
-		Product responseProduct = productTest1;
+		Product responseProduct = Painting.builder().id(id)
+				.name(newName)
+				.image(List.of())
+				.build();
 		responseProduct.setId(id);
 		responseProduct.setName(newName);
 		List<Image> newImageList = new ArrayList<>(responseProduct.getImage());
@@ -424,7 +473,7 @@ public class ProductServiceTest {
 		
 		
 		assertThrows(ResourceNotFoundException.class, () -> {
-			productService.updateProductById(responseProduct.getId(), new ProductDTO(responseProduct));
+			productService.updateProductById(responseProduct.getId(), any());
 		});
 			verify(productRepo, never()).save(any(Product.class));
 

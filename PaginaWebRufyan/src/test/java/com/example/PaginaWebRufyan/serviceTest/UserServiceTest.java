@@ -9,9 +9,11 @@ import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.PaginaWebRufyan.DTO.SearchRequestDTO;
 import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
 import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,7 @@ import com.example.PaginaWebRufyan.Repository.RoleRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
 import com.example.PaginaWebRufyan.Service.UserService;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
+import org.springframework.data.domain.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -293,8 +296,51 @@ class UserServiceTest {
 		verify(userRepo, never()).save(any(UserEntity.class));
 
 	}
-	
-	
+
+	@DisplayName("Test para encontrar los usuarios que contengan el String de busqueda Paginado y ordenado")
+	@Test
+	void searchUserBySubstrigPagedAndSorted () {
+
+		UserEntity userTest1= UserEntity.builder()
+				.name("ezequiel").username("ezeeze").build();
+		UserEntity userTest2= UserEntity.builder()
+				.name("ezeael").username("eZeeze").build();
+		UserEntity userTest3= UserEntity.builder().name("Enrique")
+					.username("EzDruval").build();
+			//PageRequest.of();
+
+		String searchTerm = "ez";
+
+		PageRequest pageRequest =PageRequest.of(1,12,Sort.by("name"));
+
+		SearchRequestDTO search = new SearchRequestDTO(searchTerm, 12, 0,"name");
+
+		Page<UserEntity> pageResponse = new PageImpl<UserEntity>(List.of(userTest1, userTest2,userTest3));
+
+		given(userRepo.findByUsernameContaining(searchTerm, pageRequest))
+				.willReturn(pageResponse);
+
+		given(userRepo.findByNameContainingIgnoreCase(searchTerm, pageRequest))
+				.willReturn(pageResponse);
+
+		var matchedUsersByName = userService.searchUserWithNameMatch(search);
+
+
+		Page<UserEntityDTO> matchedUsersByUsername =
+				userService.searchUserWithUsernameMatch(search);
+
+		assertThat(matchedUsersByName).isNotNull();
+		assertThat(matchedUsersByName).contains(new UserEntityDTO(userTest1));
+		assertThat(matchedUsersByName).contains(new UserEntityDTO(userTest2));
+
+
+
+		assertThat(matchedUsersByUsername).isNotNull();
+		assertThat(matchedUsersByUsername).contains(new UserEntityDTO(userTest1));
+		assertThat(matchedUsersByUsername).contains(new UserEntityDTO(userTest2));
+
+
+	}
 	/*
 	*
 	*
@@ -331,43 +377,8 @@ class UserServiceTest {
 		
 		
 	}
-	@DisplayName("Test para encontrar los usuarios que contengan el String de busqueda Paginado y ordenado")
-	@Test
-	void searchUserBySubstrigPagedAndSorted () {
-		UserEntity userResponse1 = user;
-		userResponse1.setId(1);
-		
-		UserEntity userResponse2= user2;
-		userResponse2.setId(2);
-		String searchTerm= "Eze";  
-		
-		Pageable pagedAndOrderedRequest= PageRequest.of(0, 12, Sort.by("birthDate").ascending());
-		
-		Page<UserEntity> pageResponse = new PageImpl<UserEntity>(List.of(userResponse1, userResponse2));
-		
-		given(userRepo.findByUsernameContaining(searchTerm, pagedAndOrderedRequest))
-		.willReturn(pageResponse);
-		
-		given(userRepo.findByNameContainingIgnoreCase(searchTerm, pagedAndOrderedRequest))
-		.willReturn(pageResponse);
-		
-		Page<UserEntity> matchedUsersByName = 		
-		userService.searchUserWithNameMatch(searchTerm, pagedAndOrderedRequest);
-		
-		Page<UserEntity> matchedUsersByUsername = 		
-		userService.searchUserWithUsernameMatch(searchTerm, pagedAndOrderedRequest);
-		
-		assertThat(matchedUsersByName).isNotNull();
-		assertThat(matchedUsersByName).contains(userResponse1);
-		assertThat(matchedUsersByName).contains(userResponse2);
-		
-		
-		assertThat(matchedUsersByUsername).isNotNull();
-		assertThat(matchedUsersByUsername).contains(userResponse1);
-		assertThat(matchedUsersByUsername).contains(userResponse2);
-		
-		
-	}
+
+*
 	*/
 
 

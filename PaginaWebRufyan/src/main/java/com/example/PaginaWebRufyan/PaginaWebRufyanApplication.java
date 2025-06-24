@@ -10,8 +10,8 @@ import java.util.*;
 
 import com.example.PaginaWebRufyan.Components.OriginalStock;
 import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.ProductImagesRegisterDTO;
 import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
 import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
 import com.example.PaginaWebRufyan.Entity.*;
 import com.example.PaginaWebRufyan.Repository.*;
@@ -203,6 +203,8 @@ public class PaginaWebRufyanApplication {
 			Map<String, Object> stockMapPainting1 = new HashMap<>();
 			stockMapPainting1.put("stockCopies",10);
 			stockMapPainting1.put("isOriginalAvailable",true);
+			stockMapPainting1.put("copiesMade",15);
+			stockMapPainting1.put("isInCart",false);
 			Map<String, Object> priceMapPainting1 = new HashMap<>();
 			priceMapPainting1.put("pricePerCopy", BigDecimal.valueOf(300));
 			priceMapPainting1.put("pricePerOriginal", BigDecimal.valueOf(1200));
@@ -251,22 +253,23 @@ public class PaginaWebRufyanApplication {
 
 			List<MultipartFile> painting2Images = List.of(multiPartFile1,multiPartFile2);
 
-			ProductRegisterDTO productRegisterPainting2 =
-					ProductRegisterDTO.builder()
+			ProductUpdateRegisterDTO productUpdateRegister =
+					ProductUpdateRegisterDTO.builder()
 							.name("The Persistence of Memory")
 							.type(ProductsEnum.PAINTING)
 							.description("A Painting I did when I was sad ")
 							.creationDate(LocalDate.now().minusWeeks(152))
 							.style("Surrealism")
 							.isFavorite(true)
-							.imageFiles(painting2Images)
+							.newImageFiles(painting2Images)
 							.stock(stockMapPainting1)
 							.priceManage(priceMapPainting1)
 							.additionalFeatures(additionalFeaturesPainting1)
 							.build();
-			List<Image> images = imageService.processImages(painting2Images);
+			//List<Image> images = ;
+			productUpdateRegister.setOldImages(imageService.processImages(painting2Images));
 
-			Product painting1 = ProductFactory.createProductFromRegister(new ProductImagesRegisterDTO(productRegisterPainting2,images));
+			Product painting1 = ProductFactory.createProductFromRegister(productUpdateRegister);
 
 		/*	Painting painting2 = Painting.builder().name("The Scream")
 							.description("A Painting I did when I was sad ")
@@ -351,15 +354,13 @@ Painting painting3= new Painting();
 
 
 
-			
+
 			
 			
 				//userMaria.setCopiesBuyed(List.of(painting1));
 			
 			//userTerCliente.setCopiesBuyed(List.of(painting3));
 			//userDonRube.setOriginalPaintings(Set.of(painting2, (Painting) painting1));
-			System.out.println(painting1);
-			System.out.println(painting1.getPriceManager().getPriceData());
 
 			List<Product> paintings = List.of(painting1);
 			paintings.forEach(painting ->{
