@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 @Setter
 @Getter
-public class SingleStock implements StockManager {
+public class SingleStock extends StockManagerBase {
     private Integer stock;
     @Override
     public void decreaseStock(Product product, Map<String, String> additionalFeatures) {
@@ -36,6 +36,14 @@ public class SingleStock implements StockManager {
 
         //stockState.put("message", "Available Stock Product");
         return stock;
+
+    }
+
+    @Override
+    public Map<String, Object> getStockMap() {
+         Map<String, Object> response = new HashMap<>();
+         response.put("stock",stock);
+         return response;
 
     }
 }
