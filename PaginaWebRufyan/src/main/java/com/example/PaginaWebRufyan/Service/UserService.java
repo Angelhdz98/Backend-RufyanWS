@@ -17,9 +17,11 @@ import com.example.PaginaWebRufyan.Repository.*;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
 
 import jakarta.validation.constraints.NotNull;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -336,4 +338,17 @@ public class UserService {
 		userRepository.save(foundUser);
 
 	}
+
+	public Page<UserEntityDTO> searchUserWithNameMatch(SearchRequestDTO searchRequest) {
+	PageRequest request = PageRequest.of(searchRequest.getPageNumber(), searchRequest.getItemsPerPage(), Sort.by(searchRequest.getSortBy()));
+
+	return null;
+
+	}
+
+	public Page<UserEntityDTO> searchUserWithUsernameMatch(SearchRequestDTO searchRequest) {
+		return null;
+	}
+
+
 }

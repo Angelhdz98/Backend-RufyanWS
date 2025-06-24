@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.serviceTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,6 +9,10 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
+import com.example.PaginaWebRufyan.DTO.ImageDTO;
+import com.example.PaginaWebRufyan.Entity.Painting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +40,7 @@ public class ImageServiceTests {
 	Image imageTest1 = new Image();
 	Image imageTest2 = new Image();
 	final String HOSTLINK= "http://localhost:8080/static/";
-	private Product productTest1 = new Product();
+	private Product productTest1 = new Painting();
 	
 	
 	ProductsCategory cupCategorySaved = ProductsCategory.builder()
@@ -57,13 +62,13 @@ public class ImageServiceTests {
 		cupAdditionalFeatures.put("Heat reaction", "No");
 		
 		
-		productTest1= Product.builder()
-				.category(cupCategorySaved)
+		productTest1= Painting.builder()
+
 				.creationDate(LocalDate.of(2022, 8, 20))
 				.description("Customized cup with digital art made by Rufyan")
-				.favorite(true)
+				.isFavorite(true)
 				.name("Digital society cup")
-				.price(600)
+				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy,Painting.minPrice))
 				.style("Expresionism")
 				.additionalFeatures(cupAdditionalFeatures)
 				.build();
@@ -110,11 +115,11 @@ public class ImageServiceTests {
 		
 		given(imageRepo.findAll()).willReturn(List.of(imageTest1,imageTest2));
 		
-		List<Image> allImages= imageService.findAllImages();
+		List<ImageDTO> allImages= imageService.findAllImages();
 		
 		assertThat(allImages.size()).isGreaterThan(0);
-		assertThat(allImages).contains(imageTest1);
-		assertThat(allImages).contains(imageTest2);
+		assertThat(allImages).contains(new ImageDTO(imageTest1));
+		assertThat(allImages).contains(new ImageDTO(imageTest1));
 		
 		
 	}
@@ -126,11 +131,11 @@ public class ImageServiceTests {
 		
 		given(imageRepo.findById(idToSearch)).willReturn(Optional.of(imageTest1));
 		
-		Optional<Image> optionalFoundedImage = imageService.findImageById(idToSearch);
-		Image foundedImage = optionalFoundedImage.get();
+		ImageDTO foundImage = imageService.retrieveImageById(idToSearch);
+
 		
-		assertThat(foundedImage).isNotNull();
-		assertThat(foundedImage).isEqualTo(imageTest1);
+		assertThat(foundImage).isNotNull();
+		assertThat(foundImage).isEqualTo(imageTest1);
 		
 	}
 	
@@ -140,10 +145,13 @@ public class ImageServiceTests {
 		int idToSearch= 20;
 		given(imageRepo.findById(idToSearch)).willReturn(Optional.empty());
 		
+		assertThrows(ResourceNotFoundException.class,()->{
+			ImageDTO Image =imageService.retrieveImageById(idToSearch);
+		});
+
+
 		
-		Optional<Image> optionalImage = imageService.findImageById(idToSearch);
-		
-		assertThat(optionalImage).isEmpty();
+
 		
 	}
 	
