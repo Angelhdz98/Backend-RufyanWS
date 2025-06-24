@@ -16,6 +16,6 @@ public abstract class PriceManagerBase {
 
     public abstract Object getPriceData();
     public abstract void setPriceData(Product product, Map <String,String> additionalFeatures);
-
+    public abstract  Map<String,BigDecimal> getPriceMap();
 
 }

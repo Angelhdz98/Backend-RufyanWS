@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Components;
 
+import com.example.PaginaWebRufyan.Entity.Painting;
 import com.example.PaginaWebRufyan.Entity.Product;
 import jakarta.persistence.Embeddable;
 import lombok.*;
@@ -11,11 +12,17 @@ import java.util.Map;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class PaintingPriceManager extends PriceManagerBase{
     private BigDecimal pricePerCopy;
     private BigDecimal pricePerOriginal;
+    // A no args paintingPriceManager will create PaintingPriceManager with min values of Painting
+
+    public PaintingPriceManager(){
+        this.pricePerCopy = Painting.minPricePerCopy;
+        this.pricePerOriginal = Painting.minPrice;
+    }
+
     @Override
     public Object getPriceData() {
         Map<String, Object> prices = new HashMap<>();
@@ -35,6 +42,14 @@ public class PaintingPriceManager extends PriceManagerBase{
         }
 
 
+    }
+
+    @Override
+    public Map<String, BigDecimal> getPriceMap() {
+        Map<String, BigDecimal> mapResponse = new HashMap<>();
+        mapResponse.put("pricePerCopy",pricePerCopy);
+        mapResponse.put("pricePerOriginal", pricePerOriginal);
+        return mapResponse;
     }
 
 
