@@ -11,17 +11,27 @@ import java.util.Map;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @ToString
 public class OriginalStock extends StockManagerBase {
     private Integer stockCopies;
+    private final Integer copiesMade;
     private Boolean isOriginalAvailable;
     private Boolean isInCart = false;
 
 
-    public OriginalStock(Integer stockCopies, Boolean isOriginalAvailable){
+    public OriginalStock(Integer stockCopies, Integer copiesMade, Boolean isOriginalAvailable){
         this.stockCopies = stockCopies;
+        this.copiesMade = copiesMade;
         this.isOriginalAvailable= isOriginalAvailable;
+        this.isInCart = false;
+    }
+
+    public OriginalStock(Integer stockCopies, Integer copiesMade){
+        this.stockCopies = stockCopies;
+        this.copiesMade = copiesMade;
+        this.isOriginalAvailable= true;
+        this.isInCart=false;
     }
 
     @Override
@@ -58,6 +68,17 @@ public class OriginalStock extends StockManagerBase {
        //infoResponse.put("ResponseMessage", message);
 
        return infoResponse;
+
+    }
+
+    @Override
+    public Map<String, Object> getStockMap() {
+       Object response = getStockInfo();
+       Map<String,Object>  mapResponse;
+       if(response instanceof Map<?,?>) {
+           mapResponse = (Map<String, Object>) response;
+           return mapResponse;
+       }else throw new RuntimeException("Get stockInfo does not return a Map type");
 
     }
 }
