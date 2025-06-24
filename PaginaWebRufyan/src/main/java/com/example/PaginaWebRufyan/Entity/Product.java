@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.example.PaginaWebRufyan.Components.PriceManagerBase;
 import com.example.PaginaWebRufyan.Components.StockManagerBase;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -49,7 +50,7 @@ public abstract class Product {
 	*/
 	@OneToMany(fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL,orphanRemoval = true)
-	private List<Image> image;
+	private List<Image> image = new ArrayList<>();
 
 	//CascadeType.ALL
 //	cascade={ CascadeType.PERSIST,	CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH }
@@ -81,9 +82,25 @@ public abstract class Product {
 	//@Builder.Default
 	private Map<String, String> additionalFeatures = new HashMap<>();
 
+
+
 	//public abstract void increaseStock(CartItem cartItem);
 
 	//public abstract void decreaseStock(CartItem cartItem);
+
+	public void deleteImage(Image image){
+		List<Image> newImageList = this.getImage();
+		newImageList.remove(image);
+		this.setImage(newImageList);
+	}
+
+	public void addImage(Image image){
+		List<Image> newImageList = this.getImage();
+		newImageList.add(image);
+		this.setImage(newImageList);
+	}
+
+
 
 	public void	addToFavoriteOf(UserEntity user) {
 		this.favoriteOf.add(user);
@@ -108,7 +125,15 @@ public abstract class Product {
 	public BigDecimal getPriceWithDetails(Map<String, String> details) {
 		return priceManager.getPriceWithDetails(details);
 	}
-	
-	
-	
+
+	public BigDecimal getPriceWithDetails(){
+		Map<String,String> voidDetails = new HashMap<>();
+		return priceManager.getPriceWithDetails(voidDetails);
+	}
+
+	public Map<String,BigDecimal> getPriceMap(){
+		return priceManager.getPriceMap();
+	}
+
+	//public abstract void checkConsistentData(ProductUpdateRegisterDTO productUpdateRegisterDTO);
 }
