@@ -7,6 +7,9 @@ import com.example.PaginaWebRufyan.DTO.*;
 import com.example.PaginaWebRufyan.Entity.CartItem;
 import com.example.PaginaWebRufyan.Entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -94,6 +97,30 @@ public class UserController {
 		return ResponseEntity.accepted().build();
 	}
 
+	@GetMapping("/search/{searchTerm}/{page}/{itemsPerPage}/{sortBy}")
+	public Page<UserEntityDTO> searchUser(@PathVariable String searchTerm,@PathVariable Integer page,@PathVariable String sortBy, @PathVariable Integer itemsPerPage){
+		SearchRequestDTO searchRequest = new SearchRequestDTO(searchTerm,itemsPerPage,page,sortBy);
 
+		return userService.searchUserWithNameMatch(searchRequest);
+	}
+
+	@GetMapping("/search")
+public Page<UserEntityDTO> searchUser(@RequestBody SearchRequestDTO searchRequestDTO){
+
+		return userService.searchUserWithNameMatch(searchRequestDTO);
+	}
+
+	@GetMapping("/searchByUserame/{searchTerm}/{page}/{itemsPerPage}/{sortBy}")
+	public Page<UserEntityDTO> searchUserByUsername(@PathVariable String searchTerm,@PathVariable Integer page,@PathVariable String sortBy, @PathVariable Integer itemsPerPage){
+		SearchRequestDTO searchRequest = new SearchRequestDTO(searchTerm,itemsPerPage,page,sortBy);
+
+		return userService.searchUserWithUsernameMatch(searchRequest);
+	}
+
+	@GetMapping("/searchByUsername")
+	public Page<UserEntityDTO> searchUserByUserName(@PathVariable Integer pageNumber, @RequestBody SearchRequestDTO searchRequestDTO){
+
+		return userService.searchUserWithUsernameMatch(searchRequestDTO);
+	}
 	
 }
