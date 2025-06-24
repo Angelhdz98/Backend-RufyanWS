@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.DTO;
 
+import com.example.PaginaWebRufyan.Entity.Painting;
 import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import com.example.PaginaWebRufyan.Entity.ProductsEnum;
 import lombok.*;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 @SuperBuilder
 @Getter
@@ -30,6 +30,8 @@ public class ProductRegisterDTO {
     private Map<String, Object> stock;
     private Map<String, Object> priceManage;
     private Map<String, String> additionalFeatures;
+
+
 
 
     //private Map<String, String> additionalFeatures = new LinkedHashMap<>();
