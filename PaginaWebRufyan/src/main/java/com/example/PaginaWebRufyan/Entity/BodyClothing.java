@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.Entity;
 
 import com.example.PaginaWebRufyan.Components.ClothingStock;
 import com.example.PaginaWebRufyan.Components.SinglePriceManager;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -20,8 +21,9 @@ import java.util.Map;
 public class BodyClothing extends Product{
     private String clothingMaterial;
     private String printingMaterial;
-    @Embedded
-    private SinglePriceManager price;
-    @Embedded
-    private ClothingStock stock;
+    @Builder.Default
+    private SinglePriceManager price = new SinglePriceManager() ;
+    @Builder.Default
+    private ClothingStock stock = new ClothingStock();
+
 }
