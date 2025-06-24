@@ -21,7 +21,11 @@ public class ClothingStock implements StockManager {
     @Column(name = "quantity")
     private Map<ClothingSizeEnum, Integer> stockPerSize= new HashMap<>();
 
+    public ClothingStock(){
+        Map<ClothingSizeEnum, Integer> stockMap = new HashMap<>(Map.of(ClothingSizeEnum.S,1,ClothingSizeEnum.M,1,ClothingSizeEnum.L,1));
+        this.stockPerSize=stockMap;
 
+    }
 
 
     @Override
