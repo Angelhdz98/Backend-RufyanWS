@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @Getter
-public class PaintingDto extends ProductDTO{
+public class PaintingDTO extends ProductDTO{
 
 
  private Integer alturaCm;
@@ -18,8 +18,8 @@ public class PaintingDto extends ProductDTO{
  private String medium;
  private String supportMaterial;
 
- public PaintingDto(Painting painting){
-  super();
+ public PaintingDTO(Painting painting){
+  super(painting.getName(),painting.getImage(),painting.getStyle(),painting.getCreationDate(),painting.getDescription(),painting.getPriceManager().getPriceMap(),painting.getStockManager().getStockMap(),painting.getAdditionalFeatures());
   this.alturaCm = painting.getAlturaCm();
   this.largoCm = painting.getLargoCm();
   this.medium = painting.getMedium();

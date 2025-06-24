@@ -1,5 +1,7 @@
 package com.example.PaginaWebRufyan.DTO;
 
+import com.example.PaginaWebRufyan.Entity.Painting;
+import com.example.PaginaWebRufyan.Entity.ProductsEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +20,7 @@ public class PaintingRegisterDTO extends ProductRegisterDTO{
     private Boolean isOriginalAvailable;
     private BigDecimal pricePerCopy;
     private BigDecimal pricePerOriginal;
+
 
 
 }

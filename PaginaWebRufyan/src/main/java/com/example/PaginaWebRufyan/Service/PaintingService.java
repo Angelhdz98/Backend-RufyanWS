@@ -1,8 +1,13 @@
 package com.example.PaginaWebRufyan.Service;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.example.PaginaWebRufyan.DTO.PaintingDTO;
+import com.example.PaginaWebRufyan.DTO.PaintingRegisterDTO;
+import com.example.PaginaWebRufyan.Utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -26,27 +31,49 @@ public class PaintingService {
 	  
 //			  "C:/Users/PP/Documents/Proyectos Programación/Backends/Back-end rufyan/PaginaWebRufyan/PaginaWebRufyan/src/main/resources/static/";
 //
-	
-	
-	
-	public Optional<Painting> findById(Integer id){
-		return paintingRepository.findById(id);
+	private Painting findPaintingById (Integer id){
+		Optional<Painting> optionalPainting= paintingRepository.findById(id);
+		if(optionalPainting.isPresent()) {
+			return optionalPainting.get();
+		}else{
+			throw new ResourceNotFoundException("No se encontró el usuario con el id: "+ id);
+		}
 	}
-	public Optional<Painting> findPaintingByName(String name){
-		return paintingRepository.findByName(name);
+	private Painting findpaintingByname(String  name){
+		Optional<Painting> optionalPainting = paintingRepository.findByName(name);
+		if(optionalPainting.isPresent()){
+			return optionalPainting.get();
+		}else throw new ResourceNotFoundException("No se encontró una pintura con el nombre: "+ name);
+	}
+	private List<PaintingDTO> findPaintingsByNameContaining(String namePart){
+		return paintingRepository.findByNameContainingIgnoreCase(namePart).stream().map(PaintingDTO::new).collect(Collectors.toList());
+	}
+
+	//DEPRECATED
+	public PaintingDTO createPainting(Painting painting){
+		return new PaintingDTO(paintingRepository.save(painting));
+	}
+	
+	public PaintingDTO retrievePaintingById(Integer id){
+		return new PaintingDTO(findPaintingById(id));
+
+	}
+	public PaintingDTO retrievePaintingByName(String name){
+		return new PaintingDTO(findpaintingByname(name));
 	}
 	
 	public List <Painting> findPaintingsSortedAndPaged(String searchTerm){
-		
 		List<Painting> paintingList = List.of();
 		return paintingList;
+
 	}
 
-	public List<Painting> findFavoritePaintings(){
+	public List<PaintingDTO> findFavoritePaintings(){
 		Painting examplePainting = new Painting();
 		examplePainting.setIsFavorite(true);
 		Example<Painting> example= Example.of(examplePainting);
-		return paintingRepository.findAll(example);
+		return paintingRepository.findAll(example).stream().map(PaintingDTO::new).collect(Collectors.toList());
+
 	}
 	
 	/*
@@ -106,14 +133,20 @@ public class PaintingService {
 	
 	
 
-
-	public Painting save(Painting painting) throws AlreadyExistIdenticatorException {
-		if(paintingRepository.existsByName(painting.getName())) {
-			throw new AlreadyExistIdenticatorException("El nombre ya existe en otra obra");
-		}
-		return paintingRepository.save(painting);
+	//all the logic for create is on productFactory.createProduct
+	/*
+	public PaintingDTO create(PaintingRegisterDTO paintingRegister)  {
+		return  new PaintingDTO(paintingRepository.save());
 	}
 
+	 */
+
+	public PaintingDTO updatePaintingById(Integer paintingId, Painting painting){
+		if(paintingRepository.existsById(paintingId)){
+			painting.setId(paintingId);
+			return new PaintingDTO(paintingRepository.save(painting));
+		}else throw  new ResourceNotFoundException("No se encontró una obra con id: "+ paintingId);
+	}
 
 // this function is not used, controller does the the repository. save 
 	/*
@@ -152,7 +185,14 @@ public Painting saveWithImages(Painting painting, List<MultipartFile> imageFiles
 
 	
 	public void deletePaintingByid(Integer id) {
+		Painting painting = findPaintingById(id);
+		painting.getImage().forEach((image)->{
+			ImageUtils.deleteImageFiles(image.getUrl());
+			imageService.deleteImageById(image.getId());
+		});
+
 		paintingRepository.deleteById(id);
+
 	}
 
 	public void deleteImage(Integer imageId) {
@@ -163,9 +203,12 @@ public Painting saveWithImages(Painting painting, List<MultipartFile> imageFiles
 		
 		
 	}
-	public List<Painting> findAll() {
+	public List<PaintingDTO> findAll() {
 		// TODO Auto-generated method stub
-		return paintingRepository.findAll();
+
+		return paintingRepository.findAll().stream().map(PaintingDTO::new).collect(Collectors.toList());
 	}
+
+
 
 }
