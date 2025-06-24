@@ -1,11 +1,20 @@
 package com.example.PaginaWebRufyan.Utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class ImageUtils {
 
+	public static boolean deleteImageFiles(String path) {
+		File file = new File(path);
+		if (file.exists()) return file.delete();
+		else {
+			System.out.println("El archivo no existe");
+			return false;
+		}
+	}
 	public static byte[] compressImage(byte[] data) {
 		Deflater deflater = new Deflater();
 		deflater.setLevel(Deflater.BEST_COMPRESSION);
