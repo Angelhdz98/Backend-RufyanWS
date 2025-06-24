@@ -32,7 +32,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
 	List <UserEntity> findByEmailContainingIgnoreCase(String emailPart);
 	Page<UserEntity> findByEmailContainingIgnoreCase(String emailPart, Pageable pageable);
-	
+
+
 	
 
 	
