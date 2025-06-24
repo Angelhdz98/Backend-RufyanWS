@@ -98,7 +98,7 @@ public class UserEntity {
 	@EqualsAndHashCode.Exclude
 	@Builder.Default
 	@JsonManagedReference
-	private Set<Product> favoriteProducts= new HashSet<>();
+	private Set<Product> favoriteProducts= new HashSet<>(Set.of());
 
 	@OneToMany(mappedBy = "originalOwner" ,
 			fetch = FetchType.EAGER)

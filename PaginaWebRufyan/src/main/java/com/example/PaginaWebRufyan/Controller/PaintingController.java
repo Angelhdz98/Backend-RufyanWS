@@ -1,10 +1,12 @@
 package com.example.PaginaWebRufyan.Controller;
 
 //import java.net.URI;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.PaginaWebRufyan.DTO.PaintingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,25 +52,26 @@ public class PaintingController {
 	
 	Painting examplePainting = Painting.builder().build();
 	
-	final int alturaMin = examplePainting.getMinHeightCm();
+	final int alturaMin = Painting.minHeightCm;
 	
-	final int largoMin = examplePainting.getMinLargeCm();
+	final int largoMin = Painting.minLargeCm;
 	
-	final int originalPriceMin = examplePainting.getMinPrice();
+	final BigDecimal originalPriceMin = Painting.minPrice;
 	
-	final int copyPriceMin = examplePainting.getMinPricePerCopy();
+	final BigDecimal copyPriceMin = Painting.minPricePerCopy;
 	
 	// @Value("${file.upload-dir}")
 	 //private  String uploadDir;
 	
 	@GetMapping("/paintings")
 	@PreAuthorize("permitAll()")
-	public ResponseEntity<List<Painting>>  retrieveAllPaintings(){
-		return ResponseEntity.ok(paintingService.findAll()); 
+	public ResponseEntity<List<PaintingDTO>>  retrieveAllPaintings(){
+		List<PaintingDTO> allPaintings =  paintingService.findAll();
+		return ResponseEntity.ok(allPaintings);
 	}
 	
 	@GetMapping("/paintings/favorites")
-	public ResponseEntity<List<Painting>> retrieveFavoritePaintings(){
+	public ResponseEntity<List<PaintingDTO>> retrieveFavoritePaintings(){
 		 return ResponseEntity.ok(paintingService.findFavoritePaintings());
 	}
 	
@@ -80,12 +83,12 @@ public class PaintingController {
 		return new  ResponseEntity<>(paintingService.findFavoritePaintings(), headers, HttpStatus.OK);
 	 */
 	@GetMapping("/paintings/{id}")
-	public ResponseEntity<Painting> retrievePainting(@PathVariable @Positive(message = "El id debe de ser un numero positivo") int id) {
-		 Painting painting = paintingService.findById(id)
-			        .orElseThrow(() -> new ResourceNotFoundException("No se encontró la obra buscada"));
-			    return ResponseEntity.ok(painting);
+	public ResponseEntity<PaintingDTO> retrievePainting(@PathVariable @Positive(message = "El id debe de ser un numero positivo") int id) {
+			    return ResponseEntity.ok(paintingService.retrievePaintingById(id));
 		
 	}
+	/*
+	//This method is Replaced with ProductFactory
 	@Transactional
 	@PostMapping("/paintings/create")
 	public ResponseEntity<Painting> uploadPainting( @RequestParam("altura_cm") @NotNull @Min(20) Integer altura_cm,
@@ -125,20 +128,21 @@ public class PaintingController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		
-		/*headers.add("Cache-Control","no-cache, no-store, must-revalidate");
+		headers.add("Cache-Control","no-cache, no-store, must-revalidate");
 		headers.add("Pragma", "no-cache");
 		headers.add("Expires", "0");
-	*/
+
 		
 		
 		return new ResponseEntity<>(paintingService.save(inputPainting), headers, HttpStatus.OK);		
 		
 		}
-		
+		*/
 	/*
 	 * 
 	 */
-		
+
+	/*
 	@Transactional
 	@PutMapping("/paintings/{id}")
 	public ResponseEntity<Painting> updatePainting(	@PathVariable Integer id, 
@@ -189,38 +193,23 @@ public class PaintingController {
 		}
 		
 	}
+
+	 */
+
 	@Transactional
 	@DeleteMapping("/paintings/{paintingId}/{imageId}")
-	public ResponseEntity<Painting> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
-			Optional<Painting> optionalOwnerPainting = paintingService.findById(paintingId);
-			if(optionalOwnerPainting.isPresent()) {
-				Painting ownerPainting = optionalOwnerPainting.get();
-				ownerPainting.setImage(ownerPainting.getImage().stream()
-						.filter(image->!image.getId().equals(imageId))
-						.collect(Collectors.toList()));
-				
-				paintingService.updatePaintingById(paintingId, ownerPainting);
-				paintingService.deleteImage(imageId);
-				
-				return ResponseEntity.ok(ownerPainting);
-			}
-			else return ResponseEntity.badRequest().build();
-		
-		
+	public ResponseEntity<PaintingDTO> deleteImageFromPainting(@PathVariable Integer paintingId, @PathVariable Integer imageId){
+
+	imageService.deleteImageById(imageId);
+	return ResponseEntity.ok(paintingService.retrievePaintingById(paintingId));
 	}
 	@Transactional
 	@DeleteMapping("/paintings/{id}")
 	public ResponseEntity<Void> deletePaintingById(@PathVariable Integer id ) {
-		Optional<Painting> painting = paintingService.findById(id);
-		if(painting.isPresent()) {
-			painting.get().getImage().forEach(image ->{
-				imageService.deleteImageById(image.getId());
-			});	
-		return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.notFound().build();
-		
-	
+		paintingService.deletePaintingByid(id);
+		return ResponseEntity.ok().build();
+
+
 	}
 	
 	

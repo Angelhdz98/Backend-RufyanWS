@@ -1,23 +1,23 @@
 package com.example.PaginaWebRufyan.Service;
 
 
-import java.util.List;
-
-import java.util.stream.Collectors;
-
-
 import com.example.PaginaWebRufyan.DTO.ProductDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-
-import com.example.PaginaWebRufyan.Entity.Product;
-
+import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
+import com.example.PaginaWebRufyan.Entity.*;
+import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.ImageRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
 import com.example.PaginaWebRufyan.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.Repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 
@@ -27,7 +27,7 @@ public class ProductService {
 	@Autowired
 	private ProductsRepository productsRepository;
 	@Autowired
-	private ImageRepository imageRepository;
+	private ImageService imageService;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -46,6 +46,19 @@ public class ProductService {
 	private Product findProductByName(String name){
 		return productsRepository.findByName(name).orElseThrow(()->new ResourceNotFoundException("Product not found with name: "+ name ));
 	}
+	/*
+	private void checkConsistentData(ProductUpdateRegisterDTO productData ){
+		 Map<String,Object> priceManage =productData.getPriceManage();
+		BigDecimal copyPrice
+		if(productData.getOldImages().isEmpty()){
+			throw new InconsitentDataException("Every single product should have at least one image");
+		} else if (productData.) {
+
+		}
+
+	}
+
+	 */
 
 	public ProductService(ProductsRepository repository) {
 		super();
@@ -70,14 +83,8 @@ public class ProductService {
 	
 	
 	// method to create new products
-	public Product saveProduct(Product product) {
-		
-		
-		
-
-		
-			
-			
+	//DEPRECATED
+	public ProductDTO saveProduct(Product product) {
 			/*List<UserEntity> copyBuyers = List.of();
 
 			if(product.getCopyBuyers()!=null) {
@@ -89,8 +96,6 @@ public class ProductService {
 				
 			}
 			*/
-			
-		
 		/*product.setCategory(
 		productsCategoryRepository.
 		findByName(product.getCategory().getName()).orElseThrow(()->{
@@ -99,7 +104,7 @@ public class ProductService {
 		}));
 		*/
 		
-		return productsRepository.save(product);		
+		return new ProductDTO(productsRepository.save(product));
 	}
 	
 
@@ -141,21 +146,47 @@ public class ProductService {
 			return productsRepository.save(product);
 	}
 	*/
-	public ProductDTO updateProductById(Integer id, ProductDTO productData) {
+
+	//good idea, here checking diferences between the foundProduct and the ProductUpdate register so can be possible to delete an image from the server
+	@Transactional
+	public ProductDTO updateProductById(Integer id, ProductUpdateRegisterDTO productUpdateData) {
+
 
 		Product foundProduct = findProductById(id);
-		foundProduct.setCategory(productData.getCategory());
-		foundProduct.setDescription(productData.getDescription());
-		foundProduct.setImage(productData.getImages());
-		foundProduct.setName(productData.getName());
-		foundProduct.setPrice(productData.getPrice());
-		foundProduct.setStyle(productData.getStyle());
+		Product updatedProduct = ProductFactory.createProductFromRegister(productUpdateData);
+		updatedProduct.setId(id);
+		List<Image> productImages =foundProduct.getImage();
+		if(productUpdateData.getOldImages().isEmpty() && productUpdateData.getNewImageFiles().isEmpty())throw  new InconsitentDataException("Is not posible to update a product with no images:");
+		List<Image> updateRegisterImages = productUpdateData.getOldImages();
+		List<Image> imagesToDelete = productImages.stream().filter(image -> !(updateRegisterImages.contains(image))).toList();
 
-		return new ProductDTO(productsRepository.save(foundProduct));
+		List<Image> newImages = new ArrayList<>(List.of());
+
+		if(!productUpdateData.getNewImageFiles().isEmpty()){
+			newImages = imageService.processImages(productUpdateData.getNewImageFiles());
+		}
+		newImages.addAll(updateRegisterImages);
+
+		updatedProduct.setImage(newImages);
+
+		imageService.deleteAllImages(imagesToDelete);
+
+
+
+		return new ProductDTO(productsRepository.save(updatedProduct));
 
 
 
 			
+	}
+		//FactoryPattern
+	public ProductDTO createProduct(ProductUpdateRegisterDTO productData){
+		if(productData.getNewImageFiles().isEmpty()){
+			throw new InconsitentDataException("You can't create a product with no images");
+		}
+	Product newProduct=	ProductFactory.createProductFromRegister(productData);
+	newProduct.setImage(imageService.processImages(productData.getNewImageFiles()));
+		return new ProductDTO(productsRepository.save(newProduct));
 	}
 
 	public List<Product> retrieveProductsByNameContainging(String searchTerm) {

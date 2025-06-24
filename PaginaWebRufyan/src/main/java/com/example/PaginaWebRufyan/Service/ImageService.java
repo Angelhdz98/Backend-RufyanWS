@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.PaginaWebRufyan.DTO.ImageDTO;
+import com.example.PaginaWebRufyan.Utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,17 +29,17 @@ public class ImageService {
 	 private  String uploadDir;
 	@Autowired
 	private ImageRepository imageRepository;
-	
-	public List<Image> findAllImages(){
-		return imageRepository.findAll();
+
+	public List<ImageDTO> findAllImages(){
+		return imageRepository.findAll().stream().map(ImageDTO::new).collect(Collectors.toList());
 			}
-	
-	public Optional<Image> findImageById(Integer id) {
-		Optional<Image> optionalImage= imageRepository.findById(id);
-	/*	if(image.isEmpty()) {
-			throw new RuntimeException(" No se econtró la imagen id: " + id);
-		}*/
-		return optionalImage;
+
+			private Image findImageById(Integer id){
+		return imageRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Imagen no encontrada con Id: "+ id));
+			}
+
+	public ImageDTO retrieveImageById(Integer id) {
+	return new ImageDTO(findImageById(id));
 	}
 		
 	public Image saveImage(Image image) {
@@ -45,9 +47,22 @@ public class ImageService {
 	}
 	
 	public void deleteImageById(Integer id ) {
+
+		Image imageToDelete = findImageById(id);
+		ImageUtils.deleteImageFiles(imageToDelete.getUrl());
 		imageRepository.deleteById(id);
 	}
-	
+
+	public void deleteAllImages(List<Image> imagesToDelete){
+		//got deleted imageFiles from server
+		for  ( Image image:imagesToDelete){
+			ImageUtils.deleteImageFiles(image.getUrl());
+		}
+
+		imageRepository.deleteAll(imagesToDelete);
+	}
+
+
 	public Image updateImageById(Integer id, Image imageData) {
 		Optional<Image> imageToUpdate= imageRepository.findById(id);
 		
@@ -64,7 +79,7 @@ public class ImageService {
 
 public List<Image> processImages(List<MultipartFile> imageFiles) {
 		
-		List<Image> images = imageFiles.stream().map((file)->{
+		return imageFiles.stream().map((file)->{
 			try {
 				// Primero se guarda el archivo en el sistema de archivo
 				String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
@@ -80,15 +95,15 @@ public List<Image> processImages(List<MultipartFile> imageFiles) {
 								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
 								  .productName(file.getOriginalFilename()).build();
 				
-				return imageRepository.save(image);
+				return image;
 			}
 			catch(IOException e) {
-				throw new RuntimeException();
+				throw new RuntimeException(e);
 			}
 			
 		}).collect(Collectors.toList());
 		
-		return images;
+
 		
 		}
 

@@ -5,10 +5,7 @@ import java.math.BigDecimal;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.PaginaWebRufyan.DTO.*;
@@ -20,9 +17,11 @@ import com.example.PaginaWebRufyan.Repository.*;
 import com.example.PaginaWebRufyan.Utils.RoleEnum;
 
 import jakarta.validation.constraints.NotNull;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +73,7 @@ public class UserService {
 
 		UserEntity user = findUserBydId(cartRegister.getUserId());
 
-		 return user.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartRegister.getProductId()) && item.getIsOriginalSelected().equals(cartRegister.getIsOriginalSelected())).findFirst().orElseThrow(()-> new ResourceNotFoundException("Cart item with product id: "+ cartRegister.getProductId()+ "doesn't exist with actual value of isOriginalSelected: " + String.valueOf(cartRegister.getIsOriginalSelected())));
+		 return user.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartRegister.getProductId()) && item.getDetails().get("isOriginalSelected").equals(cartRegister.getIsOriginalSelected())).findFirst().orElseThrow(()-> new ResourceNotFoundException("Cart item with product id: "+ cartRegister.getProductId()+ "doesn't exist with actual value of isOriginalSelected: " + String.valueOf(cartRegister.getIsOriginalSelected())));
 
 	}
 
@@ -191,51 +190,7 @@ public class UserService {
 
 	 }
 */
-	@Transactional
-	public CartItemDTO addProductToCart(CartItemRegisterDTO cartItemRegisterDTO){
-		BigDecimal price;
-		CartItem cartItem;
-		UserEntity userFound = findUserBydId(cartItemRegisterDTO.getUserId());// this function will check if user exists
-		Product productFound = findProductById(cartItemRegisterDTO.getProductId());
-		if(productFound.getAvailableStock()<cartItemRegisterDTO.getQuantity()){
-			throw new NoStockException("el producto con id: "+ productFound.getId() + "no cuenta con "+ cartItemRegisterDTO.getQuantity() +" piezas de stock");
-		}
-		if(productFound instanceof Painting){
-			Painting painting = (Painting) productFound;
-			if(cartItemRegisterDTO.getIsOriginalSelected()){
-				price = BigDecimal.valueOf(painting.getPrice());
-			} else{
-				price = BigDecimal.valueOf(painting.getPricePerCopy());
-			}
-			//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
-			cartItem = CartItem.builder()
-					.product(painting).quantity(cartItemRegisterDTO.getQuantity())
-					.isOriginalSelected(cartItemRegisterDTO.getIsOriginalSelected())
-					.pricePerUnit(price)
-					.build();
 
-		} else {
-			price=  BigDecimal.valueOf(productFound.getPrice());
-			//cartItem = new CartItem(productFound, quantity, false,price);
-			cartItem = CartItem.builder()
-					.product(productFound)
-					.quantity(cartItemRegisterDTO.getQuantity())
-					.isOriginalSelected(false)
-					.pricePerUnit(price)
-					.build();
-		}
-		cartItem.setShoppingCart(userFound.getShoppingCart());
-
-		userFound.getShoppingCart().addCartItem(cartItem);
-
-		userRepository.save(userFound);
-
-		return  new CartItemDTO(cartItem);
-
-
-
-
-	}
 
 
 	public  UserEntityDTO updateUser(Integer id ,UserEditableDTO userData) {
@@ -290,83 +245,77 @@ public class UserService {
 		return new UserEntityDTO(findUserByEmail(email));
 	}
 	@Transactional
-	public CartItemDTO addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
-		if(quantity<1)throw new InconsitentDataException("Quantity should be 1 at least");
+	public CartItemDTO addProductToCart(CartItemRegisterNew cartItemRegisterNew){
 		BigDecimal price;
 		CartItem cartItem;
-		UserEntity userFound = findUserBydId(userId);// this function will check if user exists
-
-
-
-		Product productFound = findProductById(productId);
-
-		Optional<CartItem> existingCartItem = userFound.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(productFound.getId())&& item.getIsOriginalSelected().equals(isOriginalSelected) ).findFirst();
-
-		if(existingCartItem.isPresent()){
-			userFound.getShoppingCart().deleteCartItem(existingCartItem.get());
-		}
-
-				//.getItemList().removeIf((CartItem item)-> item.getProduct().getId().equals(productFound.getId())&& item.getIsOriginalSelected().equals(isOriginalSelected) );
-
+		Integer quantity = Integer.parseInt(cartItemRegisterNew.getDetails().get("quantity"));
+		Boolean isOriginalSelected = Boolean.valueOf(cartItemRegisterNew.getDetails().get("isOriginalSelected"));
+		UserEntity userFound = findUserBydId(cartItemRegisterNew.getUserId());// this function will check if user exists
+		Product productFound = findProductById(cartItemRegisterNew.getProductId());
+		/*
 		if(productFound instanceof Painting){
 			Painting painting = (Painting) productFound;
-			if(!painting.getIsOriginalAvailable() && isOriginalSelected){
-				throw new NoStockException("Painting: " + painting.getName() + " is not original available");
-			}
-			//Check stock
-			if(painting.getAvailableStock()< quantity ){
-				throw new NoStockException("Painting " + painting.getName() + " has no enough copies");
-			}
-
-			if(isOriginalSelected){
+			if(cartItemRegisterNew.getIsOriginalSelected()){
 				price = BigDecimal.valueOf(painting.getPrice());
-				painting.setIsOriginalAvailable(false);
 			} else{
-
 				price = BigDecimal.valueOf(painting.getPricePerCopy());
 			}
 			//cartItem=  new CartItem(painting, quantity, isOriginalSelected, price);
 			cartItem = CartItem.builder()
-					.product(painting).quantity(quantity)
-					.isOriginalSelected(isOriginalSelected)
+					.product(painting).quantity(cartItemRegisterNew.getQuantity())
+					.isOriginalSelected(cartItemRegisterNew.getIsOriginalSelected())
 					.pricePerUnit(price)
 					.build();
 
 		} else {
-
-			if(productFound.getAvailableStock()<quantity){
-				throw  new NoStockException("Product: " + productFound.getName()+" has no enough stock");
-			}
-
-			price= BigDecimal.valueOf(productFound.getPrice()) ;
+			price=  BigDecimal.valueOf(productFound.getPrice());
 			//cartItem = new CartItem(productFound, quantity, false,price);
 			cartItem = CartItem.builder()
 					.product(productFound)
-					.quantity(quantity)
+					.quantity(cartItemRegisterDTO.getQuantity())
 					.isOriginalSelected(false)
 					.pricePerUnit(price)
-					.shoppingCart(userFound.getShoppingCart())
 					.build();
 		}
-		// if exist a CartItem with same product and the same value of isOriginalSelected will deleted before add the new
 
+		 */
 
+		cartItem = CartItem.builder()
+				.product(productFound)
+				.quantity(quantity)
+				.pricePerUnit(productFound.getPriceManager().getPriceWithDetails(cartItemRegisterNew.getDetails()))
+				.details(cartItemRegisterNew.getDetails())
+				.build();
 
-		userFound.addCartItemToCart(cartItemRepository.save(cartItem));
+		cartItem.setShoppingCart(userFound.getShoppingCart());
+
+		userFound.getShoppingCart().addCartItem(cartItemRepository.save(cartItem));
 		shoppingCartRepository.save(userFound.getShoppingCart());
 		userRepository.save(userFound);
 
-		return new CartItemDTO(cartItem);
+		return  new CartItemDTO(cartItem);
+
 
 
 
 	}
-	public void  removeCartItemFromCart(CartItemRegisterDTO cartItem){
+	@Transactional
+	public CartItemDTO addProductToCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected) {
+		if(quantity<1)throw new InconsitentDataException("Quantity should be 1 at least");
+		Map<String,String> details = new HashMap<>();
+		details.put("quantity",quantity.toString());
+		details.put("isOriginalSelected",isOriginalSelected.toString());
+
+
+		return addProductToCart(new CartItemRegisterNew(productId,userId,details));
+
+	}
+	public void  removeCartItemFromCart(CartItemRegisterNew cartItem){
 		UserEntity foundUser= findUserBydId(cartItem.getUserId());
 
 
 
-		Optional<CartItem> existingCartItem = foundUser.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ).findFirst();
+		Optional<CartItem> existingCartItem = foundUser.getShoppingCart().getItemList().stream().filter((CartItem item)-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getDetails().get("isOriginalSelected").equals(cartItem.getDetails().get("isOriginalSelected")) ).findFirst();
 
 
 		if(existingCartItem.isPresent()){
@@ -381,9 +330,25 @@ public class UserService {
 	}
 
 	public void removeCartItemFromCart(Integer productId, Integer userId, Integer quantity, Boolean isOriginalSelected){
+		Map<String, String> details = new HashMap<>();
+		details.put("isOriginalSelected",isOriginalSelected.toString());
+		details.put("quantity",quantity.toString());
 		UserEntity foundUser= findUserBydId(userId);
-		foundUser.getShoppingCart().deleteCartItem(new CartItemRegisterDTO(productId, userId,quantity,isOriginalSelected));
+		foundUser.getShoppingCart().deleteCartItem(new CartItemRegisterNew(productId, userId,details));
 		userRepository.save(foundUser);
 
 	}
+
+	public Page<UserEntityDTO> searchUserWithNameMatch(SearchRequestDTO searchRequest) {
+	PageRequest request = PageRequest.of(searchRequest.getPageNumber(), searchRequest.getItemsPerPage(), Sort.by(searchRequest.getSortBy()));
+
+	return null;
+
+	}
+
+	public Page<UserEntityDTO> searchUserWithUsernameMatch(SearchRequestDTO searchRequest) {
+		return null;
+	}
+
+
 }

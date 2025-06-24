@@ -2,37 +2,50 @@ package com.example.PaginaWebRufyan.DTO;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.w3c.dom.stylesheets.LinkStyle;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
+@SuperBuilder
+@NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class ProductDTO {
-private Integer id;
-private String name;
-private Integer price;
-private List<Image> images;
-private String style;
-private LocalDate creationDate;
-private ProductsCategory category;
-private String description;
+private String name="";
+private List<Image> images= new ArrayList<>();
+private String style="";
+private LocalDate creationDate= LocalDate.now();
+
+private String description ="";
+private Map<String, BigDecimal> price;
+private Map<String, Object> stock;
+private Map<String, String> additionalFeatures;
 
 
 
 public ProductDTO(Product product){
-    this.id= product.getId();
+
     this.name= product.getName();
-    this.price= product.getPrice();
     this.images= product.getImage();
     this.style = product.getStyle();
     this.creationDate= product.getCreationDate();
-    this.category = product.getCategory();
     this.description= product.getDescription();
+    this.additionalFeatures= product.getAdditionalFeatures();
+
+    this.price =  product.getPriceManager().getPriceMap();
+
+this.stock = (Map<String,Object>) product.getStockManager().getStockMap();
+
+
 }
+
 
 }

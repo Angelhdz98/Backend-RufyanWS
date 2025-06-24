@@ -3,6 +3,7 @@ package com.example.PaginaWebRufyan.Controller;
 
 import java.util.List;
 
+import com.example.PaginaWebRufyan.DTO.ImageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,13 +24,13 @@ public class ImageController {
 	private ImageService imageService;
 	
 	@GetMapping("/images")
-	public List<Image> retrieveAllImages(){
+	public List<ImageDTO> retrieveAllImages(){
 		return imageService.findAllImages();
 	}
 	
 	@GetMapping("/images/{id}")
-	public Image findImageById(@PathVariable Integer id) {
-		return imageService.findImageById(id).get();
+	public ImageDTO findImageById(@PathVariable Integer id) {
+		return imageService.retrieveImageById(id);
 	}
 	@PostMapping("/images")
 	public void saveImage(@RequestBody Image image) {
