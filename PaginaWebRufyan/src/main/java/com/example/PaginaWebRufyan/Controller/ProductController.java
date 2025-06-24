@@ -7,16 +7,11 @@ import java.util.List;
 
 import com.example.PaginaWebRufyan.DTO.ProductDTO;
 import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.PaginaWebRufyan.Entity.Image;
 import com.example.PaginaWebRufyan.Entity.Product;
@@ -50,22 +45,15 @@ public class ProductController {
 	//@ModelAttribute Product product,
 	@Transactional
 	@PostMapping("/products/create")
-	public ResponseEntity<ProductDTO> createProduct(ProductRegisterDTO productData) {
-			
-		List<Image> images= imageService.processImages(productData.getImageFiles());
+	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductUpdateRegisterDTO productData) {
 
+		return ResponseEntity.ok(productService.createProduct(productData));
 
-		
-		return ResponseEntity.ok(new ProductDTO(productService.createProduct(productData)));
-		/*catch(IOException e) {
-			return ResponseEntity.badRequest().build();
-		}*/
-		
 	}
 	
 	@Transactional
 	@PutMapping("/products/{id}")
-	public ResponseEntity<ProductDTO> updateProductById(Integer id, ProductDTO productData){
+	public ResponseEntity<ProductDTO> updateProductById(@PathVariable Integer id,@RequestBody ProductUpdateRegisterDTO productData){
 
 		return  ResponseEntity.ok(productService.updateProductById(id, productData)) ;
 	}
