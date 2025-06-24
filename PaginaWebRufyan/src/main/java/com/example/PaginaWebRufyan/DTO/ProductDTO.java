@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 @SuperBuilder
@@ -17,13 +19,13 @@ import java.util.Map;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class ProductDTO {
-private String name;
-private List<Image> images;
-private String style;
-private LocalDate creationDate;
+private String name="";
+private List<Image> images= new ArrayList<>();
+private String style="";
+private LocalDate creationDate= LocalDate.now();
 
-private String description;
-private Map<String, Object> price;
+private String description ="";
+private Map<String, BigDecimal> price;
 private Map<String, Object> stock;
 private Map<String, String> additionalFeatures;
 
@@ -38,10 +40,9 @@ public ProductDTO(Product product){
     this.description= product.getDescription();
     this.additionalFeatures= product.getAdditionalFeatures();
 
-if(product.getPriceManager().getPriceData() instanceof Map<?,?>){
-    this.price = (Map<String, Object>) product.getPriceManager().getPriceData();
-}
-this.stock = (Map<String,Object>) product.getStockManager().getStockInfo();
+    this.price =  product.getPriceManager().getPriceMap();
+
+this.stock = (Map<String,Object>) product.getStockManager().getStockMap();
 
 
 }

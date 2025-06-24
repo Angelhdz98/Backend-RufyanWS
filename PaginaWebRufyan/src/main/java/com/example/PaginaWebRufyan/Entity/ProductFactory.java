@@ -2,10 +2,8 @@ package com.example.PaginaWebRufyan.Entity;
 
 import com.example.PaginaWebRufyan.Components.OriginalStock;
 import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.ProductImagesRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
 import com.example.PaginaWebRufyan.Repository.PaintingRepository;
-import com.example.PaginaWebRufyan.Service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,20 +17,23 @@ import java.util.Set;
 public class ProductFactory {
     @Autowired
     PaintingRepository paintingRepository;
-    @Autowired
 
-
-    public static Product createProductFromRegister(ProductImagesRegisterDTO productData){
+    public static Product createProductFromRegister(ProductUpdateRegisterDTO productData){
+        if (productData.getType()==null)productData.setType(ProductsEnum.PAINTING);
         switch (productData.getType()){
             case PAINTING :
-                if(productData.getStock().containsKey("stockCopies") &&
+                /*if(productData.getStock().containsKey("stockCopies") &&
                         productData.getStock().containsKey("isOriginalAvailable") &&
                         productData.getPriceManage().containsKey("pricePerCopy") &&
-                        productData.getPriceManage().containsKey("pricePerOriginal")){
+                        productData.getPriceManage().containsKey("pricePerOriginal"))
+
+                 */
+                Painting.checkConsistentData(productData);
                     int stockCopies =(int) productData.getStock().get("stockCopies");
                     Boolean isOriginalAvailable = (Boolean) productData.getStock().get("isOriginalAvailable");
-
+                    int copiesMade = (int) productData.getStock().get("copiesMade");
                     BigDecimal pricePerCopy = (BigDecimal) productData.getPriceManage().get("pricePerCopy");
+                    Boolean isInCart =(Boolean) productData.getStock().get("isInCart");
                     BigDecimal pricePerOriginal = (BigDecimal) productData.getPriceManage().get("pricePerOriginal");
                     return Painting.builder()
                             .name(productData.getName())
@@ -40,11 +41,11 @@ public class ProductFactory {
                             .creationDate(productData.getCreationDate())
                             .style(productData.getStyle())
                             .additionalFeatures(productData.getAdditionalFeatures())
-                            .stockManager(new OriginalStock(stockCopies, isOriginalAvailable))
+                            .stockManager(new OriginalStock(stockCopies,copiesMade,isOriginalAvailable,isInCart))
                             .priceManager(new PaintingPriceManager(pricePerCopy,pricePerOriginal))
                             .isFavorite(productData.getIsFavorite())
                             //.category(productData.getProductsCategory())
-                            .image(productData.getImages())
+                            .image(productData.getOldImages())
                             .favoriteOf(new HashSet<>(Set.of()))
                             .cartItems(new HashSet<>(Set.of()))
                             .orderItems(new HashSet<>(Set.of()))
@@ -54,7 +55,7 @@ public class ProductFactory {
                             .supportMaterial(productData.getAdditionalFeatures().get("supportMaterial"))
                             .build();
 
-                }else throw new InputMismatchException(" missing values from stock and price managing");
+
             case BODYCLOTHING:
 
 
