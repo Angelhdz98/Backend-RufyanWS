@@ -13,4 +13,5 @@ public abstract class StockManagerBase {
     public abstract void decreaseStock(Product product, Map<String, String> details);
     public abstract void increaseStock(Product product, Map<String, String> details);
     public abstract Object getStockInfo();
+    public abstract Map<String,Object>getStockMap();
 }
