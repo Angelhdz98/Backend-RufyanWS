@@ -1,22 +1,20 @@
-package com.example.PaginaWebRufyan.Service;
+package com.example.PaginaWebRufyan.Products.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.example.PaginaWebRufyan.DTO.PaintingDTO;
-import com.example.PaginaWebRufyan.DTO.PaintingRegisterDTO;
+import com.example.PaginaWebRufyan.Image.Service.ImageService;
+import com.example.PaginaWebRufyan.Products.DTO.Painting.PaintingDTO;
 import com.example.PaginaWebRufyan.Utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
+import com.example.PaginaWebRufyan.Products.Entity.Painting;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.ImageRepository;
-import com.example.PaginaWebRufyan.Repository.PaintingRepository;
+import com.example.PaginaWebRufyan.Image.Repository.ImageRepository;
+import com.example.PaginaWebRufyan.Products.Repository.PaintingRepository;
 
 @Service
 public class PaintingService {
@@ -133,9 +131,9 @@ public class PaintingService {
 	
 	
 
-	//all the logic for create is on productFactory.createProduct
+	//all the logic for saveUser is on productFactory.createProduct
 	/*
-	public PaintingDTO create(PaintingRegisterDTO paintingRegister)  {
+	public PaintingDTO saveUser(PaintingRegisterDTO paintingRegister)  {
 		return  new PaintingDTO(paintingRepository.save());
 	}
 

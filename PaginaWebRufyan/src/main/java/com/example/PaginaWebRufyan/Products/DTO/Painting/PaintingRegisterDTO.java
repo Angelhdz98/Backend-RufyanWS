@@ -1,7 +1,6 @@
-package com.example.PaginaWebRufyan.DTO;
+package com.example.PaginaWebRufyan.Products.DTO.Painting;
 
-import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.ProductsEnum;
+import com.example.PaginaWebRufyan.Products.DTO.Product.ProductRegisterDTO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -11,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class PaintingRegisterDTO extends ProductRegisterDTO{
+public class PaintingRegisterDTO extends ProductRegisterDTO {
     private Integer alturaCm;
     private Integer largoCm;
     private String medium;

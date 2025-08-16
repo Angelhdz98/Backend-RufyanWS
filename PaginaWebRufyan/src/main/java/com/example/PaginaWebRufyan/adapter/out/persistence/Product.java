@@ -1,14 +1,12 @@
-package com.example.PaginaWebRufyan.Entity;
 
-import java.math.BigDecimal;
+package com.example.PaginaWebRufyan.adapter.out.persistence;
+
 import java.time.LocalDate;
 import java.util.*;
 
-import com.example.PaginaWebRufyan.Components.PriceManagerBase;
-import com.example.PaginaWebRufyan.Components.StockManagerBase;
-import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.PaginaWebRufyan.adapter.out.PriceManager;
+import com.example.PaginaWebRufyan.adapter.out.StockManager;
+import com.example.PaginaWebRufyan.Image.Image;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -28,9 +26,9 @@ public abstract class Product {
 	private LocalDate creationDate;
 	private String style;
 	@Embedded
-	private PriceManagerBase priceManager;
+	private PriceManager priceManager;
 	@Embedded
-	private StockManagerBase stockManager;
+	private StockManager stockManager;
 	//private StockManager stock;// a implementation of StockManager and PriceManager will be added on subclass
 /*	@ManyToMany(mappedBy = "copiesBuyed",
 			cascade = {CascadeType.MERGE, CascadeType.PERSIST}
@@ -50,11 +48,11 @@ public abstract class Product {
 	*/
 	@OneToMany(fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL,orphanRemoval = true)
-	private List<Image> image = new ArrayList<>();
+	private Set<Image> image = new HashSet<>();
 
 	//CascadeType.ALL
 //	cascade={ CascadeType.PERSIST,	CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH }
- 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REFRESH})
+ 	/*@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REFRESH})
  	@JoinTable(name= "favorite_product_user",
  	joinColumns = @JoinColumn(name= "product_id"),
  	inverseJoinColumns = @JoinColumn(name= "user_id"))
@@ -64,6 +62,9 @@ public abstract class Product {
 	@JsonBackReference
 	private Set<UserEntity> favoriteOf= new HashSet<>(Set.of()); // Set (no repeated of user mark as favorite a product) // puede que el nombre anterior genere un problema de nomenclatura
 
+
+ 	 */
+	/* Se eliminan por alto acoplamiento
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	@ToString.Exclude
 	@EqualsAndHashCode.Exclude
@@ -72,8 +73,10 @@ public abstract class Product {
 
 	@OneToMany(mappedBy = "product")
 	@EqualsAndHashCode.Exclude
+	@JsonManagedReference
 	private Set<OrderItem> orderItems = new HashSet<>();
-
+*/
+/*
 	@ElementCollection
 	@CollectionTable(name = "additional",
 			joinColumns = @JoinColumn(name = "product_id"))
@@ -81,15 +84,12 @@ public abstract class Product {
 	@Column(name = "feature_value")
 	//@Builder.Default
 	private Map<String, String> additionalFeatures = new HashMap<>();
+ */
 
 
 
-	//public abstract void increaseStock(CartItem cartItem);
-
-	//public abstract void decreaseStock(CartItem cartItem);
-
-	public void deleteImage(Image image){
-		List<Image> newImageList = this.getImage();
+/*	public void deleteImage(Image image){
+		Set<Image> newImageList = this.getImage();
 		newImageList.remove(image);
 		this.setImage(newImageList);
 	}
@@ -114,17 +114,6 @@ public abstract class Product {
 		
 	}
 
-	public void decreaseStock(Map<String, String> details) {
-		stockManager.decreaseStock(this, details);
-	}
-
-	public void increaseStock(Map<String, String> details) {
-		stockManager.increaseStock(this, details);
-	}
-
-	public BigDecimal getPriceWithDetails(Map<String, String> details) {
-		return priceManager.getPriceWithDetails(details);
-	}
 
 	public BigDecimal getPriceWithDetails(){
 		Map<String,String> voidDetails = new HashMap<>();
@@ -134,6 +123,6 @@ public abstract class Product {
 	public Map<String,BigDecimal> getPriceMap(){
 		return priceManager.getPriceMap();
 	}
-
+*/
 	//public abstract void checkConsistentData(ProductUpdateRegisterDTO productUpdateRegisterDTO);
 }

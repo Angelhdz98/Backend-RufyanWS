@@ -1,4 +1,4 @@
-package com.example.PaginaWebRufyan.Repository;
+package com.example.PaginaWebRufyan.Products.Repository;
 
 
 
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.PaginaWebRufyan.Entity.Painting;
+import com.example.PaginaWebRufyan.Products.Entity.Painting;
 
 public interface PaintingRepository extends JpaRepository<Painting, Integer> {
 	Optional<Painting> findByName(String name);

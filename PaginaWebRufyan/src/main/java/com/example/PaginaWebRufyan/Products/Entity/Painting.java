@@ -1,17 +1,13 @@
-package com.example.PaginaWebRufyan.Entity;
-import com.example.PaginaWebRufyan.Components.OriginalStock;
-import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.PaintingRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
-import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
+package com.example.PaginaWebRufyan.Products.Entity;
+import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingSpecs;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.assertj.core.internal.BooleanArrays;
 
 import java.math.BigDecimal;
-import java.util.InputMismatchException;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -22,28 +18,26 @@ import java.util.Map;
 @DiscriminatorValue("PAINTING")
 @Entity
 public class Painting extends Product {
-	
-	private Integer alturaCm;
-	private Integer largoCm;
-	private String medium;
-	private String supportMaterial;
+
 
 
 	@Builder.Default
 	private PaintingPriceManager priceManager= new PaintingPriceManager();
 	@Builder.Default
-	private OriginalStock stockManager = new OriginalStock(1,1,false) ;
+	private OriginalStockAdapter stockManager = new OriginalStockAdapter(1,1,false) ;
 
 	 public static final Integer minHeightCm = 15;
 	 public static final Integer minLargeCm= 15;
 	 public static final BigDecimal minPrice = new BigDecimal(750);
 	 public static final BigDecimal minPricePerCopy= new BigDecimal(300);
 
-	@ManyToOne(cascade = CascadeType.REFRESH)
+	//original ownew se manejará con una clase aparte
+	/*@ManyToOne(cascade = CascadeType.REFRESH)
 	private UserEntity originalOwner;
+	 */
 
 
-
+/*
 	public static void checkConsistentData(ProductUpdateRegisterDTO productUpdateRegisterDTO) {
 		String message ="Problems with product: /n";
 		Map<String, Object> priceManage = productUpdateRegisterDTO.getPriceManage();
@@ -77,4 +71,7 @@ public class Painting extends Product {
 			throw new InputMismatchException("El producto no tiene no los datos necesarios para iniciar components PriceManager y StockManager");
 		}
 	}
+
+ */
+
 }

@@ -1,4 +1,4 @@
-package com.example.PaginaWebRufyan.Entity;
+package com.example.PaginaWebRufyan.Security.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

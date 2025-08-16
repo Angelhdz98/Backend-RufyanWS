@@ -1,4 +1,4 @@
-package com.example.PaginaWebRufyan.Entity;
+package com.example.PaginaWebRufyan.Products.Enums;
 
 public enum ProductsEnum {
 PAINTING,
