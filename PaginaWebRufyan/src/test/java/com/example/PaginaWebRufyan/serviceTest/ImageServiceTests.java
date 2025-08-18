@@ -1,6 +1,5 @@
 package com.example.PaginaWebRufyan.serviceTest;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,9 +9,9 @@ import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.ImageDTO;
-import com.example.PaginaWebRufyan.Entity.Painting;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.Image.DTO.ImageDTO;
+import com.example.PaginaWebRufyan.Products.Entity.Painting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.PaginaWebRufyan.Entity.Image;
-import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
+import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.ImageRepository;
-import com.example.PaginaWebRufyan.Service.ImageService;
+import com.example.PaginaWebRufyan.Image.Repository.ImageRepository;
+import com.example.PaginaWebRufyan.Image.Service.ImageService;
 
 @ExtendWith(MockitoExtension.class)
 public class  ImageServiceTests {

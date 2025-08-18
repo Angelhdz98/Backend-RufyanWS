@@ -1,3 +1,4 @@
+create_java_resource.sh
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

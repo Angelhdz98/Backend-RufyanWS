@@ -1,29 +1,43 @@
 package com.example.PaginaWebRufyan;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 //import java.util.LinkedHashSet;
 
-import com.example.PaginaWebRufyan.Components.OriginalStock;
-import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
-import com.example.PaginaWebRufyan.Entity.*;
-import com.example.PaginaWebRufyan.Repository.*;
-import com.example.PaginaWebRufyan.Service.ImageService;
-import com.example.PaginaWebRufyan.Service.ProductService;
-import com.example.PaginaWebRufyan.Service.UserService;
+import com.example.PaginaWebRufyan.Buys.Entity.CartItem;
+import com.example.PaginaWebRufyan.Buys.Entity.OrderStatus;
+import com.example.PaginaWebRufyan.Buys.Entity.PurchaseOrder;
+import com.example.PaginaWebRufyan.Buys.Entity.ShoppingCart;
+import com.example.PaginaWebRufyan.Buys.Enums.OrderStatusEnum;
+import com.example.PaginaWebRufyan.Buys.Repository.OrderStatusRepository;
+import com.example.PaginaWebRufyan.Products.Service.ProductService;
+import com.example.PaginaWebRufyan.Buys.Service.PurchasesService;
+import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.Image.Service.ImageService;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategory;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategoryRepository;
+import com.example.PaginaWebRufyan.Products.DTO.Product.ProductRegisterDTO;
+import com.example.PaginaWebRufyan.Products.DTO.Product.ProductUpdateRegisterDTO;
+import com.example.PaginaWebRufyan.User.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.Products.Enums.ProductsEnum;
+import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.Products.ProductFactory;
+import com.example.PaginaWebRufyan.Products.Repository.PaintingRepository;
+import com.example.PaginaWebRufyan.Products.Repository.ProductsRepository;
+import com.example.PaginaWebRufyan.Security.Entity.PermissionEntity;
+import com.example.PaginaWebRufyan.Security.Entity.RoleEntity;
+import com.example.PaginaWebRufyan.Security.Roles.RoleRepository;
+import com.example.PaginaWebRufyan.User.Repository.UserRepository;
+import com.example.PaginaWebRufyan.User.Entity.UserEntity;
+import com.example.PaginaWebRufyan.User.Service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.example.PaginaWebRufyan.Utils.RoleEnum;
+import com.example.PaginaWebRufyan.Security.Roles.RoleEnum;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +53,9 @@ public class PaginaWebRufyanApplication {
 	@Bean
 	CommandLineRunner init(UserRepository userRepository,
 						   RoleRepository roleRepository, PaintingRepository paintingRepository,
-						   ProductsCategoryRepository productsCategoryRepository, UserService userService, ImageService imageService, ProductService productService, ProductsRepository productsRepository) {
+						   ProductsCategoryRepository productsCategoryRepository, UserService userService, ImageService imageService,
+						   PurchasesService purchasesService, ProductService productService, ProductsRepository productsRepository,
+						   OrderStatusRepository orderStatusRepository) {
 		return args ->{
 			
 			PermissionEntity createPermission = PermissionEntity.builder()
@@ -119,6 +135,8 @@ public class PaginaWebRufyanApplication {
 					.credentialNoExpired(true)
 					.roles(new HashSet<>(Set.of(roleDeveloper)))
 					.build();
+
+			ShoppingCart donRubeShoppingCart = ShoppingCart.builder().build();
 			UserEntity userDonRube =UserEntity.builder()
 					.name("Don Rube")
 					.lastname("Salinas")
@@ -132,7 +150,10 @@ public class PaginaWebRufyanApplication {
 					.credentialNoExpired(true)
 					.roles(new HashSet<>(Set.of(roleClient)))
 					.favoriteProducts(new HashSet<>())
+					.shoppingCart(donRubeShoppingCart)
 					.build();
+			donRubeShoppingCart.setUser(userDonRube);
+
 			UserEntity userDonaMago =UserEntity.builder()
 					.name("Dona Mago")
 					.lastname("de Salinas")
@@ -146,6 +167,7 @@ public class PaginaWebRufyanApplication {
 					.credentialNoExpired(true)
 					.roles(new HashSet<>(Set.of(roleClient)))
 					.build();
+
 			UserEntity userBaudelioCliente =UserEntity.builder()
 					.name("Baudelio")
 					.lastname("Jimenez")
@@ -162,7 +184,9 @@ public class PaginaWebRufyanApplication {
 			
 			
 		
-					
+
+
+
 			
 
 			
@@ -266,10 +290,26 @@ public class PaginaWebRufyanApplication {
 							.priceManage(priceMapPainting1)
 							.additionalFeatures(additionalFeaturesPainting1)
 							.build();
+			ProductUpdateRegisterDTO productUpdateRegister2 =
+					ProductUpdateRegisterDTO.builder()
+							.name("The Persistence of action")
+							.type(ProductsEnum.PAINTING)
+							.description("A Painting with no cap need ")
+							.creationDate(LocalDate.now().minusWeeks(13))
+							.style("Realism")
+							.isFavorite(true)
+							.newImageFiles(painting2Images)
+							.stock(stockMapPainting1)
+							.priceManage(priceMapPainting1)
+							.additionalFeatures(additionalFeaturesPainting1)
+							.build();
 			//List<Image> images = ;
 			productUpdateRegister.setOldImages(imageService.processImages(painting2Images));
+			productUpdateRegister2.setOldImages(imageService.processImages(painting2Images));
 
 			Product painting1 = ProductFactory.createProductFromRegister(productUpdateRegister);
+
+			Product painting2= ProductFactory.createProductFromRegister(productUpdateRegister2);
 
 		/*	Painting painting2 = Painting.builder().name("The Scream")
 							.description("A Painting I did when I was sad ")
@@ -362,16 +402,28 @@ Painting painting3= new Painting();
 			//userTerCliente.setCopiesBuyed(List.of(painting3));
 			//userDonRube.setOriginalPaintings(Set.of(painting2, (Painting) painting1));
 
-			List<Product> paintings = List.of(painting1);
+			List<Product> paintings = List.of(painting1, painting2);
 			paintings.forEach(painting ->{
 				productsRepository.save(painting);
 			});
 
+			Map<String, String> details = new HashMap<>();
+			details.put("isOriginalSelected",Boolean.toString(true));
+			CartItem item = new CartItem(painting1,details,userDonRube.getShoppingCart());
+
+
+
 
 
 			userDonRube.addFavoriteProduct(painting1);
+			userDonRube.getShoppingCart().addCartItem(item);//pareciera que no agrega bien el item en este contexto
+		//userDonRube.getShoppingCart().getItemList().add(item);
 		//	userDonRube.addFavoriteProduct(painting2);
 
+
+			//userDonRube.getShoppingCart().setUser(userDonRube);
+		System.out.println("el carro de compras de don rube antes de ser persistido agregando a la lista: "+ userDonRube.getShoppingCart());
+		System.out.println("el carro de compras de don rube antes de ser persistido usando addCartItem");
 
 		var userList=	List.of(userRufyan,
 					userDonRube,
@@ -389,6 +441,90 @@ Painting painting3= new Painting();
 				userService.createUser(new UserRegisterDTO(user));
 			}
 
+
+		 //UserEntity donRubePersisted = 	userService.saveUser(new UserRegisterDTO(userDonRube));
+
+			//userDonRube.setShoppingCart(donRubeShoppingCart);
+		/*
+			Optional<UserEntity>  userDonRubeGuardadoOptional = userRepository.findUserByUsername(userDonRube.getUsername());
+			if(userDonRubeGuardadoOptional.isPresent()){
+				UserEntity userDonRubeGuardado = userDonRubeGuardadoOptional.get();
+				ShoppingCart donRubeShoppingCart = new ShoppingCart(1,userDonRube,Set.of(),BigDecimal.ZERO, LocalDate.now());
+				userDonRubeGuardado.setShoppingCart(donRubeShoppingCart);
+				userRepository.save(userDonRubeGuardado);
+			}*/
+
+			/*
+
+
+					RETURN_REQUESTED,
+					RETURNED,
+
+
+			 */
+			OrderStatus pendingStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.PENDING)
+					.description("pending to get confirmation paid")
+					.build();
+
+			OrderStatus paidStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.PAID)
+					.description("Payment confirmed")
+					.build();
+			OrderStatus processedStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.PROCESSED)
+					.description("Order processed ready to shipment")
+					.build();
+
+			OrderStatus shippedStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.SHIPPED)
+					.description("Order shipped")
+					.build();
+			OrderStatus deliveredStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.DELIVERED)
+					.description("Order delivered")
+					.build();
+
+			OrderStatus returnRequestedStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.RETURN_REQUESTED)
+					.description("Return requested")
+					.build();
+			OrderStatus returnedStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.RETURNED)
+					.description("Order returned")
+					.build();
+			OrderStatus returnReceivedStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.RETURN_RECEIVED)
+					.description("Return received")
+					.build();
+
+			OrderStatus cancelledStatus = OrderStatus.builder()
+					.orderStatusEnum(OrderStatusEnum.CANCELLED)
+					.description("Order cancelled (before shipment) ")
+					.build();
+
+			List<OrderStatus> orderStatusList = List.of(pendingStatus,paidStatus, processedStatus,shippedStatus, deliveredStatus,returnRequestedStatus, returnedStatus,returnReceivedStatus);
+
+			Optional<UserEntity> optionalDonRupePersisted = userRepository.findByUsername(userDonRube.getUsername());
+
+
+			orderStatusRepository.saveAll(orderStatusList);
+			if(optionalDonRupePersisted.isPresent()){
+
+				 UserEntity persistedDonRube= optionalDonRupePersisted.get();
+				// adding item to persisted entity
+				persistedDonRube.getShoppingCart().addCartItem(item);
+				UserEntity rePersisted = userRepository.save(persistedDonRube);
+				 System.out.println(persistedDonRube.getShoppingCart() + "items: "+ persistedDonRube.getShoppingCart().getItemList() );
+				System.out.println("Don rube vuelto a persistir cx: "+rePersisted);
+				 PurchaseOrder newPurchase =  purchasesService.createOrder(persistedDonRube.getShoppingCart());
+				System.out.println(newPurchase);
+			 }else{
+				System.out.println("No se encontró usuario con username: "+ userDonRube.getUsername());
+			}
+
+
+			//System.out.println(userDonRube.getShoppingCart());
 
 
 

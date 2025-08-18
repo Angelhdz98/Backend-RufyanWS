@@ -13,8 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
-import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.User.DTO.UserEntityDTO;
+import com.example.PaginaWebRufyan.User.DTO.UserRegisterDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.example.PaginaWebRufyan.Controller.UserController;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
-import com.example.PaginaWebRufyan.Service.FavoritesProductsService;
-import com.example.PaginaWebRufyan.Service.ProductService;
-import com.example.PaginaWebRufyan.Service.UserService;
+import com.example.PaginaWebRufyan.User.Controller.UserController;
+import com.example.PaginaWebRufyan.User.Entity.UserEntity;
+import com.example.PaginaWebRufyan.Service.UserServiceAdapter.FavoritesProductsService;
+import com.example.PaginaWebRufyan.Products.Service.ProductService;
+import com.example.PaginaWebRufyan.User.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 

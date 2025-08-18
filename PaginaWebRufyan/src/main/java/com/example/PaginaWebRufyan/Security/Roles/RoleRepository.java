@@ -1,11 +1,10 @@
-package com.example.PaginaWebRufyan.Repository;
+package com.example.PaginaWebRufyan.Security.Roles;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.PaginaWebRufyan.Entity.RoleEntity;
-import com.example.PaginaWebRufyan.Utils.RoleEnum;
+import com.example.PaginaWebRufyan.Security.Entity.RoleEntity;
 
 //import java.util.Optional;
 

@@ -1,6 +1,5 @@
 package com.example.PaginaWebRufyan.domain.model;
 
-import com.example.PaginaWebRufyan.Security.Roles.RoleEnum;
 import lombok.Getter;
 
 

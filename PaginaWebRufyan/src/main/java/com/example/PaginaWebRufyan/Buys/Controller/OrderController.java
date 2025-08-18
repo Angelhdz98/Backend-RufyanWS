@@ -1,8 +1,8 @@
-package com.example.PaginaWebRufyan.Controller;
+package com.example.PaginaWebRufyan.Buys.Controller;
 
 import java.util.List;
 
-import com.example.PaginaWebRufyan.Entity.PurchaseOrder;
+import com.example.PaginaWebRufyan.Buys.Entity.PurchaseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.PaginaWebRufyan.Entity.OrderStatus;
-import com.example.PaginaWebRufyan.Service.OrderService;
+import com.example.PaginaWebRufyan.Buys.Entity.OrderStatus;
+import com.example.PaginaWebRufyan.Buys.Service.OrderService;
 
 import jakarta.validation.constraints.Positive;
 

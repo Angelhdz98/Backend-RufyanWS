@@ -7,10 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import com.example.PaginaWebRufyan.Components.OriginalStock;
-import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.PaintingDTO;
+import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.Products.DTO.Painting.PaintingDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Example;
 
-import com.example.PaginaWebRufyan.Entity.Image;
-import com.example.PaginaWebRufyan.Entity.Painting;
-import com.example.PaginaWebRufyan.Entity.ProductsCategory;
+import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.Products.Entity.Painting;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategory;
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.ImageRepository;
-import com.example.PaginaWebRufyan.Repository.PaintingRepository;
-import com.example.PaginaWebRufyan.Service.PaintingService;
+import com.example.PaginaWebRufyan.Image.Repository.ImageRepository;
+import com.example.PaginaWebRufyan.Products.Repository.PaintingRepository;
+import com.example.PaginaWebRufyan.Products.Service.PaintingService;
 
 @ExtendWith(MockitoExtension.class)
 public class PaintingServiceTest {
@@ -156,12 +157,12 @@ public class PaintingServiceTest {
 									.priceManager(new PaintingPriceManager())
 									.style("Urbano")
 									.isFavorite(true)
-									.image(List.of(obra1Image, obra2Image))
+									.image(Set.of(obra1Image, obra2Image))
 									.alturaCm(60)
 									.largoCm(80)
 									.medium("Aceite")
 									.supportMaterial("Lienzo")
-									.stockManager(new OriginalStock(5,10,true))
+									.stockManager(new OriginalStockAdapter(5,10,true))
 									.build();
 		
 		Painting paintingTestOk2 = Painting
@@ -177,7 +178,7 @@ public class PaintingServiceTest {
 				.largoCm(80)
 				.medium("Aceite")
 				.supportMaterial("Lienzo")
-				.stockManager(new OriginalStock(5,10,true))
+				.stockManager(new OriginalStockAdapter(5,10,true))
 				.build();
 
 
@@ -251,7 +252,7 @@ public class PaintingServiceTest {
 		 // Se agrega el id a obra guardada por que eso distinguiría a la obra que vamos
 		//a subir de la obra que ya esta guardada
 		
-		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStock(15,10,true)).build();
+		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStockAdapter(15,10,true)).build();
 
 		
 		Painting wrongMeasureHeight = Painting.builder().alturaCm(Painting.minHeightCm).build();
@@ -375,7 +376,7 @@ Integer id=12;
 		obraGuardada.setId(id);
 
 		
-		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStock(15,10)).build();
+		Painting moreAvailableThanMade = Painting.builder().stockManager(new OriginalStockAdapter(15,10)).build();
 
 		
 		Painting wrongMeasureHeigth = Painting.builder().alturaCm(Painting.minHeightCm-1).build();

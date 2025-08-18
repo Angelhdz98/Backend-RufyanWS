@@ -14,8 +14,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.example.PaginaWebRufyan.DTO.SearchRequestDTO;
-import com.example.PaginaWebRufyan.DTO.UserEntityDTO;
-import com.example.PaginaWebRufyan.DTO.UserRegisterDTO;
+import com.example.PaginaWebRufyan.User.DTO.UserEntityDTO;
+import com.example.PaginaWebRufyan.User.DTO.UserRegisterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,15 +24,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.PaginaWebRufyan.Entity.PermissionEntity;
-import com.example.PaginaWebRufyan.Entity.RoleEntity;
-import com.example.PaginaWebRufyan.Entity.UserEntity;
+import com.example.PaginaWebRufyan.Security.Entity.PermissionEntity;
+import com.example.PaginaWebRufyan.Security.Entity.RoleEntity;
+import com.example.PaginaWebRufyan.User.Entity.UserEntity;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
-import com.example.PaginaWebRufyan.Repository.RoleRepository;
-import com.example.PaginaWebRufyan.Repository.UserRepository;
-import com.example.PaginaWebRufyan.Service.UserService;
-import com.example.PaginaWebRufyan.Utils.RoleEnum;
+import com.example.PaginaWebRufyan.Security.Roles.RoleRepository;
+import com.example.PaginaWebRufyan.User.Repository.UserRepository;
+import com.example.PaginaWebRufyan.User.Service.UserService;
+import com.example.PaginaWebRufyan.Security.Roles.RoleEnum;
 import org.springframework.data.domain.*;
 
 @ExtendWith(MockitoExtension.class)
