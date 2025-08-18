@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.domain.model;
 
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 @Getter
 public class LikesDomain {
     private final Long id;
