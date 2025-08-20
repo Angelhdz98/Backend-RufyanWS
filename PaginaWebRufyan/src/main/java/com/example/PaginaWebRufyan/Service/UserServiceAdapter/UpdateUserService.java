@@ -8,20 +8,20 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdateUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UpdateUserService implements UpdateUserUseCase {
 
     private final UserRepository userRepository;
 
     public UpdateUserService(UserRepository userRepository){
-       this.userRepository= userRepository;
+        this.userRepository= userRepository;
     }
 
     @Override
     public UserDomain updateUser(UpdateUserCommand command) {
-        UserDomain userToUpdate = userRepository.findUserById(command.getUserId()).orElseThrow(() -> {
-            throw new ResourceNotFoundException("usuario no encontrado con id: " + command.getUserId());
-        });
+        UserDomain userToUpdate = userRepository.retrieveUserById(command.getUserId());
 
         if (!userToUpdate.getEmail().equals(
                 command.getEmail())) {
