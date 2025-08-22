@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.Products.Enums;
 
-public enum ProductType {
+public enum ProductTypeEnum {
     PAINTING,
     CUP,
     CLOTHING,
