@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.User.Entity.UserEntity;
 import com.example.PaginaWebRufyan.adapter.in.ConverterUserEntityDomain;
 import com.example.PaginaWebRufyan.adapter.out.persistence.SpringDataUserRepository;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
@@ -45,7 +44,7 @@ public class UserRepositoryJPAImp implements UserRepository {
 
     @Override
     public Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable) {
-        return persistenceRepo.findUsersWhoLikedPainting(productId,pageable).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findUsersWhoLikedProduct(productId,pageable).map(ConverterUserEntityDomain::convertToDomain);
     }
 
 
