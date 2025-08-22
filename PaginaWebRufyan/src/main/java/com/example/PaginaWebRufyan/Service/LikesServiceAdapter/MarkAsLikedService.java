@@ -1,6 +1,7 @@
 package com.example.PaginaWebRufyan.Service.LikesServiceAdapter;
 
-import com.example.PaginaWebRufyan.domain.model.LikesDomain;
+import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
+import com.example.PaginaWebRufyan.domain.model.LikeDomain;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.CreateLikeUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.LikesRepository;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,9 @@ public class MarkAsLikedService implements CreateLikeUseCase {
         this.likesRepository = likesRepository;
     }
 
+
     @Override
-    public LikesDomain markAsLiked(LikesDomain like) {
-        return likesRepository.markAsLiked(like);
+    public LikeDomain markAsLiked(LikeCommand likeCommand) {
+        return likesRepository.markAsLiked(likeCommand);
     }
 }

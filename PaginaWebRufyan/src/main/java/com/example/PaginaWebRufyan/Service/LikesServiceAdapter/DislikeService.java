@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.Service.LikesServiceAdapter;
 
-import com.example.PaginaWebRufyan.domain.model.LikesDomain;
+import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.DislikeUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.LikesRepository;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,7 @@ public class DislikeService  implements DislikeUseCase {
 
 
     @Override
-    public void dislike(LikesDomain like) {
-        likesRepository.unmarkAsLiked(like.getUserId(),like.getProductId());
-
+    public void dislike(LikeCommand like) {
+        likesRepository.unmarkAsLiked(like.userId(),like.productId());
     }
 }

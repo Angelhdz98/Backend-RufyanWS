@@ -1,9 +1,10 @@
 package com.example.PaginaWebRufyan.domain.port.in.LikesUseCase;
 
-import com.example.PaginaWebRufyan.domain.model.LikesDomain;
+import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
+import com.example.PaginaWebRufyan.domain.model.LikeDomain;
 
 public interface CreateLikeUseCase {
 
-    LikesDomain markAsLiked(LikesDomain likeDomain);
+    LikeDomain markAsLiked(LikeCommand likeCommand);
 
 }
