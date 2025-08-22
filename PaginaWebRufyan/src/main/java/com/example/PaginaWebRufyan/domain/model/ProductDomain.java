@@ -1,6 +1,7 @@
 package com.example.PaginaWebRufyan.domain.model;
 
 import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PriceManagerBase;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.StockManagerBase;
@@ -16,15 +17,16 @@ private final StockManagerBase stockManagerBase;
 private final PriceManagerBase priceManagerBase;
 private final Set<Image> images;
 private final ProductDomainDetails productDetails;
+private final ProductTypeEnum productType;
 
-
-    public ProductDomain(Long id, String name, StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<Image> images, ProductDomainDetails productDetails) {
+    public ProductDomain(Long id, String name, StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<Image> images, ProductDomainDetails productDetails, ProductTypeEnum productType) {
         this.id = id;
         this.name = name;
         this.stockManagerBase = stockManagerBase;
         this.priceManagerBase = priceManagerBase;
         this.images = images;
         this.productDetails = productDetails;
+        this.productType = productType;
     }
 
     abstract void increaseStock(CartItemDomain itemDomain);
