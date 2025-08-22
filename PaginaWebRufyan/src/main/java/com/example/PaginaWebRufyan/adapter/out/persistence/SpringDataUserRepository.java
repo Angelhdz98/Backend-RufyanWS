@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.adapter.out.persistence;
 
 import com.example.PaginaWebRufyan.User.Entity.UserEntity;
-import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +17,7 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
     Page<UserEntity>  findByUsernameContaining(String usernamePart, Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u " +
-            "JOIN LikeEntity l ON u.id = l.userId " +
-            "WHERE l.painting.id = :paintingId")
-    Page<UserEntity> findUsersWhoLikedPainting(@Param("paintingId") Long paintingId, Pageable pageable);
+            "WHERE u.id IN (SELECT l.userId FROM LikeEntity l WHERE l.productId = :productId)")
+    Page<UserEntity> findUsersWhoLikedProduct(@Param("productId") Long productId, Pageable pageable);
+
 }
