@@ -2,28 +2,34 @@ package com.example.PaginaWebRufyan.domain.model;
 
 
 
+import com.example.PaginaWebRufyan.User.Entity.UserProfilePicture;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class UserDomain {
-    private  Long id;
+    private final Long  id;
     private final FullName fullname;
     private final BirthDate birthDate;
-    private final String email;
     private final String username;
+    private final String email;
 
-    public UserDomain( FullName fullname, BirthDate birthDate, String email, String username) {
 
+
+    public UserDomain(Long id, FullName fullname,
+                      BirthDate birthDate,
+                      String username,
+                      String email) {
+        this.id = id;
         this.fullname = fullname;
         this.birthDate = birthDate;
-        this.email = email;
         this.username = username;
-    }
+        this.email = email;
 
+
+    }
 //private Long profilePictureId;
 //private UserValidators userValidators;
 

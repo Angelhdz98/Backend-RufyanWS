@@ -4,9 +4,10 @@ import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.DeleteUserByIdUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class DeleteUserByIdService implements
         DeleteUserByIdUseCase {
 
@@ -18,9 +19,8 @@ public class DeleteUserByIdService implements
 
     @Override
     public void deleteUserById(Long userId) {
-        Optional<UserDomain> optionalUser = userRepository.findUserById(userId);
-        if(optionalUser.isEmpty())throw new ResourceNotFoundException("No existe un usuario con ese ID");
-       userRepository.deleteUser(optionalUser.get());
+        UserDomain userToDelete = userRepository.retrieveUserById(userId);
+        userRepository.deleteById(userId);
 
 
     }

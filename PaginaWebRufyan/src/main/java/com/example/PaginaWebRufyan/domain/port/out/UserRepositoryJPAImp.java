@@ -5,9 +5,14 @@ import com.example.PaginaWebRufyan.User.Entity.UserEntity;
 import com.example.PaginaWebRufyan.adapter.in.ConverterUserEntityDomain;
 import com.example.PaginaWebRufyan.adapter.out.persistence.SpringDataUserRepository;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Repository
 public class UserRepositoryJPAImp implements UserRepository {
 
@@ -29,6 +34,20 @@ public class UserRepositoryJPAImp implements UserRepository {
     public Optional<UserDomain> findUserByUsername(String username) {
         return persistenceRepo.findByUsername(username).map(ConverterUserEntityDomain::convertToDomain);
     }
+
+    @Override
+    public List<UserDomain> findAllUsersByIds(List<Long> userIds) {
+       return  persistenceRepo.findAllById(userIds)
+               .stream()
+               .map(ConverterUserEntityDomain::convertToDomain)
+               .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable) {
+        return persistenceRepo.findUsersWhoLikedPainting(productId,pageable).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
 
     @Override
     public UserDomain retrieveUserById(Long userId) {

@@ -25,8 +25,8 @@ public class GetPagedUsersThatLikedService implements GetPagedUsersThatLikedUseC
 
     @Override
     public Page<UserDomain> getPagedUsersThatLiked(Long productId, Pageable pageable) {
-        Page<LikeDomain> pagedLikes = likeRepo.listUsersLiked(productId, pageable);
-        return usersRepo.findAllUsersByIds(pagedLikes.stream().map(LikeDomain::getUserId).toList(),pageable);
+
+        return usersRepo.findAllUsersWhoLikedProduct(productId, pageable);
 
     }
 }
