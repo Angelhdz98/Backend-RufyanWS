@@ -1,6 +1,5 @@
 package com.example.PaginaWebRufyan.domain.model;
 
-import com.example.PaginaWebRufyan.Products.Enums.ProductType;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BodyClotheTypesEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PrintingTecniqueEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
@@ -13,8 +12,7 @@ public class BodyClothingDomainDetails extends ProductDomainDetails {
     private final PrintingTecniqueEnum printingTechnique;
 
 
-    public BodyClothingDomainDetails(ProductType productType, String material, BodyClotheTypesEnum type, PrintingTecniqueEnum printingTechnique) {
-        super(productType);
+    public BodyClothingDomainDetails( String material, BodyClotheTypesEnum type, PrintingTecniqueEnum printingTechnique) {
         this.material = material;
         this.type = type;
         this.printingTechnique = printingTechnique;

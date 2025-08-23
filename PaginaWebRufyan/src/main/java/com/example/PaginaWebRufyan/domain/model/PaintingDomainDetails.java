@@ -1,10 +1,8 @@
 package com.example.PaginaWebRufyan.domain.model;
 
-import com.example.PaginaWebRufyan.Products.Enums.ProductType;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.MediumEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.SupportMaterialEnum;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -19,8 +17,8 @@ public class PaintingDomainDetails extends ProductDomainDetails {
     private final LocalDate creationDate;
     private final ProductDomainDetails productDetails;
 
-    public PaintingDomainDetails(ProductType productType, Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate, ProductDomainDetails productDetails) {
-        super(productType);
+    public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate, ProductDomainDetails productDetails) {
+
         this.alturaCm = alturaCm;
         this.largoCm = largoCm;
         this.medium = medium;
