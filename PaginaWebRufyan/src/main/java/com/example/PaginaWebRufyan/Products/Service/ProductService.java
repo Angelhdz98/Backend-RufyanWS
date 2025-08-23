@@ -148,7 +148,7 @@ public class ProductService {
 	}
 	*/
 
-	//good idea, here checking diferences between the foundProduct and the ProductUpdate register so can be possible to delete an image from the server
+	//good idea, here checking diferences between the foundProduct and the ProductUpdate register so can be possible to deleteById an image from the server
 	@Transactional
 	public ProductDTO updateProductById(Integer id, ProductUpdateRegisterDTO productUpdateData) {
 
