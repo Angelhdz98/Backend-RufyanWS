@@ -1,30 +1,26 @@
 package com.example.PaginaWebRufyan.domain.model;
 
 import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
 @Getter
 public class PaintingDomain extends ProductDomain{
 
-    public PaintingDomain(Long id, String name, StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<Image> images, ProductDomainDetails productDetails) {
-        super(id, name, stockManagerBase, priceManagerBase, images, productDetails);
+
+    public PaintingDomain(Long id, String name, StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<ImageDomain> images, ProductDomainDetails productDetails, ProductTypeEnum productType, String description, Boolean isFavorite) {
+        super(id, name, stockManagerBase, priceManagerBase, images, productDetails, productType, description, isFavorite);
     }
 
-    @Override
-    void increaseStock(CartItemDomain itemDomain) {
-
-        getStockManagerBase()
-        .increaseStock(this,itemDomain.getDetails());
+    public PaintingDomain() {
     }
 
-    @Override
-    void decreaseStock(CartItemDomain itemDomain) {
-        getStockManagerBase().decreaseStock(this,itemDomain.getDetails());
-    }
 
 
 

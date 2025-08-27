@@ -10,17 +10,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PaintingPriceManager implements PriceManager{
+public class PaintingPriceManagerPersist implements PriceManagerPersist {
     private BigDecimal pricePerCopy;
     private BigDecimal pricePerOriginal;
     // A no args paintingPriceManager will saveUser PaintingPriceManager with min values of Painting
 
 
 
-  public PaintingPriceManager(){
-        this.pricePerCopy = Painting.minPricePerCopy;
-        this.pricePerOriginal = Painting.minPrice;
-    }
 
 
 

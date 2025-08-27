@@ -15,17 +15,15 @@ public class PaintingDomainDetails extends ProductDomainDetails {
     private final MediumEnum medium;
     private final SupportMaterialEnum supportMaterial;
     private final LocalDate creationDate;
-    private final ProductDomainDetails productDetails;
 
-    public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate, ProductDomainDetails productDetails) {
-
+    public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate) {
         this.alturaCm = alturaCm;
         this.largoCm = largoCm;
         this.medium = medium;
         this.supportMaterial = supportMaterial;
         this.creationDate = creationDate;
-        this.productDetails = productDetails;
     }
+
 
     @Override
     public void validate() {
