@@ -2,35 +2,52 @@ package com.example.PaginaWebRufyan.domain.model;
 
 import com.example.PaginaWebRufyan.Image.Image;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PriceManagerBase;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.StockManagerBase;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
-
+import java.util.stream.Collectors;
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public abstract class ProductDomain {
-private final Long id;
-private final String name;
-private final StockManagerBase stockManagerBase;
-private final PriceManagerBase priceManagerBase;
-private final Set<Image> images;
-private final ProductDomainDetails productDetails;
-private final ProductTypeEnum productType;
+private  Long id;
+private  String name;
+private  StockManagerBase stockManagerBase;
+private  PriceManagerBase priceManagerBase;
+private Set<ImageDomain> images;
+private ProductDomainDetails productDetails;
+private ProductTypeEnum productType;
+private String description;
+private Boolean isFavorite;
 
-    public ProductDomain(Long id, String name, StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<Image> images, ProductDomainDetails productDetails, ProductTypeEnum productType) {
-        this.id = id;
-        this.name = name;
-        this.stockManagerBase = stockManagerBase;
-        this.priceManagerBase = priceManagerBase;
-        this.images = images;
-        this.productDetails = productDetails;
-        this.productType = productType;
+
+    public void increaseStock(CartItemDomain itemDomain){
+        stockManagerBase.increaseStock(itemDomain.getProduct(), itemDomain.getDetails());
+    }
+    public void decreaseStock(CartItemDomain itemDomain){
+        stockManagerBase.decreaseStock(itemDomain.getProduct(), itemDomain.getDetails());
     }
 
-    abstract void increaseStock(CartItemDomain itemDomain);
-    abstract void decreaseStock(CartItemDomain itemDomain);
+    Set<ImageDomain> deleteImageById(Long imageId){
+        return images.stream().filter((imageDomain)-> !(imageDomain.id().equals(imageId))).collect(Collectors.toSet());
+    }
+
+    Set<ImageDomain> addImage(ImageDomain newImage){
+      images.add(newImage);
+      return images;
+    }
+
+    Set<ImageDomain> addAllImages(Set<ImageDomain> newImages){
+        images.addAll(newImages);
+        return images;
+    }
+
 
 
 
