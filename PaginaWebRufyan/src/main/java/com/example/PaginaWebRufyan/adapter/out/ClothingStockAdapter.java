@@ -3,6 +3,7 @@ package com.example.PaginaWebRufyan.adapter.out;
 import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 @Embeddable
 @ToString
+@Getter
 public class ClothingStockAdapter implements StockManager {
     @ElementCollection
     @CollectionTable(name = "clothing_size_stock",

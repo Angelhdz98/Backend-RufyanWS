@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -69,5 +71,11 @@ productDomain;
             this.stockCopies=stockCopies-quantity;
 
         }
+    }
+
+    @Override
+    public Boolean isAvailable() {
+        return (stockCopies>0 || isOriginalAvailable );
+
     }
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Embeddable
-public class SingleStockManager implements StockManager  {
+public class SingleStockAdapter implements StockManager  {
     private Integer stock;
     /*@Override
     public void decreaseStock(Product product, Map<String, String> additionalFeatures) {

@@ -13,5 +13,5 @@ public abstract class StockManagerBase {
     public abstract void decreaseStock(ProductDomain productDomain
     ,CartItemDetails details);
     public abstract void increaseStock(ProductDomain productDomain,CartItemDetails details);
-
+    public abstract Boolean isAvailable();
 }
