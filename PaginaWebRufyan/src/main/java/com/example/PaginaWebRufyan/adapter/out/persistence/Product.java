@@ -4,53 +4,55 @@ package com.example.PaginaWebRufyan.adapter.out.persistence;
 import java.time.LocalDate;
 import java.util.*;
 
-import com.example.PaginaWebRufyan.adapter.out.PriceManager;
+import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
+import com.example.PaginaWebRufyan.adapter.out.PriceManagerPersist;
 import com.example.PaginaWebRufyan.adapter.out.StockManager;
 import com.example.PaginaWebRufyan.Image.Image;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @DiscriminatorColumn(name = "product_type", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class Product {
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private String name;
 	private String description;
 	private LocalDate creationDate;
-	private String style;
 	@Embedded
-	private PriceManager priceManager;
+	private PriceManagerPersist priceManagerPersist;
 	@Embedded
 	private StockManager stockManager;
-	//private StockManager stock;// a implementation of StockManager and PriceManager will be added on subclass
-/*	@ManyToMany(mappedBy = "copiesBuyed",
-			cascade = {CascadeType.MERGE, CascadeType.PERSIST}
-			)
-	
-	@JsonIgnore
-	private List<UserEntity> copyBuyers;
-	*/
-	
-	
+
+	private Boolean isAvailable;
 	//private PriceManager priceManager;
 	private Boolean isFavorite;
-	/*
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name= "category_id")//Nombre de la columna 
-	private ProductsCategory category;
-	*/
+
+
 	@OneToMany(fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL,orphanRemoval = true)
 	private Set<Image> image = new HashSet<>();
+    private ProductTypeEnum productTypeEnum;
+    //private StockManager stock;// a implementation of StockManager and PriceManager will be added on subclass
+/*	@ManyToMany(mappedBy = "copiesBuyed",
+			cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+			)
 
-	//CascadeType.ALL
+	@JsonIgnore
+	private List<UserEntity> copyBuyers;
+	*/
+
+/*
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name= "category_id")//Nombre de la columna
+	private ProductsCategory category;
+	*/
+//CascadeType.ALL
 //	cascade={ CascadeType.PERSIST,	CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH }
  	/*@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REFRESH})
  	@JoinTable(name= "favorite_product_user",
@@ -105,13 +107,13 @@ public abstract class Product {
 	public void	addToFavoriteOf(UserEntity user) {
 		this.favoriteOf.add(user);
 		user.getFavoriteProducts().add(this);
-		
+
 	}
 
 	public void	removeFavoriteOf(UserEntity user) {
 		this.favoriteOf.remove(user);
 		user.getFavoriteProducts().remove(this);
-		
+
 	}
 
 
@@ -124,5 +126,6 @@ public abstract class Product {
 		return priceManager.getPriceMap();
 	}
 */
-	//public abstract void checkConsistentData(ProductUpdateRegisterDTO productUpdateRegisterDTO);
-}
+    //public abstract void checkConsistentData(ProductUpdateRegisterDTO productUpdateRegisterDTO);
+
+	}

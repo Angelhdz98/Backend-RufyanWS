@@ -1,4 +1,4 @@
-package com.example.PaginaWebRufyan.domain.model.ValueObjects;
+ package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 public interface ProductStockDTO {
 }

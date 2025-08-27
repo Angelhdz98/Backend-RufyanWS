@@ -1,5 +1,5 @@
 package com.example.PaginaWebRufyan.domain.port.in.ProductUseCase;
 
-public interface DeleteProductUseCase {
+public interface DeleteProductByIdUseCase {
     void deleteProduct(Long id);
 }
