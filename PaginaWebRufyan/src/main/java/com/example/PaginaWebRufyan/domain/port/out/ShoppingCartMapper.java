@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Buys.Entity.CartItem;
 import com.example.PaginaWebRufyan.Buys.Entity.ShoppingCart;
-import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.CartItemDetailsFactory;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
@@ -16,7 +15,7 @@ public class ShoppingCartMapper {
 
     public static ShoppingCart toEntity(ShoppingCartDomain shoppingCartDomain){
      Set<CartItemDomain> items = shoppingCartDomain.getItems();
-     Set<Product> productSet = items.stream().map((CartItemDomain cartItemDomain )->ProductMapper.toEntity( cartItemDomain.getProduct()) ).collect(Collectors.toSet());
+     //Set<Product> productSet = items.stream().map((CartItemDomain cartItemDomain )->ProductMapper.toEntity( cartItemDomain.getProduct()) ).collect(Collectors.toSet());
 
         Set<CartItem> cartItems = items.stream().map(CartItemMapper::toEntity).collect(Collectors.toSet());
 
@@ -28,13 +27,14 @@ public class ShoppingCartMapper {
 
         Set<CartItem> itemList = shoppingCart.getItemList();
 
-        Set<ProductDomain> productSet =      itemList
+        /*Set<ProductDomain> productSet =      itemList
                 .stream()
                 .map(CartItem::getProduct)
                 .collect(Collectors.toSet())
                 .stream()
                 .map(ProductMapper::toDomain).collect(Collectors.toSet());
 
+         */
         Set<CartItemDomain> cartItemDomainSet = itemList.stream().map((CartItem item) -> {
             ProductDomain product = ProductMapper.toDomain(item.getProduct());
             assert product != null;

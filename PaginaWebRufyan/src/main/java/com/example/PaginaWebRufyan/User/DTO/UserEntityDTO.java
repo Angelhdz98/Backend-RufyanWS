@@ -7,7 +7,6 @@ import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -22,7 +21,7 @@ public class UserEntityDTO {
 
 
 
-    private Set<CartItemDTO> cartProducts = new HashSet<>();
+    private Set<CartItemDTO> cartProducts;
 
 
 

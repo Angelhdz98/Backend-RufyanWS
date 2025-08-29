@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
-import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
