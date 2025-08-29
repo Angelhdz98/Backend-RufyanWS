@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Buys.Entity;
 
+import com.example.PaginaWebRufyan.adapter.out.persistence.CartItemDetailsAdapter;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -15,22 +16,16 @@ import lombok.*;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    private Long id;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name="product_id")
     @JsonBackReference
     private Product product;
-    //private Boolean isOriginalSelected;
-    //private ClothingSizeEnum size;
-  /*  @ElementCollection
-    @CollectionTable(name = "details_cartItem_key_value", joinColumns = @JoinColumn(name = "CartItem_id"))
-    @MapKeyColumn(name = "key")
-    @Column(name = "value")
-    private Map<String, String> details = new HashMap<>();
-    */
-    // PaintingItemDetails y clothingItemDetails
-    private CartItemDetails cartItemDetails;
+
+
+
+    @Embedded
+    private CartItemDetailsAdapter cartItemDetails;
 
 
 
