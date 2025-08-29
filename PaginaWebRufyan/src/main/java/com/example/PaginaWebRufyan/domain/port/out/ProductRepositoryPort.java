@@ -14,8 +14,8 @@ public interface ProductRepositoryPort {
     ProductDomain updateProduct(ProductDomain product);
     void deleteProductById(Long id);
 
-   Optional<ProductDomain> findProductById(Long userId);
-   ProductDomain retrieveProductById(Long userId);
+   Optional<ProductDomain> findProductById(Long productId);
+   ProductDomain retrieveProductById(Long productId);
    List<ProductDomain> findAllProducts();
    Page<ProductDomain> findPagedProducts(Pageable pageable);
    List<ProductDomain> findProductByType(ProductTypeEnum productType);
