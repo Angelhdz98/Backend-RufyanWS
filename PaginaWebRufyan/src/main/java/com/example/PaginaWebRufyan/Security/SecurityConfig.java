@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.PaginaWebRufyan.Service.UserServiceDetails;
+import com.example.PaginaWebRufyan.Security.Service.UserServiceDetails;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

@@ -10,12 +10,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
-import com.example.PaginaWebRufyan.Components.PaintingPriceManager;
-import com.example.PaginaWebRufyan.DTO.ProductDTO;
-import com.example.PaginaWebRufyan.DTO.ProductRegisterDTO;
-import com.example.PaginaWebRufyan.DTO.ProductUpdateRegisterDTO;
-import com.example.PaginaWebRufyan.Entity.*;
-import com.example.PaginaWebRufyan.Service.ImageService;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
+import com.example.PaginaWebRufyan.Image.Image;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategory;
+import com.example.PaginaWebRufyan.Products.DTO.Product.ProductDTO;
+import com.example.PaginaWebRufyan.Products.DTO.Product.ProductUpdateRegisterDTO;
+import com.example.PaginaWebRufyan.Products.Entity.BodyClothing;
+import com.example.PaginaWebRufyan.Products.Entity.Painting;
+import com.example.PaginaWebRufyan.Products.Enums.ProductsEnum;
+import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.Image.Service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +30,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.PaginaWebRufyan.Exceptions.InconsitentDataException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
-import com.example.PaginaWebRufyan.Repository.ImageRepository;
-import com.example.PaginaWebRufyan.Repository.ProductsCategoryRepository;
-import com.example.PaginaWebRufyan.Repository.ProductsRepository;
-import com.example.PaginaWebRufyan.Service.ProductService;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import com.example.PaginaWebRufyan.Products.Categories.ProductsCategoryRepository;
+import com.example.PaginaWebRufyan.Products.Repository.ProductsRepository;
+import com.example.PaginaWebRufyan.Products.Service.ProductService;
+
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -139,7 +141,7 @@ public class ProductServiceTest {
 		accesoriesAdditionalFeatures.put("Technique", "Pyrography");
 
 		Map<String,Object> wrongPriceMap = new HashMap<>();
-		wrongPriceMap.put("pricePerCopy",Painting.minPricePerCopy);
+		wrongPriceMap.put("pricePerCopy", Painting.minPricePerCopy);
 		wrongPriceMap.put("pricePerOriginal", Painting.minPrice.subtract(BigDecimal.ONE));
 
 		Map<String,Object> wrongPricePerCopyMap = new HashMap<>();
@@ -208,7 +210,7 @@ public class ProductServiceTest {
 
 		Product painting1 = new Painting();
 		painting1.setName("Pintura 1");
-		painting1.setPriceManager(new PaintingPriceManager(copyPrice,originalPrice));
+		painting1.setPriceManagerPersist(new PaintingPriceManagerPersist(copyPrice,originalPrice));
 
 		Product painting2 = new Painting();
 		painting2.setName("Pintura 2");
@@ -338,7 +340,7 @@ public class ProductServiceTest {
 		int idImage2 = idImage1+1;
 		String responseName= "nombreGenerico";
 		Product productTest1 = Painting.builder().id(id)
-				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy, Painting.minPrice))
+				.priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy, Painting.minPrice))
 				.name(responseName)
 				.build();
 

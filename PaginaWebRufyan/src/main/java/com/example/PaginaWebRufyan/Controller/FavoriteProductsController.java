@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.PaginaWebRufyan.Entity.FavoriteRequest;
-import com.example.PaginaWebRufyan.Entity.Product;
-import com.example.PaginaWebRufyan.Service.FavoritesProductsService;
+import com.example.PaginaWebRufyan.DTO.FavoriteRequestDTO;
+import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.Service.UserServiceAdapter.FavoritesProductsService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -26,7 +26,7 @@ public class FavoriteProductsController {
 	FavoritesProductsService favoritesProductsService;
 	
 	@PostMapping("/add")
-	public ResponseEntity<Product> addFavorite(@RequestBody FavoriteRequest favoriteRequest ){
+	public ResponseEntity<Product> addFavorite(@RequestBody FavoriteRequestDTO favoriteRequest ){
 		
 		Optional<Product>optionalProduct= favoritesProductsService.addProductToFavorites(favoriteRequest.getUserId(), favoriteRequest.getProductId());
 		
@@ -40,7 +40,7 @@ public class FavoriteProductsController {
 	}
 	
 	@DeleteMapping("/remove")
-	public  ResponseEntity<Product> removeFavorite(@RequestBody FavoriteRequest favoriteRequest ){
+	public  ResponseEntity<Product> removeFavorite(@RequestBody FavoriteRequestDTO favoriteRequest ){
 		
 		Optional<Product> optionalProduct = favoritesProductsService. 
 				removeProductfromFavorites(favoriteRequest.getUserId(), favoriteRequest.getProductId());
