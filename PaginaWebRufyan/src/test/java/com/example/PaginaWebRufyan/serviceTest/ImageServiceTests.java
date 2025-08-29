@@ -9,7 +9,7 @@ import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
 import com.example.PaginaWebRufyan.Image.DTO.ImageDTO;
 import com.example.PaginaWebRufyan.Products.Entity.Painting;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +67,7 @@ public class  ImageServiceTests {
 				.description("Customized cup with digital art made by Rufyan")
 				.isFavorite(true)
 				.name("Digital society cup")
-				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy,Painting.minPrice))
+				.priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy,Painting.minPrice))
 				.style("Expresionism")
 				.additionalFeatures(cupAdditionalFeatures)
 				.build();

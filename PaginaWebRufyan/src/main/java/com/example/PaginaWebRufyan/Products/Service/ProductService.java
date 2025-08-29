@@ -13,6 +13,7 @@ import com.example.PaginaWebRufyan.Products.Categories.ProductsCategoryRepositor
 import com.example.PaginaWebRufyan.Products.Repository.ProductsRepository;
 import com.example.PaginaWebRufyan.User.Repository.UserRepository;
 import com.example.PaginaWebRufyan.Image.Service.ImageService;
+import com.example.PaginaWebRufyan.domain.model.ImageProcessor;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 
 
 
-@Service
 public class ProductService {
 	@Autowired
 	private ProductsRepository productsRepository;
@@ -161,10 +161,10 @@ public class ProductService {
 		List<Image> updateRegisterImages = productUpdateData.getOldImages();
 		List<Image> imagesToDelete = productImages.stream().filter(image -> !(updateRegisterImages.contains(image))).toList();
 
-		List<Image> newImages = new ArrayList<>(List.of());
+		Set<Image> newImages = new LinkedHashSet<>();
 
 		if(!productUpdateData.getNewImageFiles().isEmpty()){
-			newImages = imageService.processImages(productUpdateData.getNewImageFiles());
+			 ImageProcessor.processImages(productUpdateData.getNewImageFiles(),productUpdateData.getName());
 		}
 		newImages.addAll(updateRegisterImages);
 
@@ -186,7 +186,7 @@ public class ProductService {
 			throw new InconsitentDataException("You can't saveUser a product with no images");
 		}
 	Product newProduct=	ProductFactory.createProductFromRegister(productData);
-	newProduct.setImage(imageService.processImages(productData.getNewImageFiles()));
+	newProduct.setImage(Set.of());
 		return new ProductDTO(productsRepository.save(newProduct));
 	}
 

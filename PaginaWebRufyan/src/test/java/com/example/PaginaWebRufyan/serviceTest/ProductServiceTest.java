@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
-import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
 import com.example.PaginaWebRufyan.Image.Image;
 import com.example.PaginaWebRufyan.Products.Categories.ProductsCategory;
 import com.example.PaginaWebRufyan.Products.DTO.Product.ProductDTO;
@@ -210,7 +210,7 @@ public class ProductServiceTest {
 
 		Product painting1 = new Painting();
 		painting1.setName("Pintura 1");
-		painting1.setPriceManager(new PaintingPriceManager(copyPrice,originalPrice));
+		painting1.setPriceManagerPersist(new PaintingPriceManagerPersist(copyPrice,originalPrice));
 
 		Product painting2 = new Painting();
 		painting2.setName("Pintura 2");
@@ -340,7 +340,7 @@ public class ProductServiceTest {
 		int idImage2 = idImage1+1;
 		String responseName= "nombreGenerico";
 		Product productTest1 = Painting.builder().id(id)
-				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy, Painting.minPrice))
+				.priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy, Painting.minPrice))
 				.name(responseName)
 				.build();
 

@@ -21,7 +21,7 @@ import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Image.Repository.ImageRepository;
 
 
-@Service
+
 public class ImageService { 
 	//private final String UPLOAD_DIR = "C://Users//PP//Documents//Proyectos_Programación//Backends//Back_end_rufyan//PaginaWebRufyan//PaginaWebRufyan//src//main//resources//static";
 	
@@ -77,31 +77,7 @@ public class ImageService {
 		
 	}
 
-public List<Image> processImages(List<MultipartFile> imageFiles) {
-		
-		return imageFiles.stream().map((file)->{
-			try {
-				// Primero se guarda el archivo en el sistema de archivo
-				String fileName =System.currentTimeMillis()+ "_"+ file.getOriginalFilename();
-				Path filePath = Paths.get( uploadDir +"/UploadedImages/UploadedPaintingImages");
-				if(!Files.exists(filePath)) {
-					Files.createDirectories(filePath);
-				}
-				Path savedFilePath = filePath.resolve(fileName);
-				Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
-				//Files.write(filePath, file.getBytes());
-				// Agregamos el path del archivo a la image
-				Image image = Image.builder() 
-								   .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName) 
-								  .productName(file.getOriginalFilename()).build();
-				
-				return image;
-			}
-			catch(IOException e) {
-				throw new RuntimeException(e);
-			}
-			
-		}).collect(Collectors.toList());
+
 		
 
 		

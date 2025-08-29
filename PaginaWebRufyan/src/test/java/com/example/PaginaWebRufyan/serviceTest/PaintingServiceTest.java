@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
-import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManager;
+import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
 import com.example.PaginaWebRufyan.Products.DTO.Painting.PaintingDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -154,7 +154,7 @@ public class PaintingServiceTest {
 									.name("1era Obra, datos correctos")
 									.description("Obra con todos los datos correctos ")
 									.creationDate(LocalDate.of(2020, 3, 25))
-									.priceManager(new PaintingPriceManager())
+									.priceManager(new PaintingPriceManagerPersist())
 									.style("Urbano")
 									.isFavorite(true)
 									.image(Set.of(obra1Image, obra2Image))
@@ -170,7 +170,7 @@ public class PaintingServiceTest {
 				.name("2da Obra, datos correctos")
 				.description("Obra con todos los datos correctos ")
 				.creationDate(LocalDate.of(2020, 3, 25))
-				.priceManager(new PaintingPriceManager())
+				.priceManager(new PaintingPriceManagerPersist())
 				.style("Urbano")
 				.isFavorite(true)
 				.image(List.of(obra1Image, obra2Image))
@@ -260,9 +260,9 @@ public class PaintingServiceTest {
 
 
 
-		Painting wrongPricing = Painting.builder().priceManager(new PaintingPriceManager(Painting.minPricePerCopy ,Painting.minPrice)).build();
+		Painting wrongPricing = Painting.builder().priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy ,Painting.minPrice)).build();
 
-		Painting wrongPricingInCopy = Painting.builder().priceManager(new PaintingPriceManager(Painting.minPricePerCopy.subtract(BigDecimal.ONE),Painting.minPrice.subtract(BigDecimal.ONE))).build();
+		Painting wrongPricingInCopy = Painting.builder().priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy.subtract(BigDecimal.ONE),Painting.minPrice.subtract(BigDecimal.ONE))).build();
 		
 
 		Painting wrongDate = Painting.builder().creationDate(LocalDate.now().plusDays(1L)).build();
@@ -383,10 +383,10 @@ Integer id=12;
 		Painting wrongMeasureLarge = Painting.builder().largoCm(Painting.minLargeCm-1).build();
 		
 Painting wrongPricingPerCopy = Painting.builder()
-		.priceManager(new PaintingPriceManager(Painting.minPricePerCopy.subtract(BigDecimal.ONE), Painting.minPrice)).build();
+		.priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy.subtract(BigDecimal.ONE), Painting.minPrice)).build();
 
 		Painting wrongPricingPerOriginal = Painting.builder()
-				.priceManager(new PaintingPriceManager(Painting.minPricePerCopy, Painting.minPrice.subtract(BigDecimal.ONE))).build();
+				.priceManager(new PaintingPriceManagerPersist(Painting.minPricePerCopy, Painting.minPrice.subtract(BigDecimal.ONE))).build();
 
 
 		Painting wrongDate = Painting.builder()
