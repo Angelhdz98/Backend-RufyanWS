@@ -14,81 +14,33 @@ import java.util.Optional;
 import java.util.Set;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
-@Builder
 @ToString
 @Getter
 @Setter
 public class ShoppingCart {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @OneToOne(mappedBy = "shoppingCart",fetch = FetchType.EAGER)
-    @JsonBackReference
-    //@EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UserEntity user;
+    private Long id;
+    private Long userId;
    @OneToMany(mappedBy = "shoppingCart",fetch = FetchType.EAGER,
            cascade = {CascadeType.ALL},orphanRemoval = true)
    //@ToString.Exclude
    @EqualsAndHashCode.Exclude
-   @Builder.Default
-    private Set<CartItem> itemList = new HashSet<>();
-    private BigDecimal totalAmount = BigDecimal.ZERO;
+    private Set<CartItem> itemList;
+    private BigDecimal totalAmount;
     private LocalDate updatedAt;
 
-    /*
+
     @PreUpdate
     void preUpdate(){
         updatedAt = LocalDate.now();
     }
 
-    public void updateTotal (){
-        this.totalAmount = itemList.stream().map((CartItem item)->
-        {
-           return item.getPricePerUnit().multiply(BigDecimal.valueOf(item.getQuantity()));
-        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    public ShoppingCart(Long id, Long userId, Set<CartItem> itemList, BigDecimal totalAmount) {
+        this.id = id;
+        this.userId = userId;
+        this.itemList = itemList;
+        this.totalAmount = totalAmount;
     }
-
-    public void addCartItem (CartItem cartItem){
-
-        this.itemList.add(cartItem);
-        //cartItem.setShoppingCart(this);
-        cartItem.getProduct().getStockManager().decreaseStock(cartItem.getProduct(),cartItem.getDetails());
-                //setAvailableStock(cartItem.getProduct().getAvailableStock()-cartItem.getItemQuantity());
-        updateTotal();
-    }
-
-    public void deleteCartItem(CartItem cartItem){
-        cartItem.getProduct().getStockManager().increaseStock(cartItem.getProduct(),cartItem.getDetails());
-                //setAvailableStock(cartItem.getProduct().getAvailableStock()+ cartItem.getItemQuantity());
-        this.itemList.remove(cartItem);
-        updateTotal();
-    }
-
-
-    public void deleteCartItem(CartItemRegisterNew cartItem){
-
-      Optional<CartItem>  optionalCartItemToDelete = this.itemList.stream().filter((CartItem item )-> item.getProduct().getId().equals(cartItem.getProductId())&& item.getDetails().get("isOriginalSelected").equals(cartItem.getDetails().get("isOriginalSelected"))).findFirst();
-      if (optionalCartItemToDelete.isPresent()){
-
-         CartItem cartItemToDelete =  optionalCartItemToDelete.get();
-                  cartItemToDelete.getProduct().getStockManager().increaseStock(cartItemToDelete.getProduct(), cartItem.getDetails());
-                          //.setAvailableStock(cartItemToDelete.getProduct().getAvailableStock()+cartItem.getItemQuantity());
-          this.itemList.remove(cartItemToDelete);
-      }
-
-
-
-
-                = this.itemList.stream().filter(( CartItem item)->!(
-
-                item.getProduct().getId().equals(cartItem.getProductId())&& item.getIsOriginalSelected().equals(cartItem.getIsOriginalSelected()) ) ).collect(Collectors.toSet());
-
-
-        updateTotal();
-    }*/
-    
 }

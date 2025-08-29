@@ -11,7 +11,7 @@ import java.util.Set;
 public class ShoppingCartDomain {
     private final Long id;
     private final Long userId;
-    private Set<CartItemDomain> items;
+    private final Set<CartItemDomain> items;
 
     public BigDecimal getSubtotalAmount(){
         return items.stream().map((CartItemDomain cartItemDomain)-> {
@@ -22,11 +22,9 @@ public class ShoppingCartDomain {
     public void addItem(CartItemDomain itemDomain) {
         if(items.add(itemDomain))
             itemDomain.getProduct();
-
     }
 
     public void deleteItem(CartItemDomain itemDomain){
        if( !items.remove(itemDomain)) throw new ResourceNotFoundException("no se encontró el item que se quiere eliminar");
     }
-
 }
