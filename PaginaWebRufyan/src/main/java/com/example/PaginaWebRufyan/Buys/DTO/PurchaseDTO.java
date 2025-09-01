@@ -19,12 +19,5 @@ public class PurchaseDTO {
     private OrderStatus orderStatus;
     private BigDecimal totalAmount;
 
-    public PurchaseDTO(PurchaseOrder purchase) {
-        this.username = purchase.getUser().getUsername();
-        this.paymentId = purchase.getPaymentId();
-        this.orderItems = purchase.getOrderItems();
-        this.createdAt = purchase.getCreatedAt();
-        this.orderStatus = purchase.getOrderStatus();
-        this.totalAmount = purchase.getTotalAmount();
-    }
+
 }

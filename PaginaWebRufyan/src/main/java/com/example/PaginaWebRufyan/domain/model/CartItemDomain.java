@@ -3,6 +3,8 @@ package com.example.PaginaWebRufyan.domain.model;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 public class CartItemDomain {
     private final Long id;
@@ -16,4 +18,12 @@ public class CartItemDomain {
         this.product = product;
         this.details = details;
     }
+
+    public BigDecimal getItemTotalAmount(){
+       return this.getProduct().getPriceManagerBase().getPriceWithDetails(details);
+    }
+
+
+
+
 }

@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 
 import java.util.Set;
 @AllArgsConstructor
-@Entity
+//@Entity
 public class SecurityUserDetails  {//implements UserDetails
-    private final Integer userId;
+    private final Long userId;
     private final String password;
     private final String username;
     private final String email;

@@ -29,9 +29,4 @@ private Product product;
 private int quantity;
 private BigDecimal priceAtPurchase;
 
-public OrderItem(CartItem cart){
-    this.product = cart.getProduct();
-    this.quantity = cart.getQuantity();
-    this.priceAtPurchase = cart.getPricePerUnit().multiply(new BigDecimal(cart.getQuantity()));
-}
 }

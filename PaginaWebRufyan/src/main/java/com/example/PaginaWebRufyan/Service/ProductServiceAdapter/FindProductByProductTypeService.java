@@ -6,7 +6,9 @@ import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.FindProductsByT
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FindProductByProductTypeService implements FindProductsByTypeUseCase {
     private final ProductRepositoryPort productRepositoryPort;
 

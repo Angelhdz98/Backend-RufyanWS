@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.adapter.in;
 
 import com.example.PaginaWebRufyan.User.Entity.UserEntity;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 
 public class ConverterUserEntityDomain {
 /*
@@ -21,6 +22,6 @@ public class ConverterUserEntityDomain {
     }
 */
     public static UserDomain convertToDomain(UserEntity userEntity) {
-       return new UserDomain(userEntity.getId(),userEntity.getFullName(), userEntity.getBirthDate(),userEntity.getUsername(),userEntity.getEmail());
+       return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail());
     }
 }

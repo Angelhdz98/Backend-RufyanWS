@@ -14,21 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.PaginaWebRufyan.DTO.FavoriteRequestDTO;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
-import com.example.PaginaWebRufyan.Service.UserServiceAdapter.FavoritesProductsService;
 
-@RestController
+
 @CrossOrigin(origins = "http://localhost:5173/")
 @PreAuthorize("permitAll()")
-@RequestMapping("/my-favorites")
 public class FavoriteProductsController {
 	
 	@Autowired
-	FavoritesProductsService favoritesProductsService;
+
 	
 	@PostMapping("/add")
 	public ResponseEntity<Product> addFavorite(@RequestBody FavoriteRequestDTO favoriteRequest ){
 		
-		Optional<Product>optionalProduct= favoritesProductsService.addProductToFavorites(favoriteRequest.getUserId(), favoriteRequest.getProductId());
+		Optional<Product>optionalProduct= null;
 		
 		if(optionalProduct.isPresent()) {
 			
@@ -42,8 +40,8 @@ public class FavoriteProductsController {
 	@DeleteMapping("/remove")
 	public  ResponseEntity<Product> removeFavorite(@RequestBody FavoriteRequestDTO favoriteRequest ){
 		
-		Optional<Product> optionalProduct = favoritesProductsService. 
-				removeProductfromFavorites(favoriteRequest.getUserId(), favoriteRequest.getProductId());
+		Optional<Product> optionalProduct = Optional.empty();
+
 		
 		if(optionalProduct.isPresent()) {
 			return ResponseEntity.ok(optionalProduct.get());
