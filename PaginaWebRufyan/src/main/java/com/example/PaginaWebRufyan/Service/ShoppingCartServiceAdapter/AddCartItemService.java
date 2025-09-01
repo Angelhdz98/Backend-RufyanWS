@@ -48,7 +48,7 @@ public class AddCartItemService implements AddCartItemUseCase {
                   ClothingItemDetails clothingActualItemDetails = (ClothingItemDetails) item.getDetails();
                   yield (item.getProduct().equals(bodyClothingDomain) && clothingActualItemDetails.getClothingSizeEnum().equals(clothingNewItemDetails.getClothingSizeEnum()) &&  clothingActualItemDetails.getColor().equals(clothingNewItemDetails.getColor()) );
               }
-              case PRINT,   CUP, default -> false;
+              case PRINT,   CUP -> false;
           });
 
         shoppingCartDomain.addItem(cartItemDomain);

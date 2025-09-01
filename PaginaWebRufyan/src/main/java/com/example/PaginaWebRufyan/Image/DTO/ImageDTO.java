@@ -9,9 +9,6 @@ public class ImageDTO {
     private String productName="";
 
 
-    public ImageDTO(Image image){
-    this.id = image.getId();
-    this.productName= image.getProductName();
-    }
+
 
 }

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Builder
@@ -21,12 +23,9 @@ public class CartItem {
     @JoinColumn(name="product_id")
     @JsonBackReference
     private Product product;
-
-
-
     @Embedded
     private CartItemDetailsAdapter cartItemDetails;
-
+    private BigDecimal totalPrice;
 
 
 

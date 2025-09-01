@@ -16,6 +16,13 @@ public class PaintingItemDetails extends CartItemDetails {
         super(quantity);
         this.isOriginalSelected = new IsOriginalSelected(isOriginalSelected);
     }
+
+    public PaintingItemDetails(){
+        super(1);
+        this.isOriginalSelected = new IsOriginalSelected(false);
+    }
+
+
     @Override
     public String showDetails() {
         if(isOriginalSelected.getIsOriginalSelected()) return "Obra original seleccionada";

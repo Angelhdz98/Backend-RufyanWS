@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Entity
+//@Entity
 @Builder
 public class PurchaseOrder implements Cloneable {
 
@@ -31,7 +31,7 @@ public class PurchaseOrder implements Cloneable {
 	private int id;
 	private String paymentId;
 	@ManyToOne()
-	private UserEntity user;
+	private Long  userId;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<OrderItem> orderItems;
 	private final Temporal createdAt;
@@ -41,18 +41,25 @@ public class PurchaseOrder implements Cloneable {
 
 
 	// se realizó la compra
+    // este metodo contructor formara parte de un mapper en la capa de dominio
+    /*
 	public PurchaseOrder(ShoppingCart cart){
-		this.user = cart.getUser();
-		this.orderItems = cart.getItemList().stream().map(OrderItem::new).collect(Collectors.toSet());
+		this.userId = cart.getUserId();
+		this.orderItems = cart.getItemList();
 		this.createdAt = LocalDate.now();
 		this.orderStatus = new OrderStatus(2,"Verificación de pago pendiente", OrderStatusEnum.PENDING);
 		this.totalAmount = cart.getTotalAmount();
 
 	}
-	public PurchaseOrder(){
+     */
+
+
+ /*   public PurchaseOrder(){
 		this.createdAt = ZonedDateTime.now();
 
 	}
+
+  */
 
 
 

@@ -23,7 +23,7 @@ public class ShoppingCart {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
-   @OneToMany(mappedBy = "shoppingCart",fetch = FetchType.EAGER,
+   @OneToMany(fetch = FetchType.EAGER,
            cascade = {CascadeType.ALL},orphanRemoval = true)
    //@ToString.Exclude
    @EqualsAndHashCode.Exclude

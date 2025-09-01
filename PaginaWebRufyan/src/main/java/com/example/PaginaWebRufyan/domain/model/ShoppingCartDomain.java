@@ -14,9 +14,7 @@ public class ShoppingCartDomain {
     private final Set<CartItemDomain> items;
 
     public BigDecimal getSubtotalAmount(){
-        return items.stream().map((CartItemDomain cartItemDomain)-> {
-              return cartItemDomain.getProduct().getPriceManagerBase().getPriceWithDetails(cartItemDomain.getDetails());
-        } ).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream().map(CartItemDomain::getItemTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void addItem(CartItemDomain itemDomain) {

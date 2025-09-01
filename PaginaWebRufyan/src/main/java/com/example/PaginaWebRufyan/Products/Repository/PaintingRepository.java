@@ -21,7 +21,7 @@ public interface PaintingRepository extends JpaRepository<Painting, Integer> {
 	List<Painting> findByNameContainingIgnoreCase(String namePart);
 	Page<Painting> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
 	
-
+/*
 	List<Painting> findByStyleContainingIgnoreCase(String stylePart);
 	Page<Painting> findByStyleContainingIgnoreCase(String stylePart, Pageable pageable );
 	
@@ -33,7 +33,7 @@ public interface PaintingRepository extends JpaRepository<Painting, Integer> {
 
 	List<Painting> findBySupportMaterialContainingIgnoreCase(String support_materialPart);
 	Page<Painting> findBySupportMaterialContainingIgnoreCase(String support_materialPart, Pageable pageable);
-
+ */
 	
 	boolean existsByName(String namePart);
 	

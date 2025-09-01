@@ -14,6 +14,8 @@ public class ClothingItemDetails extends CartItemDetails {
     private final ClothingSizeEnum clothingSizeEnum;
     private final ClothingColorEnum color;
 
+
+
     public ClothingItemDetails(ClothingColorEnum color, ClothingSizeEnum clothingSizeEnum) {
         super(1);
         this.color = color;
@@ -25,6 +27,12 @@ public class ClothingItemDetails extends CartItemDetails {
         this.color = color;
         this.clothingSizeEnum = clothingSizeEnum;
     }
+    public ClothingItemDetails() {
+        super(1);
+        this.color = ClothingColorEnum.BLACK;
+        this.clothingSizeEnum = ClothingSizeEnum.M;
+    }
+
 
 
 

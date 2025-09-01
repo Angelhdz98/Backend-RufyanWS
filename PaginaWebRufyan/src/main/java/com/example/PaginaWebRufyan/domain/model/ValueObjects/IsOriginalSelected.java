@@ -1,12 +1,13 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-
+@Embeddable
 public class IsOriginalSelected {
     private final Boolean isOriginalSelected;
 

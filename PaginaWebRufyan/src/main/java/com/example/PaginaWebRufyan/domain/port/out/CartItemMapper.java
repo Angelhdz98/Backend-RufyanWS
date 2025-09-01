@@ -37,7 +37,7 @@ Product product,
         CartItemDetailsAdapter cartItemDetailsAdapter = CartItemDetailsMapper.toEntity(cartItemDomain.getDetails(),cartItemDomain.getProduct().getProductType());
 
 
-        return new CartItem(cartItemDomain.getId(),productPersistenceAdapter,cartItemDetailsAdapter);
+        return new CartItem(cartItemDomain.getId(),productPersistenceAdapter,cartItemDetailsAdapter,cartItemDomain.getItemTotalAmount());
 
     }
 

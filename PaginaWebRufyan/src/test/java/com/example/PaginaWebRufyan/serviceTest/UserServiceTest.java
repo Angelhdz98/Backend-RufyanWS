@@ -320,7 +320,7 @@ class UserServiceTest {
 		given(userRepo.findByUsernameContaining(searchTerm, pageRequest))
 				.willReturn(pageResponse);
 
-		given(userRepo.findByNameContainingIgnoreCase(searchTerm, pageRequest))
+		given(userRepo.findByFullNameFirstNameContainingIgnoreCase(searchTerm, pageRequest))
 				.willReturn(pageResponse);
 
 		var matchedUsersByName = userService.searchUserWithNameMatch(search);
@@ -357,7 +357,7 @@ class UserServiceTest {
 		given(userRepo.findByUsernameContaining(searchTerm))
 		.willReturn(List.of(userResponse1,userResponse2));
 		
-		given(userRepo.findByNameContainingIgnoreCase(searchTerm))
+		given(userRepo.findByFullNameFirstNameContainingIgnoreCase(searchTerm))
 		.willReturn(List.of(userResponse1,userResponse2));
 		
 		List<UserEntity> matchedUsersByName = 		

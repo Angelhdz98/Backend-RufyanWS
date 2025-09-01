@@ -8,19 +8,16 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
 @Data
-@Builder
-@EqualsAndHashCode()
+@EqualsAndHashCode
 @ToString
 @Entity
 @Table
@@ -31,7 +28,7 @@ public class UserEntity {
 	@NotNull
 	private FullName fullName;
 	@NotNull
-	private BirthDate birthDate;
+	private LocalDate birthDate;
 
 	@NotNull
 	@Column(unique= true)
@@ -46,7 +43,7 @@ public class UserEntity {
 	public UserEntity(Long id, FullName fullName, BirthDate birthDate, String username, String email) {
 		this.id = id;
 		this.fullName = fullName;
-		this.birthDate = birthDate;
+		this.birthDate = birthDate.getBirthDate();
 		this.username = username;
 		this.email = email;
 		this.createdAt = LocalDateTime.now();

@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Getter
-@Component
 public class BirthDate {
     @JsonFormat(pattern = "yyyy-M-d")
     private final LocalDate birthDate;

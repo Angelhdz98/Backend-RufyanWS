@@ -1,12 +1,12 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 
 @Getter
 @AllArgsConstructor
-@Component
+@Embeddable
 public class UserValidators {
     private boolean isEnabled;
     private boolean accountNoExpired;

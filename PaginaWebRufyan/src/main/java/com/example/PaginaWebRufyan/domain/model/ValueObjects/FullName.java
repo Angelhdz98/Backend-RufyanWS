@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
+import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Builder
 @AllArgsConstructor
-@Component
+@Embeddable
 public class FullName {
     @NotNull
     private final String firstName;

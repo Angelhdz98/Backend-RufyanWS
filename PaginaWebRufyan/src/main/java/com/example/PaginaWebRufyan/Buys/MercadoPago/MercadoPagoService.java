@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
-@Service
+
 public class MercadoPagoService {
 
     @Value("${spring.MercadoPago.backUrl.success}")
@@ -37,11 +37,11 @@ public class MercadoPagoService {
                 .id(String.valueOf(cartItem.getId()))
                 //.categoryId(cartItem.getProduct().getCategory())
                 .currencyId("MXN")
-                .quantity(cartItem.getQuantity())
+                .quantity(cartItem.getCartItemDetails().getQuantity())
                 .description(cartItem.getProduct().getDescription())
-                .pictureUrl(cartItem.getProduct().getImage().get(1).getUrl())
+                .pictureUrl(cartItem.getProduct().getImage().stream().findFirst().orElseThrow().getUrl())
                 .title(cartItem.getProduct().getName())
-                .unitPrice(cartItem.getPricePerUnit())
+                .unitPrice(cartItem.getTotalPrice())
                 .build();
     }
 

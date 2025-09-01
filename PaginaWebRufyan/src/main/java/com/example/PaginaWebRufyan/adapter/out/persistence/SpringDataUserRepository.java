@@ -17,7 +17,7 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
     Page<UserEntity>  findByUsernameContaining(String usernamePart, Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u " +
-            "WHERE u.id IN (SELECT l.userId FROM LikeEntity l WHERE l.productId = :productId)")
+            "WHERE u.id IN (SELECT l.userId FROM Likes l WHERE l.productId = :productId)")
     Page<UserEntity> findUsersWhoLikedProduct(@Param("productId") Long productId, Pageable pageable);
 
 }

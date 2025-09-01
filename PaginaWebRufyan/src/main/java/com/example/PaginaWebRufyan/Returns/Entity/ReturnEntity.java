@@ -11,16 +11,18 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
-@Entity
+//@Entity
 @Data
-@Builder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ReturnEntity extends ReturnOrder {
 
+    public static Long WEEKS_FOR_RETURNING= 2L;
 
     @OneToOne(cascade = CascadeType.MERGE)
 
@@ -42,7 +44,7 @@ public class ReturnEntity extends ReturnOrder {
     @Override
     public Boolean isValidForReturning() {
         // the only thing to care about returns is time before a week
-        return this.order.getCreatedAt().isBefore(order.getCreatedAt().plusWeeks(1));
+        return ChronoUnit.WEEKS.between(this.order.getCreatedAt(), LocalDate.now())<WEEKS_FOR_RETURNING;//.isBefore(order.getCreatedAt().plusWeeks(1))
     }
 
     @Override

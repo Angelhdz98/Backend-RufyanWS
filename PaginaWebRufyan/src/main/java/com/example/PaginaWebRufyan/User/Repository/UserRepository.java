@@ -19,13 +19,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 	Optional<UserEntity> findUserByEmail(String email);
 	
 	Optional<UserEntity> findUserByUsername(String userName);
-	@Query("SELECT u FROM UserEntity u JOIN FETCH u.favoriteProducts WHERE u.id = :id")
-	Optional<UserEntity> findByIdWithFavoriteProducts(@Param("id") Integer id);
+
+/*	@Query("SELECT u FROM UserEntity u JOIN FETCH u.favoriteProducts WHERE u.id = :id")
+	Optional<UserEntity> findByIdWithFavoriteProducts(@Param("id") Long id);
+ */
 	Optional<UserEntity> findByUsername(String username);
 	Optional<UserEntity> findByEmail(String email);
 	
-	List <UserEntity> findByNameContainingIgnoreCase(String namePart);
-	Page<UserEntity> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
+	List <UserEntity> findByFullNameFirstNameContainingIgnoreCase(String namePart);
+	Page <UserEntity> findByFullNameFirstNameContainingIgnoreCase(String namePart, Pageable pageable);
 	
 	List <UserEntity> findByUsernameContaining(String usernamePart);
 	Page<UserEntity> findByUsernameContaining(String usernamePart, Pageable pageable);
