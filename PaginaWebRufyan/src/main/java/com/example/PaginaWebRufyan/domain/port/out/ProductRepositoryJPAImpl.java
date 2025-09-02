@@ -9,11 +9,12 @@ import com.example.PaginaWebRufyan.domain.model.ProductDomainFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-@Component
+@Repository
 public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     private final SpringDataProductRepository springDataProductRepository;
 
