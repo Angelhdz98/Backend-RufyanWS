@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 @Repository
 public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
+
+
     private final SpringDataProductRepository springDataProductRepository;
 
     public ProductRepositoryJPAImpl(SpringDataProductRepository springDataProductRepository) {
@@ -87,5 +89,9 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
         return springDataProductRepository.findProductByIsAvailableAndProductTypeEnum(true,productTypeEnum ,pageable).map(ProductMapper::toDomain);
     }
 
+    @Override
+    public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
+        return springDataProductRepository.findProductByIsFavorite(true, pageable).map(ProductMapper::toDomain);
+    }
 
 }

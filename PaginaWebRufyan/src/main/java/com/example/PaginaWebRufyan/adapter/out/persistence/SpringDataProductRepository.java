@@ -15,6 +15,8 @@ public interface SpringDataProductRepository extends JpaRepository<Product, Long
      Page<Product> findProductByProductTypeEnum(ProductTypeEnum productTypeEnum, Pageable pageable);
     List<Product> findProductByProductTypeEnum(ProductTypeEnum productTypeEnum);
 
+    Page<Product> findProductByIsFavorite(Boolean isFavorite, Pageable pageable);
+
     Page<Product> findProductByIsAvailable(Boolean availability, Pageable pageable);
 
     Page<Product> findProductByIsAvailableAndProductTypeEnum(Boolean availability, ProductTypeEnum productTypeEnum, Pageable pageable);
