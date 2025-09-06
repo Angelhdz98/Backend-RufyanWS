@@ -12,12 +12,18 @@ public class BodyClothingDomainDetails extends ProductDomainDetails {
     private final PrintingTecniqueEnum printingTechnique;
 
 
+    public BodyClothingDomainDetails( ) {
+        this.material = "100% algodon ";
+        this.type = BodyClotheTypesEnum.T_SHIRT;
+        this.printingTechnique = PrintingTecniqueEnum.SERIGRAPHY;
+    }
+
+
     public BodyClothingDomainDetails( String material, BodyClotheTypesEnum type, PrintingTecniqueEnum printingTechnique) {
         this.material = material;
         this.type = type;
         this.printingTechnique = printingTechnique;
     }
-
 
     @Override
     public void validate() {

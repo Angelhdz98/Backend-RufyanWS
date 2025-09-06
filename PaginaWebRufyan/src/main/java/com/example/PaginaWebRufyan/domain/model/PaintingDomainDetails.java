@@ -10,6 +10,11 @@ import java.time.LocalDate;
 
 @Getter
 public class PaintingDomainDetails extends ProductDomainDetails {
+    private final static Integer MIN_HEIGHT_CM =10;
+    private final static Integer MIN_LARGE_CM =10;
+
+
+
     private final Integer alturaCm;
     private final Integer largoCm;
     private final MediumEnum medium;
@@ -25,11 +30,21 @@ public class PaintingDomainDetails extends ProductDomainDetails {
     }
 
 
+    public PaintingDomainDetails() {
+
+        this.alturaCm = MIN_HEIGHT_CM;
+        this.largoCm = MIN_LARGE_CM;
+        this.medium = MediumEnum.OIL_PAINT;
+        this.supportMaterial = SupportMaterialEnum.COTTON_PAPER;
+        this.creationDate = LocalDate.now();
+
+    }
+
     @Override
     public void validate() {
-        int alturaMinimaCm = 10;
-        int largoMinimoCm =10;
-        if(alturaCm<alturaMinimaCm || largoCm < largoMinimoCm)throw new IllegalArgumentException("se debe cumplir con altura minima de: "+alturaMinimaCm+" y un largo minimo de: "+ largoMinimoCm);
+
+
+        if(alturaCm<MIN_HEIGHT_CM || largoCm < MIN_LARGE_CM)throw new IllegalArgumentException("se debe cumplir con altura minima de: "+MIN_HEIGHT_CM+" y un largo minimo de: "+ MIN_LARGE_CM);
         if(creationDate.isAfter(LocalDate.now())) throw new IllegalArgumentException("la fecha creacion no puede ser del futuro");
     }
 }
