@@ -12,20 +12,25 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-@NoArgsConstructor
+
 @AllArgsConstructor
 @Getter
 public abstract class ProductDomain {
 private  Long id;
 private  String name;
-private  StockManagerBase stockManagerBase;
-private  PriceManagerBase priceManagerBase;
-private Set<ImageDomain> images;
+private final StockManagerBase stockManagerBase;
+private final PriceManagerBase priceManagerBase;
+private final Set<ImageDomain> images;
 private ProductDomainDetails productDetails;
 private ProductTypeEnum productType;
 private String description;
 private Boolean isFavorite;
 
+    public ProductDomain(StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<ImageDomain> images) {
+        this.stockManagerBase = stockManagerBase;
+        this.priceManagerBase = priceManagerBase;
+        this.images = images;
+    }
 
     public void increaseStock(CartItemDomain itemDomain){
         stockManagerBase.increaseStock(itemDomain.getProduct(), itemDomain.getDetails());

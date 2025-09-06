@@ -17,6 +17,10 @@ public class PaintingPriceManager extends PriceManagerBase {
         this.pricePerOriginal = pricePerOriginal;
     }
 
+    public PaintingPriceManager() {
+        this.pricePerCopy = MIN_COPY_PRICE;
+        this.pricePerOriginal = MIN_ORIGINAL_PRICE;
+    }
     @Override
     public BigDecimal getPriceWithDetails(CartItemDetails details) {
         return null;

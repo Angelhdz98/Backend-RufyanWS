@@ -6,15 +6,27 @@ import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 public class BodyClothingStockManager extends StockManagerBase {
     private final Map<ClothingSizeEnum, Integer> stockPerSize;
+    public final static Integer DEFAULT_STOCK_PER_SIZE = 5;
+
+
 
     public BodyClothingStockManager(Map<ClothingSizeEnum, Integer> stockPerSize) {
         this.stockPerSize = stockPerSize;
+    }
+
+    public BodyClothingStockManager() {
+        Map<ClothingSizeEnum, Integer> stock = new HashMap<>();
+        Arrays.stream(ClothingSizeEnum.values()).forEach(clothingSizeEnum -> {
+            stock.put(clothingSizeEnum,DEFAULT_STOCK_PER_SIZE);
+        });
+        this.stockPerSize = stock ;
     }
 
 

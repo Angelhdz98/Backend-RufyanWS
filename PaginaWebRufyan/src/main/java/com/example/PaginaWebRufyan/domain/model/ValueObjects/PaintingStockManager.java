@@ -14,15 +14,21 @@ import java.util.Map;
 @AllArgsConstructor
 
 public class PaintingStockManager extends StockManagerBase {
-
+    private final Integer DEFAULT_STOCK_COPIES = 0;
+    private final Integer DEFAULT_COPIES_MADE = 0 ;
+    private final Boolean DEFAULT_ORIGINAL_AVAILABLE = true;
 
     @Setter
     private Integer stockCopies;
     private final Integer copiesMade;
     private Boolean isOriginalAvailable;
 
+    public PaintingStockManager() {
+        this.stockCopies = DEFAULT_STOCK_COPIES;
+        this.copiesMade = DEFAULT_COPIES_MADE;
+        this.isOriginalAvailable = DEFAULT_ORIGINAL_AVAILABLE;
 
-
+    }
 
     @Override
     public Map<String, Integer> getStock() {
