@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 @Getter
 public class PaintingPriceManager extends PriceManagerBase {
-   private static final BigDecimal MIN_ORIGINAL_PRICE = new BigDecimal("500");
-    private static final BigDecimal MIN_COPY_PRICE = new BigDecimal("300");
+   public static final BigDecimal MIN_ORIGINAL_PRICE = new BigDecimal("500");
+    public static final BigDecimal MIN_COPY_PRICE = new BigDecimal("300");
    private final BigDecimal pricePerCopy;
    private final BigDecimal pricePerOriginal;
 

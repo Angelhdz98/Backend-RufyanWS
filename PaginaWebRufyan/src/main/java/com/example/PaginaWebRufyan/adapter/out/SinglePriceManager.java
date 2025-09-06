@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @ToString
 public class SinglePriceManager extends PriceManagerBase {
-    private static final BigDecimal MIN_PRICE= BigDecimal.valueOf(200);
+    public static final BigDecimal MIN_PRICE= BigDecimal.valueOf(200);
     private BigDecimal price;
 
     public SinglePriceManager(){
