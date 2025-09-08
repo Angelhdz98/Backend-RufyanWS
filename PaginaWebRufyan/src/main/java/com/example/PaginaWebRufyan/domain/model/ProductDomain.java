@@ -26,6 +26,10 @@ private ProductTypeEnum productType;
 private String description;
 private Boolean isFavorite;
 
+private final static Integer MIN_DESCRIPTION_LENGTH = 10;
+private final static Integer MIN_LENGTH_NAME =3;
+    private final static Integer MIN_LENGTH_IMAGES =2;
+
     public ProductDomain(StockManagerBase stockManagerBase, PriceManagerBase priceManagerBase, Set<ImageDomain> images) {
         this.stockManagerBase = stockManagerBase;
         this.priceManagerBase = priceManagerBase;
@@ -57,14 +61,17 @@ private Boolean isFavorite;
 
 
      void validateProduct(){
-         int minLengthName =3;
-         int minImages =1;
 
-         if(images.size()<minImages){
-            throw new IllegalArgumentException("Todos los productos deben contar con un minimo de" + minImages+ "imagenes");
+
+         if(images.size()<MIN_LENGTH_IMAGES){
+            throw new IllegalArgumentException("Todos los productos deben contar con un minimo de" + MIN_LENGTH_IMAGES+ "imagenes");
          }
-         if(name.length()<minLengthName){
-             throw new IllegalArgumentException("El nombre de un producto debe tener un minimo de " + minLengthName + "caracteres");
+         if(name.length()<MIN_LENGTH_NAME){
+             throw new IllegalArgumentException("El nombre de un producto debe tener un minimo de " + MIN_LENGTH_NAME + "caracteres");
+         }
+         if(description.length()<MIN_DESCRIPTION_LENGTH){
+             throw new IllegalArgumentException("La descripción debe de tener un mínimo de: "+ MIN_DESCRIPTION_LENGTH+ " caracteres");
+
          }
      }
 }

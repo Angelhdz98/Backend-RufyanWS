@@ -10,7 +10,7 @@ import java.util.Set;
 public class BodyClothingDomain extends ProductDomain {
 
 
-    public BodyClothingDomain(Long id, String name, BodyClothingStockManager bodyClothingStockManager, SinglePriceManager singlePriceManager, Set<ImageDomain> images, ProductDomainDetails productDetails, ProductTypeEnum productType, String description, Boolean isFavorite) {
+    public BodyClothingDomain(Long id, String name, BodyClothingStockManager bodyClothingStockManager, SinglePriceManager singlePriceManager, Set<ImageDomain> images, BodyClothingDomainDetails productDetails, ProductTypeEnum productType, String description, Boolean isFavorite) {
         super(id, name, bodyClothingStockManager, singlePriceManager, images, productDetails, productType, description, isFavorite);
     }
 

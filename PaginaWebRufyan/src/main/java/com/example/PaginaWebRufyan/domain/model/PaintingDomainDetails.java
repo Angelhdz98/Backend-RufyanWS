@@ -10,8 +10,8 @@ import java.time.LocalDate;
 
 @Getter
 public class PaintingDomainDetails extends ProductDomainDetails {
-    private final static Integer MIN_HEIGHT_CM =10;
-    private final static Integer MIN_LARGE_CM =10;
+    public final static Integer MIN_HEIGHT_CM =10;
+    public final static Integer MIN_LARGE_CM =10;
 
 
 
