@@ -22,10 +22,13 @@ public class PaintingDomainDetails extends ProductDomainDetails {
     private final LocalDate creationDate;
 
     public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate) {
+        if(alturaCm<MIN_LARGE_CM ) throw  new IllegalArgumentException("la altura minima es de: "+MIN_HEIGHT_CM);
         this.alturaCm = alturaCm;
+        if(largoCm<MIN_LARGE_CM ) throw  new IllegalArgumentException("el largo minimo es de: "+MIN_LARGE_CM);
         this.largoCm = largoCm;
         this.medium = medium;
         this.supportMaterial = supportMaterial;
+        if(creationDate.isAfter(LocalDate.now())) throw new IllegalArgumentException("la fecha de creacion no puede ser del futuro");
         this.creationDate = creationDate;
     }
 

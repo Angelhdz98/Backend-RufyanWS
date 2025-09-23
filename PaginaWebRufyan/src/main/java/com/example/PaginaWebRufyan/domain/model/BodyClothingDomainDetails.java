@@ -20,6 +20,7 @@ public class BodyClothingDomainDetails extends ProductDomainDetails {
 
 
     public BodyClothingDomainDetails( String material, BodyClotheTypesEnum type, PrintingTecniqueEnum printingTechnique) {
+        if(material.isBlank() || type.equals(null) || printingTechnique.equals(null)  ) throw new IllegalArgumentException("Faltan valores requeridos");
         this.material = material;
         this.type = type;
         this.printingTechnique = printingTechnique;

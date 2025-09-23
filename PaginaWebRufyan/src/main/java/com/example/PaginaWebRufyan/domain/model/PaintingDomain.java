@@ -14,8 +14,8 @@ import java.util.Set;
 public class PaintingDomain extends ProductDomain{
     ;
 
-    public PaintingDomain(Long id, String name, PaintingStockManager paintingStockManager, PaintingPriceManager paintingPriceManager, Set<ImageDomain> images, ProductDomainDetails productDetails, ProductTypeEnum productType, String description, Boolean isFavorite) {
-        super(id, name, paintingStockManager, paintingPriceManager, images, productDetails, productType, description, isFavorite);
+    public PaintingDomain(Long id, String name, PaintingStockManager paintingStockManager, PaintingPriceManager paintingPriceManager, Set<ImageDomain> images, PaintingDomainDetails paintingDetails, ProductTypeEnum productType, String description, Boolean isFavorite) {
+        super(id, name, paintingStockManager, paintingPriceManager, images, paintingDetails, productType, description, isFavorite);
     }
     public PaintingDomain() {
         super(new PaintingStockManager(), new PaintingPriceManager(), Set.of());

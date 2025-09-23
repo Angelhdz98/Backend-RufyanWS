@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 
 public class ProductDomainFactory {
 
-    public static ProductDomain createProduct(ProductSpecs productSpecs, ProductDomainDetails productDetails){
+    public static ProductDomain createProduct(ProductSpecs productSpecs,
+                                              ProductDomainDetails productDetails){
 
         Set<ImageDomain> imageDomains = ImageProcessor.processImages(productSpecs.productImages().stream().toList(), productSpecs.name());
 
@@ -36,37 +37,38 @@ public class ProductDomainFactory {
 
 
 
-                yield new PaintingDomain(0L,productSpecs.name(),
+                yield new PaintingDomain(null,productSpecs.name(),
                         new PaintingStockManager(paintingStock.availableCopies(),paintingStock.copiesMade(),paintingStock.isOriginalAvailable()),
                         new PaintingPriceManager(paintingPricing.pricePerCopy(),paintingPricing.pricePerOriginal()), imageDomains, paintingDetails,
                         productSpecs.productTypeEnum(),productSpecs.description(),productSpecs.isFavorite());
             }
-            case CUP -> null;
             case CLOTHING ->  {
 
-                if(!(productDetails instanceof BodyClothingDomainDetails bodyClothingDomainDetails)){
-                    throw new IllegalArgumentException("No tiene los detalles necesarios:  " + Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
-                }
+               if(!(productDetails instanceof BodyClothingDomainDetails bodyClothingDomainDetails)){
+                   throw new IllegalArgumentException("No tiene los detalles necesarios:  " + Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+               }
 
-                if(!(productSpecs.productStock() instanceof BodyClothingStockManager bodyClothingStock)){
-                    throw new IllegalArgumentException("No tiene los datos necesarios para el stock"+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
-                }
+               if(!(productSpecs.productStock() instanceof BodyClothingStockDTO bodyClothingStockDTO)){
+                   throw new IllegalArgumentException("No tiene los datos necesarios para el stock"+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+               }
 
-                if(!(productSpecs.productPricing() instanceof SinglePriceManager singlePriceManager)){
-                    throw new IllegalArgumentException("El producto no tiene la información necesaria declarar sus precios: "+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
-                }
-                yield new BodyClothingDomain(0L,
-                        productSpecs.name(),
-                        new  BodyClothingStockManager(bodyClothingStock.getStockPerSize()),
-                        new SinglePriceManager(singlePriceManager.getPrice()),
-                        imageDomains,
-                        bodyClothingDomainDetails,
-                        productSpecs.productTypeEnum(),
-                        productSpecs.description(),productSpecs.isFavorite());
+               if(!(productSpecs.productPricing() instanceof SinglePricingDTO singlePriceDTO)){
+                   throw new IllegalArgumentException("El producto no tiene la información necesaria declarar sus precios: "+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+               }
+               yield new BodyClothingDomain(null,
+                       productSpecs.name(),
+                       new  BodyClothingStockManager(bodyClothingStockDTO.stockPerSize()),
+                       new SinglePriceManager(singlePriceDTO.price()),
+                       imageDomains,
+                       bodyClothingDomainDetails,
+                       productSpecs.productTypeEnum(),
+                       productSpecs.description(),
+                       productSpecs.isFavorite());
 
-            }
-            case PRINT -> null;
-            default -> throw new IllegalArgumentException("No hay ningun tipo de producto llamado así las opciones son "+ Arrays.toString(ProductTypeEnum.values()) );
+           }
+            case CUP, PRINT -> null;
+
+           default -> throw new IllegalArgumentException("No hay ningun tipo de producto llamado así las opciones son "+ Arrays.toString(ProductTypeEnum.values()) );
         };
 
 
@@ -129,7 +131,7 @@ public class ProductDomainFactory {
 
 
 
-                yield new PaintingDomain(command.userId(),command.productSpecs().name(),
+                yield new PaintingDomain(command.productId(),command.productSpecs().name(),
                         new PaintingStockManager(paintingStock.availableCopies(),paintingStock.copiesMade(),paintingStock.isOriginalAvailable()),
                         new PaintingPriceManager(paintingPricing.pricePerCopy(),paintingPricing.pricePerOriginal()), imageDomains, paintingDetails,
                         command.productSpecs().productTypeEnum(),command.productSpecs().description(),command.productSpecs().isFavorite());
