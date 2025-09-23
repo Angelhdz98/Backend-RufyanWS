@@ -1,9 +1,7 @@
 package com.example.PaginaWebRufyan.adapter.out;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
