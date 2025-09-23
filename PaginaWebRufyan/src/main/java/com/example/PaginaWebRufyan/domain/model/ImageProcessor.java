@@ -1,6 +1,6 @@
 package com.example.PaginaWebRufyan.domain.model;
 
-import com.example.PaginaWebRufyan.Image.Image;
+
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
