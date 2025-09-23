@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 public class ImageProcessor {
 
     @Value("${file.upload-dir}")
-    private static  String uploadDir;
+    private static  String defaultUploadDir;
 
-    public static Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName) {
+    public static Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName, String uploadDir) {
 
         return imageFiles.stream().map((file)->{
             try {
@@ -45,5 +45,33 @@ public class ImageProcessor {
             }
 
         }).collect(Collectors.toSet());
-}}
+}
+    public static Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName) {
+
+        return imageFiles.stream().map((file)->{
+            try {
+                // Primero se guarda el archivo en el sistema de archivo
+                String fileName = file.getOriginalFilename()+"_"+System.currentTimeMillis();
+                Path filePath = Paths.get( defaultUploadDir +"/UploadedImages/UploadedPaintingImages");
+                if(!Files.exists(filePath)) {
+                    Files.createDirectories(filePath);
+                }
+                Path savedFilePath = filePath.resolve(fileName);
+                Files.copy(file.getInputStream(),savedFilePath, StandardCopyOption.REPLACE_EXISTING);
+                //Files.write(filePath, file.getBytes());
+                // Agregamos el path del archivo a la image
+                ImageDomain image = new ImageDomain(null,productName,productName);
+                        /*
+                        Image.builder()
+                        .url("http://localhost:8080/UploadedImages/UploadedPaintingImages/"+fileName)
+                        .productName(file.getOriginalFilename()).build();*/
+                return image;
+            }
+            catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }).collect(Collectors.toSet());
+    }
+}
 
