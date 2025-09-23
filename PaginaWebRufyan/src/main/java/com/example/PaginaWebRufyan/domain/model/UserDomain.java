@@ -2,14 +2,16 @@ package com.example.PaginaWebRufyan.domain.model;
 
 
 
-import com.example.PaginaWebRufyan.User.Entity.UserProfilePicture;
+
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 public class UserDomain {
+
+    public static Integer MIN_USERNAME_LENGTH = 3;
+
     private final Long  id;
     private final FullName fullname;
     private final BirthDate birthDate;
@@ -24,8 +26,11 @@ public class UserDomain {
                       String email) {
         this.id = id;
         this.fullname = fullname;
+        if(!birthDate.isAdult())  throw new IllegalArgumentException("El usuario debe ser mayor de edad");
         this.birthDate = birthDate;
+        if(username.length()<MIN_USERNAME_LENGTH|| !username.matches("^[a-zA-Z0-9._]+$")) throw new IllegalArgumentException("El nombre de usuario debe tener un minimo de " + MIN_USERNAME_LENGTH + " caracteres y solo puede contener letras, numeros, puntos y guiones bajos");
         this.username = username;
+        if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) throw new IllegalArgumentException("El email no es valido");
         this.email = email;
 
 
