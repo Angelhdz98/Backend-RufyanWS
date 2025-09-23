@@ -18,4 +18,5 @@ public abstract class CartItemDetails {
     }
     public abstract String showDetails();
     public abstract Map<String, String> detailsObject();
+    public abstract boolean areSameDetails(CartItemDetails other);
 }

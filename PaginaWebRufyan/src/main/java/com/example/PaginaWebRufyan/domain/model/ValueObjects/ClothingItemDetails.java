@@ -11,6 +11,7 @@ import java.util.Map;
 @Component
 public class ClothingItemDetails extends CartItemDetails {
 
+
     private final ClothingSizeEnum clothingSizeEnum;
     private final ClothingColorEnum color;
 
@@ -50,6 +51,31 @@ public class ClothingItemDetails extends CartItemDetails {
 
         return detailsObject;
     }
+    @Override
+    public boolean areSameDetails(CartItemDetails other) {
+        if(!(other instanceof ClothingItemDetails clothingItemDetails) ) return false;
+        return (clothingItemDetails.getClothingSizeEnum().equals(clothingSizeEnum) && clothingItemDetails.getColor().equals(color));
+    }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
