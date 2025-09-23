@@ -1,15 +1,14 @@
 package com.example.PaginaWebRufyan.adapter.out;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Embeddable
+@Entity
 @Getter
 @Setter
-
 public class SinglePriceManagerPersist extends PriceManagerPersist {
 
     private BigDecimal price;
