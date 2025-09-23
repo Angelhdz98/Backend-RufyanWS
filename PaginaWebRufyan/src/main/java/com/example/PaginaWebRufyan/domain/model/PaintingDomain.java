@@ -1,12 +1,8 @@
 package com.example.PaginaWebRufyan.domain.model;
 
-import com.example.PaginaWebRufyan.Image.Image;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
-import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
