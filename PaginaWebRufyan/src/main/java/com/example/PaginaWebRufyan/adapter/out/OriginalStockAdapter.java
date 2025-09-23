@@ -2,7 +2,6 @@
 
 package com.example.PaginaWebRufyan.adapter.out;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import lombok.*;
 
