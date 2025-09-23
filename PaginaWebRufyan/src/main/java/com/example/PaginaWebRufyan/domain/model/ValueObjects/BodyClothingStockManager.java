@@ -5,11 +5,12 @@ import com.example.PaginaWebRufyan.Exceptions.NoStockException;
 import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
+@ToString
 @Getter
 public class BodyClothingStockManager extends StockManagerBase {
     private final Map<ClothingSizeEnum, Integer> stockPerSize;
