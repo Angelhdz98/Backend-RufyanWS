@@ -21,8 +21,7 @@ public class DecreaseStockService implements DecreaseStockUseCase {
     @Override
     public void decreaseStock(CartItemDomain cartItemDomain) {
         ProductDomain productById = productRepositoryPort
-                .findProductById(cartItemDomain.getProduct().getId() )
-                .orElseThrow(()->new ResourceNotFoundException("No se encontró el producto con el id: "+ cartItemDomain.getProduct().getId()));
+                .retrieveProductById(cartItemDomain.getProduct().getId());
         productById.decreaseStock(cartItemDomain);
         productRepositoryPort.updateProduct(productById);
 

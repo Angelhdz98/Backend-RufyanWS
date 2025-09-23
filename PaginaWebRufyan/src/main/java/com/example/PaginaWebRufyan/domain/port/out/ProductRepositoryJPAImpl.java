@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Repository
 public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
@@ -21,15 +22,14 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     }
 
     private  ProductDomain retrieveProduct(Long id){
-       return springDataProductRepository.findById(id)
-               .map(ProductMapper::toDomain)
+       return findProductById(id)
                .orElseThrow(()-> new ResourceNotFoundException("No se encontró el product con el id: "+ id));
     }
 
 
     @Override
     public ProductDomain saveProduct(ProductDomain product) {
-        return ProductMapper.toDomain(springDataProductRepository.save(ProductMapper.toEntity(product))) ;
+        return ProductMapper.toDomain(springDataProductRepository.save(Objects.requireNonNull(ProductMapper.toEntity(product)))) ;
     }
 
     @Override
@@ -54,6 +54,8 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
         return retrieveProduct(userId);
     }
 
+
+    // Este metodo trae todos los productos, sin paginacion. evitar su uso
     @Override
     public List<ProductDomain> findAllProducts() {
         return springDataProductRepository.findAll().stream().map(ProductMapper::toDomain).toList();

@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Service.ProductServiceAdapter;
 
+import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.FindProductByIdUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
@@ -15,6 +16,9 @@ public class FindProductByIdService implements FindProductByIdUseCase {
 
     @Override
     public ProductDomain findProductById(Long id) {
+        if(productRepositoryPort.findProductById(id).isEmpty()){
+            throw new ResourceNotFoundException("No se encontró el producto con el id: "+ id);
+        }
        return productRepositoryPort.retrieveProductById(id);
     }
 }

@@ -17,9 +17,11 @@ public class IncreaseStockService implements IncreaseStockUseCase {
 
     @Override
     public void increaseProductStock(CartItemDomain cartItemDomain) {
-        ProductDomain productById = productRepositoryPort
-                .findProductById(cartItemDomain.getProduct().getId() )
+        ProductDomain productById = productRepositoryPort.retrieveProductById(cartItemDomain.getProduct().getId());
+
+               /* .findProductById(cartItemDomain.getProduct().getId() )
                 .orElseThrow(()->new ResourceNotFoundException("No se encontró el producto con el id: "+ cartItemDomain.getProduct().getId()));
+                */
         productById.increaseStock(cartItemDomain);
         productRepositoryPort.updateProduct(productById);
     }
