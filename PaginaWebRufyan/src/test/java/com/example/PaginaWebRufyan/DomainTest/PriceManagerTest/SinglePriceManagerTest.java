@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ExtendWith(MockitoExtension.class)
 public class SinglePriceManagerTest {
 
@@ -29,7 +29,7 @@ public class SinglePriceManagerTest {
     public void shouldThrowErrorCreatingSinglePriceManager(){
 
         assertThrows(IllegalArgumentException.class, ()->{
-            SinglePriceManager singlePriceManager = new SinglePriceManager(SinglePriceManager.MIN_PRICE.subtract(BigDecimal.ONE));
+    new SinglePriceManager(SinglePriceManager.MIN_PRICE.subtract(new BigDecimal("0.01")));
         });
 
     }

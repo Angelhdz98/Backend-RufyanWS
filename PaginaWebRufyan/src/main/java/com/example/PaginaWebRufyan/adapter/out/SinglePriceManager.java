@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.adapter.out;
 
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PriceManagerBase;
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,12 +22,14 @@ public class SinglePriceManager extends PriceManagerBase {
 
 
     public SinglePriceManager(BigDecimal price) {
+        if(price.compareTo(MIN_PRICE)<0)
+            throw new IllegalArgumentException("El precio no puede ser menor a "+MIN_PRICE);
         this.price = price;
     }
 
     @Override
     public BigDecimal getPriceWithDetails(CartItemDetails details) {
-        return price;
+        return price.multiply(new BigDecimal(details.getItemQuantity().getQuantity()));
     }
 
     @Override

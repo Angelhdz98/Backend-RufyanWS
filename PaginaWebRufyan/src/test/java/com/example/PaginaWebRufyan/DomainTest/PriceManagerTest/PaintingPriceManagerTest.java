@@ -1,18 +1,46 @@
 package com.example.PaginaWebRufyan.DomainTest.PriceManagerTest;
 
-import com.example.PaginaWebRufyan.Products.Entity.Painting;
-import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingPriceManager;
+import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.assertj.core.api.Assertions;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
 @ExtendWith(MockitoExtension.class)
 public class PaintingPriceManagerTest {
+
+
+    PaintingItemDetails originalSelected = new PaintingItemDetails(1,true);
+    Integer copiesQuantity = 2;
+    PaintingItemDetails copySelected = new PaintingItemDetails(copiesQuantity,false);
+
+
+    Integer quantityClothes = 3;
+    ClothingItemDetails clothingItemDetails = new ClothingItemDetails(quantityClothes, ClothingColorEnum.BLACK, ClothingSizeEnum.M);
+
+    BigDecimal clothePrice = new BigDecimal("700");
+    BigDecimal priceGlobalPerCopy = new BigDecimal("800");
+    BigDecimal priceGlobalPerOriginal = new BigDecimal("2000");
+
+
+    @Test
+    @DisplayName("Test para obtener el precio total de una obra con sus detalles")
+    public void shouldGetTotalPaintingPriceWithDetails(){
+
+        PaintingPriceManager paintingPriceManager = new PaintingPriceManager(priceGlobalPerCopy,priceGlobalPerOriginal);
+
+assertThat(paintingPriceManager.getPriceWithDetails(originalSelected)).isEqualTo(priceGlobalPerCopy);
+        assertThat(paintingPriceManager.getPriceWithDetails(copySelected)).isEqualTo(priceGlobalPerCopy.multiply(new BigDecimal(copiesQuantity)));
+
+    }
+
+
 
     @DisplayName("Test para crear un price manager de manera correcta")
     @Test
@@ -21,9 +49,9 @@ public class PaintingPriceManagerTest {
         BigDecimal pricePerOriginal = new BigDecimal("2000");
         PaintingPriceManager paintingPriceManager = new PaintingPriceManager(pricePerCopy,pricePerOriginal);
 
-        Assertions.assertThat(paintingPriceManager).isInstanceOf(PaintingPriceManager.class);
-        Assertions.assertThat(paintingPriceManager.getPricePerCopy()).isEqualTo(pricePerCopy);
-        Assertions.assertThat(paintingPriceManager.getPricePerOriginal()).isEqualTo(pricePerOriginal);
+        assertThat(paintingPriceManager).isInstanceOf(PaintingPriceManager.class);
+        assertThat(paintingPriceManager.getPricePerCopy()).isEqualTo(pricePerCopy);
+        assertThat(paintingPriceManager.getPricePerOriginal()).isEqualTo(pricePerOriginal);
 
     }
 
@@ -56,7 +84,7 @@ public class PaintingPriceManagerTest {
     }
     @DisplayName("Test para arrojar una excepción cuando el precio de una obra original es menor al de el minimo establecido  ")
     @Test
-    public void shouldThrowIllegalArgumentaException(){
+    public void shouldThrowIllegalArgumentaExceptionOriginalPriceLowerThanEstablished(){
 
         BigDecimal pricePerCopy = PaintingPriceManager.MIN_COPY_PRICE;
 
