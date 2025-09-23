@@ -5,6 +5,7 @@ import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-
+@ToString
 public class PaintingStockManager extends StockManagerBase {
-    private final Integer DEFAULT_STOCK_COPIES = 0;
-    private final Integer DEFAULT_COPIES_MADE = 0 ;
-    private final Boolean DEFAULT_ORIGINAL_AVAILABLE = true;
+    public static final Integer DEFAULT_STOCK_COPIES = 0;
+    public static final Integer DEFAULT_COPIES_MADE = 0 ;
+    public static final Boolean DEFAULT_ORIGINAL_AVAILABLE = true;
 
     @Setter
     private Integer stockCopies;
@@ -70,11 +71,11 @@ productDomain;
             this.isOriginalAvailable = false;
         }else {
             Integer quantity =paintingDetails.getItemQuantity().getQuantity();
-            if(quantity + stockCopies> copiesMade || quantity==0){
+            if((quantity + stockCopies)> copiesMade || quantity==0){
                 throw new IllegalArgumentException("Petición invalida, el numero de copias hecas es de: "+copiesMade +" el restock excedería la cantidad de copias hechas: "+ quantity+stockCopies);
             }
 
-            this.stockCopies=stockCopies-quantity;
+            this.stockCopies=stockCopies+quantity;
 
         }
     }

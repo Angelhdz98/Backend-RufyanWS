@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-@Embeddable
+@Entity
 @ToString
 @Getter
-public class ClothingStockAdapter implements StockManager {
+public class ClothingStockAdapter extends StockManager {
     @ElementCollection
     @CollectionTable(name = "clothing_size_stock",
                      joinColumns = @JoinColumn(name = "clothing_id"))
