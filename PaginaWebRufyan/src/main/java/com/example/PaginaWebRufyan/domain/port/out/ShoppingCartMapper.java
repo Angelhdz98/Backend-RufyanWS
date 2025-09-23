@@ -8,6 +8,7 @@ import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,14 +36,14 @@ public class ShoppingCartMapper {
                 .map(ProductMapper::toDomain).collect(Collectors.toSet());
 
          */
-        Set<CartItemDomain> cartItemDomainSet = itemList.stream().map((CartItem item) -> {
+        LinkedHashSet<CartItemDomain> cartItemDomainSet = (LinkedHashSet<CartItemDomain>) itemList.stream().map((CartItem item) -> {
             ProductDomain product = ProductMapper.toDomain(item.getProduct());
             assert product != null;
             CartItemDetails itemDetails = CartItemDetailsFactory.createCartItemDetails(product, item.getCartItemDetails());
             return new CartItemDomain(item.getId(), product, itemDetails);
         }).collect(Collectors.toSet());
 
-        return new ShoppingCartDomain(shoppingCart.getId(), shoppingCart.getUserId(),cartItemDomainSet );
+        return new ShoppingCartDomain(shoppingCart.getId(), shoppingCart.getUserId(), cartItemDomainSet);
     }
 
 }
