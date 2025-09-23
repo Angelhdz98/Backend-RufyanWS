@@ -1,11 +1,10 @@
 package com.example.PaginaWebRufyan.Products.Entity;
 import com.example.PaginaWebRufyan.Image.Image;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
-import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
 import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
-import com.example.PaginaWebRufyan.adapter.out.PriceManagerPersist;
 import com.example.PaginaWebRufyan.adapter.out.StockManager;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
+import com.example.PaginaWebRufyan.domain.model.PaintingDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.MediumEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.SupportMaterialEnum;
 import jakarta.persistence.*;
@@ -18,7 +17,6 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@DiscriminatorValue("PAINTING")
 @Entity
 @Getter
 public class Painting extends Product {
@@ -29,9 +27,17 @@ public class Painting extends Product {
     private final MediumEnum medium;
     private final SupportMaterialEnum supportMaterial;
 
+    protected Painting(){
+        super();
+        this.alturaCm = PaintingDomainDetails.MIN_HEIGHT_CM;
+        this.largoCm = PaintingDomainDetails.MIN_LARGE_CM;
+        this.medium = MediumEnum.OIL_PAINT;
+        this.supportMaterial = SupportMaterialEnum.COTTON_PAPER;
+    }
 
 
-    public Painting(Long id, String name, String description, LocalDate creationDate, PriceManagerPersist priceManagerPersist, StockManager stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> image, ProductTypeEnum productTypeEnum, Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial) {
+
+    public Painting(Long id, String name, String description, LocalDate creationDate, PaintingPriceManagerPersist priceManagerPersist , StockManager stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> image, ProductTypeEnum productTypeEnum, Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial) {
         super(id, name, description, creationDate, priceManagerPersist, stockManager, isAvailable, isFavorite, image, productTypeEnum);
         this.alturaCm = alturaCm;
         this.largoCm = largoCm;
@@ -40,6 +46,7 @@ public class Painting extends Product {
     }
 
     public Painting(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial) {
+        super();
         this.alturaCm = alturaCm;
         this.largoCm = largoCm;
         this.medium = medium;
