@@ -36,7 +36,7 @@ public class UserDomainTest {
 
         UserDomain userDomain = new UserDomain(idTest, fullNameTest, correctBirthDay, usernameTest, emailTest);
 
-        assertThat(userDomain.getId()).isGreaterThan(0);
+        assertThat(userDomain.getId()).isGreaterThan(0L);
         assertThat(userDomain.getFullname().getFirstName()).isEqualTo(firstNameTest);
 
 

@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class UserRepositoryJPAImp implements UserRepository {
+public class UserRepositoryJPAImp implements UserRepositoryPort {
 
 
     private final SpringDataUserRepository persistenceRepo;
@@ -45,6 +45,22 @@ public class UserRepositoryJPAImp implements UserRepository {
     @Override
     public Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable) {
         return persistenceRepo.findUsersWhoLikedProduct(productId,pageable).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
+    @Override
+    public Page<UserDomain> findUsersByUsernameMatch(String usernameParte, Pageable pageable) {
+        return persistenceRepo.findByUsernameContaining(usernameParte, pageable).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
+    @Override
+    public Page<UserDomain> findUsersByNameMatch(String fullNamePart, Pageable pageable) {
+        return persistenceRepo.findByStringFullNameIgnoreCase(fullNamePart,pageable).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
+    @Override
+    public Page<UserDomain> findUsersByEmailMatch(String emailPart, Pageable pageable) {
+        return persistenceRepo.findByEmailContainingIgnoreCase(emailPart,pageable).map(ConverterUserEntityDomain::convertToDomain
+        );
     }
 
 

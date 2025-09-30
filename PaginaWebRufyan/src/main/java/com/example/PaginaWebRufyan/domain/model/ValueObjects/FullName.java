@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-
 @Embeddable
 public class FullName {
     public static Integer MIN_NAME_LENGTH=2;

@@ -26,7 +26,9 @@ public class UserEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotNull
+    @Embedded
 	private FullName fullName;
+    private String stringFullName;
 	@NotNull
 	private LocalDate birthDate;
 
@@ -48,11 +50,14 @@ public class UserEntity {
 		this.email = email;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
+        this.stringFullName = fullName.getFullName();
 	}
 
 	@PreUpdate
+    @PrePersist
 	protected void onUpdate(){
-		this.updatedAt = LocalDateTime.now();
+		this.stringFullName = fullName.getFullName();
+        this.updatedAt = LocalDateTime.now();
 	}
 
 
