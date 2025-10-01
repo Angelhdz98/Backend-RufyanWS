@@ -45,13 +45,13 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     }
 
     @Override
-    public Optional<ProductDomain> findProductById(Long userId) {
-        return springDataProductRepository.findById(userId).map(ProductMapper::toDomain);
+    public Optional<ProductDomain> findProductById(Long productId) {
+        return springDataProductRepository.findById(productId).map(ProductMapper::toDomain);
     }
 
     @Override
-    public ProductDomain retrieveProductById(Long userId) {
-        return retrieveProduct(userId);
+    public ProductDomain retrieveProductById(Long productId) {
+        return findProductById(productId).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el Id: "+ productId));
     }
 
 
@@ -95,6 +95,11 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     @Override
     public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
         return springDataProductRepository.findProductByIsFavorite(true, pageable).map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public boolean existById(Long productId) {
+        return springDataProductRepository.existsById(productId);
     }
 
 }

@@ -22,6 +22,7 @@ public interface ProductRepositoryPort {
 
    Page<ProductDomain> findFavoriteProducts(Pageable pageable);
 
+   boolean existById(Long productId);
 
    //List<ProductDomain> findAvailableProducts(); // TODO: don't use this in production, change it for a Pageable
    Page<ProductDomain> findAvailableProducts(Pageable page);
