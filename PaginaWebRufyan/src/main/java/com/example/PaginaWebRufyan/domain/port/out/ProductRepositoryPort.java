@@ -28,4 +28,6 @@ public interface ProductRepositoryPort {
 
    Page<ProductDomain> findAvailableProductsByType(ProductTypeEnum productTypeEnum, Pageable pageable);
 
+   Page<ProductDomain> findProductsLikedByUser(Long userId, Pageable pageable);
+
 }

@@ -4,6 +4,8 @@ import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -17,6 +19,10 @@ public interface SpringDataProductRepository extends JpaRepository<Product, Long
     Page<Product> findProductByIsAvailable(Boolean availability, Pageable pageable);
 
     Page<Product> findProductByIsAvailableAndProductTypeEnum(Boolean availability, ProductTypeEnum productTypeEnum, Pageable pageable);
+
+    @Query("SELECT p FROM Product p " +
+            "WHERE p.id IN(SELECT l.productId from Likes l where l.userId = :userId)  ")
+    Page<Product> findProductsLikedByUser(@Param("userId") Long productId, Pageable pageable);
 
 
 }

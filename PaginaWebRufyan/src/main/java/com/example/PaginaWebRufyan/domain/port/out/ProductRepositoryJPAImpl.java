@@ -88,6 +88,11 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     }
 
     @Override
+    public Page<ProductDomain> findProductsLikedByUser(Long userId, Pageable pageable) {
+        return springDataProductRepository.findProductsLikedByUser(userId,pageable).map(ProductMapper::toDomain);
+    }
+
+    @Override
     public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
         return springDataProductRepository.findProductByIsFavorite(true, pageable).map(ProductMapper::toDomain);
     }
