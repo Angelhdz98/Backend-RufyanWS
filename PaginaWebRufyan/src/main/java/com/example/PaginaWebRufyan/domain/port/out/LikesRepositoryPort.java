@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Set;
 
-public interface LikesRepository {
+public interface LikesRepositoryPort {
     Set<LikeDomain> findUserLikes(Long userId);
     Page<LikeDomain>findUserLikes(Long userId, Pageable pageable);
+
     LikeDomain markAsLiked(LikeCommand likeDomain);
     //LikesDomain markAsLiked(Long userId, Long productId);
     boolean existsLike(Long userId, Long productId);
