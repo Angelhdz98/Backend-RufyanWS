@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GetUsersThatLikedService implements GetUsersThatLikedUseCase {
+public class GetUsersThatLikedAProductService implements GetUsersThatLikedUseCase {
     private final LikesRepository likesRepo;
     private final UserRepositoryPort usersRepo;
 
-    public GetUsersThatLikedService(LikesRepository likesRepo, UserRepositoryPort usersRepo) {
+    public GetUsersThatLikedAProductService(LikesRepository likesRepo, UserRepositoryPort usersRepo) {
         this.likesRepo = likesRepo;
         this.usersRepo = usersRepo;
     }

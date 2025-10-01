@@ -1,8 +1,7 @@
 package com.example.PaginaWebRufyan.Service.LikesServiceAdapter;
 
-import com.example.PaginaWebRufyan.adapter.out.persistence.SpringDataProductRepository;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
-import com.example.PaginaWebRufyan.domain.model.UserDomain;
+
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.GetPagedProductsLikedByUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import org.springframework.data.domain.Page;
