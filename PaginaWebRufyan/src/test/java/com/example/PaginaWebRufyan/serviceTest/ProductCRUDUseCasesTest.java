@@ -3,6 +3,7 @@ package com.example.PaginaWebRufyan.serviceTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
@@ -20,8 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
@@ -111,7 +110,7 @@ public class ProductCRUDUseCasesTest {
     MockMultipartFile file4;
 
 
-    MultipartFile fileImageAdded = Mockito.mock(MultipartFile.class);
+    MultipartFile fileImageAdded = mock(MultipartFile.class);
     ProductSpecs productSpecs;
     ProductSpecs productSpecsUpdated;
     ProductDomain defaultProduct1;
@@ -322,6 +321,13 @@ public class ProductCRUDUseCasesTest {
     @Test
     @DisplayName("Test de casos de uso para eliminar un producto por su id ")
     public void shouldDeleteReturnPainting(){
+
+        Long id = 1L;
+        ProductDomain mockProduct= mock(ProductDomain.class);
+        when(productRepositoryPort.retrieveProductById(any())).thenReturn(mockProduct);
+
+        deleteProductByIdUseCase.deleteProduct(id);
+        verify(productRepositoryPort,times(1)).deleteProductById(any());
 
     }
 

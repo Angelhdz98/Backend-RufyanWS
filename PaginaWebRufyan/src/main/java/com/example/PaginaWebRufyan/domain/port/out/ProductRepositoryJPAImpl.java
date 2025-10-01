@@ -40,7 +40,7 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
     @Override
     public void deleteProductById(Long id) {
-        ProductDomain productDomain = retrieveProduct(id);
+        ProductDomain productDomain = retrieveProductById(id);
         springDataProductRepository.deleteById(id);
     }
 
