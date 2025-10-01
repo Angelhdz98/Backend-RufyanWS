@@ -1,13 +1,10 @@
 package com.example.PaginaWebRufyan.DomainTest.StockManagerTests;
 
-import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.PaintingDomain;
-import com.example.PaginaWebRufyan.domain.model.ValueObjects.BodyClothingStockManager;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingItemDetails;
 import org.assertj.core.api.Assertions;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingStockManager;
@@ -15,9 +12,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 // Por cada tipo de stock:
