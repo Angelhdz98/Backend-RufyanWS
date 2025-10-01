@@ -20,8 +20,10 @@ public interface UserRepositoryPort {
     UserDomain retrieveUserByUsername(String username);
     UserDomain saveUser(UserDomain userDomain);
     void deleteById(Long userId);
+
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+    boolean existById(Long userId);
     void deleteUser(UserDomain userDomain);
 
 

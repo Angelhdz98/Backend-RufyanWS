@@ -99,6 +99,11 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
     }
 
     @Override
+    public boolean existById(Long userId) {
+        return persistenceRepo.existsById(userId);
+    }
+
+    @Override
     public void deleteUser(UserDomain userDomain) {
         persistenceRepo.delete(ConverterUserEntityDomain.convertToEntity(userDomain));
     }
