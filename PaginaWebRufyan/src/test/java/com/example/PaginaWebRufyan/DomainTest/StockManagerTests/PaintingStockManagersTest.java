@@ -148,7 +148,7 @@ public class PaintingStockManagersTest {
 
         PaintingDomain paintingDomain = new PaintingDomain(paintingStock);
 
-        paintingStock.increaseStock(paintingDomain, paintingItemDetails);
+        paintingStock.decreaseStock(paintingDomain, paintingItemDetails);
 
         Assertions.assertThat(paintingStock.getStockCopies()).isEqualTo(initialQuantityValue - quantityItemDetails);
 
