@@ -1,4 +1,4 @@
-package com.example.PaginaWebRufyan;
+package com.example.PaginaWebRufyan.JPAAdapterTest;
 
 import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(ProductRepositoryJPAImpl.class)
 //@AutoConfigureTestDatabase
-public class JPAAdaptersTest {
+public class JPAProductAdaptersTest {
 
 
     @Autowired
