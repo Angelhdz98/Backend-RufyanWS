@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Service.ShoppingCartServiceAdapter;
 
+import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.CartItemCommand;
 import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.DeleteCartItemCommand;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
@@ -25,12 +26,13 @@ public class DeleteCartItemService implements DeleteCartItemUseCase {
 
 
     @Override
-    public ShoppingCartDomain deleteCartItemUseCase(DeleteCartItemCommand cartItemCommand) {
+    public ShoppingCartDomain deleteCartItem(DeleteCartItemCommand deleteCartItemCommand) {
         //ProductDomain productDomain = productRepositoryPort.retrieveProductById(cartItemCommand.productId());
-        ShoppingCartDomain shoppingCartDomain = shoppingCartRepository.retrieveShoppingCart(cartItemCommand.userId());
-        shoppingCartDomain.getItems().removeIf((CartItemDomain cartItemDomain)->{
-            return cartItemDomain.getId().equals(cartItemCommand.cartItemId());
-        });
+        ShoppingCartDomain shoppingCartDomain = shoppingCartRepository.retrieveShoppingCart(deleteCartItemCommand.userId());
+        if(!shoppingCartDomain.getItems().removeIf((CartItemDomain cartItemDomain)->{
+            return cartItemDomain.getId().equals(deleteCartItemCommand.cartItemId());
+        })) throw  new ResourceNotFoundException("No se encuentra el cartItem que deseas borrar");
+
         return  shoppingCartRepository.updateShoppingCart(shoppingCartDomain.getId(), shoppingCartDomain);
     }
 }
