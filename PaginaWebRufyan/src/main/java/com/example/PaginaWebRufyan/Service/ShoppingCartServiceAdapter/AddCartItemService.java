@@ -1,13 +1,11 @@
 package com.example.PaginaWebRufyan.Service.ShoppingCartServiceAdapter;
 
-import com.example.PaginaWebRufyan.Products.Entity.Painting;
 import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.CartItemCommand;
 import com.example.PaginaWebRufyan.domain.model.*;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ClothingItemDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingItemDetails;
 import com.example.PaginaWebRufyan.domain.port.in.ShoppingCartUseCase.AddCartItemUseCase;
-import com.example.PaginaWebRufyan.domain.port.out.CartItemMapper;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.ShoppingCartRepositoryPort;
 import org.springframework.stereotype.Service;
