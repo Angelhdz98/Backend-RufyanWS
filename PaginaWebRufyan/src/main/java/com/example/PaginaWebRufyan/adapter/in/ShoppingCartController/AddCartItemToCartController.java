@@ -18,7 +18,7 @@ public class AddCartItemToCartController {
 
     @PutMapping
     ResponseEntity<ShoppingCartDTO> addCartItem(CartItemCommand cartItemCommand){
-        ShoppingCartDomain shoppingCartDomainUpdated = addCartItemUseCase.addCartItemUseCase(cartItemCommand);
+        ShoppingCartDomain shoppingCartDomainUpdated = addCartItemUseCase.addCartItem(cartItemCommand);
 
         return ResponseEntity.ok( ShoppingCartDomainToDTO.toDTO(shoppingCartDomainUpdated));
 
