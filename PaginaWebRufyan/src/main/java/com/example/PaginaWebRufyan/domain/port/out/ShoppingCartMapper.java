@@ -1,7 +1,7 @@
 package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Buys.Entity.CartItem;
-import com.example.PaginaWebRufyan.Buys.Entity.ShoppingCart;
+import com.example.PaginaWebRufyan.Buys.Entity.ShoppingCartEntity;
 import com.example.PaginaWebRufyan.domain.model.CartItemDetailsFactory;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
@@ -14,19 +14,19 @@ import java.util.stream.Collectors;
 
 public class ShoppingCartMapper {
 
-    public static ShoppingCart toEntity(ShoppingCartDomain shoppingCartDomain){
+    public static ShoppingCartEntity toEntity(ShoppingCartDomain shoppingCartDomain){
      Set<CartItemDomain> items = shoppingCartDomain.getItems();
      //Set<Product> productSet = items.stream().map((CartItemDomain cartItemDomain )->ProductMapper.toEntity( cartItemDomain.getProduct()) ).collect(Collectors.toSet());
 
         Set<CartItem> cartItems = items.stream().map(CartItemMapper::toEntity).collect(Collectors.toSet());
 
 
-        return new ShoppingCart(shoppingCartDomain.getId(),shoppingCartDomain.getUserId(),cartItems, shoppingCartDomain.getSubtotalAmount());
+        return new ShoppingCartEntity(shoppingCartDomain.getId(),shoppingCartDomain.getUserId(),cartItems, shoppingCartDomain.getSubtotalAmount());
     }
 
- public static ShoppingCartDomain toDomain(ShoppingCart shoppingCart){
+ public static ShoppingCartDomain toDomain(ShoppingCartEntity shoppingCartEntity){
 
-        Set<CartItem> itemList = shoppingCart.getItemList();
+        Set<CartItem> itemList = shoppingCartEntity.getItemList();
 
         /*Set<ProductDomain> productSet =      itemList
                 .stream()
@@ -43,7 +43,7 @@ public class ShoppingCartMapper {
             return new CartItemDomain(item.getId(), product, itemDetails);
         }).collect(Collectors.toSet());
 
-        return new ShoppingCartDomain(shoppingCart.getId(), shoppingCart.getUserId(), cartItemDomainSet);
+        return new ShoppingCartDomain(shoppingCartEntity.getId(), shoppingCartEntity.getUserId(), cartItemDomainSet);
     }
 
 }
