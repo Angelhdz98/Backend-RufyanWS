@@ -40,7 +40,7 @@ private final static Integer MIN_LENGTH_NAME =3;
         this.name = name;
         this.stockManagerBase = stockManagerBase;
         this.priceManagerBase = priceManagerBase;
-        if(images.size()<MIN_LENGTH_IMAGES) throw new IllegalArgumentException("Todos los productos deben contar con un minimo de " + MIN_LENGTH_IMAGES+ " imagenes");
+        if(images.size()<MIN_LENGTH_IMAGES) throw new IllegalArgumentException("Todos los productos deben contar con un minimo de " + MIN_LENGTH_IMAGES+ " imagenes y solo tiene: "+ images.size());
         this.images = images;
         this.productDetails = productDetails;
         this.productType = productType;
