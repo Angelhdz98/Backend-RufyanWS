@@ -1,16 +1,10 @@
 package com.example.PaginaWebRufyan.Buys.Entity;
 
-import com.example.PaginaWebRufyan.Buys.DTO.CartItemRegisterNew;
-import com.example.PaginaWebRufyan.User.Entity.UserEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -18,7 +12,7 @@ import java.util.Set;
 @ToString
 @Getter
 @Setter
-public class ShoppingCart {
+public class ShoppingCartEntity {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +31,7 @@ public class ShoppingCart {
         updatedAt = LocalDate.now();
     }
 
-    public ShoppingCart(Long id, Long userId, Set<CartItem> itemList, BigDecimal totalAmount) {
+    public ShoppingCartEntity(Long id, Long userId, Set<CartItem> itemList, BigDecimal totalAmount) {
         this.id = id;
         this.userId = userId;
         this.itemList = itemList;
