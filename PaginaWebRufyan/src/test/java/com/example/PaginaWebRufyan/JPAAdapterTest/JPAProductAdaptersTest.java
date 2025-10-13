@@ -3,15 +3,14 @@ package com.example.PaginaWebRufyan.JPAAdapterTest;
 import com.example.PaginaWebRufyan.Products.Enums.ClothingSizeEnum;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
-import com.example.PaginaWebRufyan.domain.model.BodyClothingDomainDetails;
-import com.example.PaginaWebRufyan.domain.model.PaintingDomain;
-import com.example.PaginaWebRufyan.domain.model.PaintingDomainDetails;
-import com.example.PaginaWebRufyan.domain.model.ProductDomain;
+import com.example.PaginaWebRufyan.domain.model.*;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
 import com.example.PaginaWebRufyan.domain.port.out.ProductMapper;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryJPAImpl;
 
 import org.junit.jupiter.api.*;
+
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -28,13 +27,15 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 import static com.example.PaginaWebRufyan.domain.model.ProductDomainFactory.createProduct;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @DataJpaTest
-@Import(ProductRepositoryJPAImpl.class)
+@Import({ImageStorageProperties.class,ProductRepositoryJPAImpl.class})
 //@AutoConfigureTestDatabase
 public class JPAProductAdaptersTest {
 
@@ -42,8 +43,16 @@ public class JPAProductAdaptersTest {
     @Autowired
     private TestEntityManager entityManager;
 
+    @TempDir
+    static Path tempDirBase;
+
+    static Path testSpecificPath;
+
     @Autowired
     ProductRepositoryJPAImpl productRepositoryJPA;
+    @Autowired
+        private    ImageStorageProperties imageStorageProperties;
+
 
     //Long id1= 1L; // commented cause JPA autoAsignThis
 
@@ -78,6 +87,17 @@ public class JPAProductAdaptersTest {
     @BeforeEach
     public void setUp() throws IOException {
 
+/*        mockedImageProcessor.when(()->ImageProcessor.processImages(anyList(),anyString())).thenReturn(imageDomainSet);
+        when(imageDomainSet.size()).thenReturn(4);
+        */
+        // se crea una path temporal
+         String testId = "test-"+ UUID.randomUUID()+ "-"+ Instant.now().toEpochMilli();
+         testSpecificPath = tempDirBase.resolve(testId);
+         Files.createDirectories(testSpecificPath);
+         System.setProperty("app.upload-dir",testSpecificPath.toString());
+        imageStorageProperties.init();
+
+
         byte[] image1Bytes = Files.readAllBytes(imagePath1);
         byte[] image2Bytes = Files.readAllBytes(imagePath2);
         byte[] image3Bytes = Files.readAllBytes(imagePath3);
@@ -85,7 +105,8 @@ public class JPAProductAdaptersTest {
         MockMultipartFile mockFile1 = new MockMultipartFile("obra1", "obra1.jpg", "image/jpg", image1Bytes);
         MockMultipartFile mockFile2 = new MockMultipartFile("obra2", "obra2.jpg", "image/jpg", image2Bytes);
         MockMultipartFile mockFile3 = new MockMultipartFile("obra3", "obra3.jpg", "image/jpg", image3Bytes);
-        Set<MultipartFile> images = Set.of(mockFile1, mockFile2, mockFile3);
+
+        Set<MultipartFile> images = Set.of(mockFile1,mockFile2, mockFile3);
 
         Map<ClothingSizeEnum, Integer> defaultStockPerSize = new HashMap<>();
 
@@ -107,6 +128,7 @@ public class JPAProductAdaptersTest {
         productDomainDetails = new PaintingDomainDetails();
         productDomainDetails2 = new BodyClothingDomainDetails();
 
+        //String uploadDirection = ImageStorageProperties.getUploadDir();
 
     }
 
@@ -114,7 +136,7 @@ public class JPAProductAdaptersTest {
     @DisplayName("Test para guardar un producto en la base de datos H2")
     public void shouldReturnAProductDomainAfterSavingIt() {
 
-        ProductDomain painting2 = createProduct(product2Specs, productDomainDetails);
+        ProductDomain painting2 = ProductDomainFactory.createProduct(product2Specs, productDomainDetails);
         ProductDomain savedProduct = productRepositoryJPA.saveProduct(painting2);
 
         //Assertions
