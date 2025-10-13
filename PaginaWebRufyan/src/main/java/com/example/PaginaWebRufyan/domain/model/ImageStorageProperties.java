@@ -15,8 +15,11 @@ public class ImageStorageProperties {
 
     @PostConstruct
     public void init() {
-        STATIC_IMAGES_URL = this.uploadDir;
+
+        System.out.println("upload dir: "+ uploadDir);
+        STATIC_IMAGES_URL = System.getProperty("app.upload-dir");
         System.out.println("STATIC_IMAGES_URL = " + STATIC_IMAGES_URL);
+
     }
     public static String getUploadDir(){
         return STATIC_IMAGES_URL;

@@ -1,11 +1,14 @@
 package com.example.PaginaWebRufyan.DomainTest;
 
 import com.example.PaginaWebRufyan.domain.model.ImageProcessor;
+import com.example.PaginaWebRufyan.domain.model.ImageStorageProperties;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +25,10 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
+@Import(ImageStorageProperties.class)
 public class ImageProcessorTest {
+@Autowired
+        ImageStorageProperties imageStorageProperties;
     Path imagePath1;
     Path imagePath2;
     Path imagePath3;
@@ -46,7 +52,8 @@ public class ImageProcessorTest {
         String testId = "test-"+ UUID.randomUUID()+"-"+ Instant.now().toEpochMilli();
         testSpecificPath = tempDirBase.resolve(testId);
         Files.createDirectories(testSpecificPath);
-        System.setProperty("app.upload.dir",testSpecificPath.toString());
+        System.setProperty("app.upload-dir",testSpecificPath.toString());
+        imageStorageProperties.init();
 
         try {
             imagePath1 = Paths.get(classLoader.getResource("static/obra1.jpg").toURI());

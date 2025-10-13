@@ -56,7 +56,6 @@ public class ImageProcessor {
                 // Primero se guarda el archivo en el sistema de archivo
                 String fileName = file.getOriginalFilename() + "_" + System.currentTimeMillis();
                 Path filePath = Paths.get(ImageStorageProperties.getUploadDir() + "/UploadedImages/UploadedPaintingImages");
-                System.out.println(filePath.toString());
                 if (!Files.exists(filePath)) {
                     Files.createDirectories(filePath);
                 }
