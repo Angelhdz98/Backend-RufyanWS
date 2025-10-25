@@ -1,26 +1,24 @@
 package com.example.PaginaWebRufyan.Service.UserServiceAdapter;
 
-import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.DeleteUserByIdUseCase;
-import com.example.PaginaWebRufyan.domain.port.out.UserRepository;
+import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 @Service
 public class DeleteUserByIdService implements
         DeleteUserByIdUseCase {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryPort userRepositoryPort;
 
-    public DeleteUserByIdService(UserRepository userRepository){
-    this.userRepository= userRepository;
+    public DeleteUserByIdService(UserRepositoryPort userRepositoryPort){
+    this.userRepositoryPort = userRepositoryPort;
     }
 
     @Override
     public void deleteUserById(Long userId) {
-        UserDomain userToDelete = userRepository.retrieveUserById(userId);
-        userRepository.deleteById(userId);
+        UserDomain userToDelete = userRepositoryPort.retrieveUserById(userId);
+        userRepositoryPort.deleteById(userId);
 
 
     }

@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
-public class JpaLikesRepository implements LikesRepository{
+public class JpaLikesRepository implements LikesRepositoryPort {
 
     private final SpringDataLikesRepository springDataLikesRepo;
 

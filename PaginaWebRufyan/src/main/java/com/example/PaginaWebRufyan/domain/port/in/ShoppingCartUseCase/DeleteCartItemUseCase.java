@@ -4,5 +4,5 @@ import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.DeleteCartI
 import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
 
 public interface DeleteCartItemUseCase {
-    ShoppingCartDomain deleteCartItemUseCase(DeleteCartItemCommand cartItemCommand);
+    ShoppingCartDomain deleteCartItem(DeleteCartItemCommand cartItemCommand);
 }

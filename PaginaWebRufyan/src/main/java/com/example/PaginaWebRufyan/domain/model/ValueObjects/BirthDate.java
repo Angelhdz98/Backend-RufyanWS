@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -28,7 +27,8 @@ return getAge()>=18;
 
     public Integer getAge(){
        // return (int) ChronoUnit.YEARS.between(birthDate ,LocalDate.now()); // no es precisa
-        return Period.between(birthDate,LocalDate.now()).getYears();
+
+        return birthDate.isAfter(LocalDate.now())?0: Period.between(birthDate,LocalDate.now()).getYears();
     }
 
 }

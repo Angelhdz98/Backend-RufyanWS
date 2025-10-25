@@ -19,7 +19,7 @@ public class DeleteCartItemController {
     }
     @PutMapping
     ResponseEntity<ShoppingCartDTO> deleteCartItem(@RequestBody DeleteCartItemCommand cartItemCommand) {
-        ShoppingCartDomain shoppingCartDomain = deleteCartItemUseCase.deleteCartItemUseCase(cartItemCommand);
+        ShoppingCartDomain shoppingCartDomain = deleteCartItemUseCase.deleteCartItem(cartItemCommand);
 
         return ResponseEntity.ok(ShoppingCartDomainToDTO.toDTO(shoppingCartDomain));
     }

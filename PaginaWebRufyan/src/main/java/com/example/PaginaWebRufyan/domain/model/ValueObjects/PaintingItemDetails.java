@@ -14,6 +14,7 @@ public class PaintingItemDetails extends CartItemDetails {
 
     public PaintingItemDetails(Integer quantity,Boolean isOriginalSelected){
         super(quantity);
+        if(isOriginalSelected && quantity > 1) throw new IllegalArgumentException("No se puede seleccionar obra original con cantidad mayor a 1");
         this.isOriginalSelected = new IsOriginalSelected(isOriginalSelected);
     }
 
@@ -37,6 +38,12 @@ public class PaintingItemDetails extends CartItemDetails {
         detailsObject.put(ItemQuantity.class.getSimpleName(),getItemQuantity().getQuantity().toString());
         return detailsObject;
 
+    }
+
+    @Override
+    public boolean areSameDetails(CartItemDetails other) {
+        if(!(other instanceof PaintingItemDetails paintingItemDetails) ) return false;
+        return paintingItemDetails.getIsOriginalSelected().getIsOriginalSelected()==isOriginalSelected.getIsOriginalSelected() ;
     }
 
 }

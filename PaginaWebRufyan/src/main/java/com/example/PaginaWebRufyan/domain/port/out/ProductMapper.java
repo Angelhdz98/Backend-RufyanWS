@@ -25,7 +25,7 @@ public class ProductMapper {
 
                 Painting painting = (Painting) product;
 
-               yield new PaintingDomain(product.getId(),product.getName(), new PaintingStockManager(paintingStock.getStockCopies(), paintingStock.getCopiesMade(), paintingStock.getIsOriginalAvailable()), new PaintingPriceManager(priceManager.getPricePerCopy(),priceManager.getPricePerOriginal()), product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(painting.getAlturaCm(), painting.getLargoCm(), painting.getMedium(), painting.getSupportMaterial(),painting.getCreationDate()),product.getProductTypeEnum(), product.getDescription(),product.getIsFavorite());
+               yield new PaintingDomain(painting.getId(),painting.getName(), new PaintingStockManager(paintingStock.getStockCopies(), paintingStock.getCopiesMade(), paintingStock.getIsOriginalAvailable()), new PaintingPriceManager(priceManager.getPricePerCopy(),priceManager.getPricePerOriginal()), painting.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(painting.getAlturaCm(), painting.getLargoCm(), painting.getMedium(), painting.getSupportMaterial(),painting.getCreationDate()),painting.getProductTypeEnum(), painting.getDescription(),painting.getIsFavorite());
             }
             case CLOTHING -> {
 
@@ -56,10 +56,56 @@ public class ProductMapper {
 
                 Set<Image> images = productDomain.getImages().stream().map(ImageMapper::toEntity).collect(Collectors.toSet());
 
-                yield new Painting(productDomain.getId(),productDomain.getName(),productDomain.getDescription(), LocalDate.now(), new PaintingPriceManagerPersist(priceManager.getPricePerCopy(), priceManager.getPricePerOriginal()), new OriginalStockAdapter(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),paintingStockManager.isAvailable(),productDomain.getIsFavorite(), images, productDomain.getProductType(), paintingDomainDetails.getAlturaCm(), paintingDomainDetails.getLargoCm(), paintingDomainDetails.getMedium(), paintingDomainDetails.getSupportMaterial());
+                yield new Painting(productDomain.getId(),
+                        productDomain.getName(),
+                        productDomain.getDescription(),
+                        LocalDate.now(),
+                        new PaintingPriceManagerPersist(priceManager.getId(),priceManager.getPricePerCopy(), priceManager.getPricePerOriginal()),
+                        new OriginalStockAdapter(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),
+                        paintingStockManager.isAvailable(),
+                        productDomain.getIsFavorite(),
+                        images,
+                        productDomain.getProductType(),
+                        paintingDomainDetails.getAlturaCm(),
+                        paintingDomainDetails.getLargoCm(),
+                        paintingDomainDetails.getMedium(),
+                        paintingDomainDetails.getSupportMaterial());
+            }
+            case CLOTHING -> {
+                SinglePriceManager priceManager = (SinglePriceManager) productDomain.getPriceManagerBase();
+                BodyClothingStockManager bodyClothingStockManager = (BodyClothingStockManager) productDomain.getStockManagerBase();
+                BodyClothingDomainDetails bodyClothingDomainDetails = (BodyClothingDomainDetails) productDomain.getProductDetails();
+                Set<Image> images = productDomain.getImages().stream().map(ImageMapper::toEntity).collect(Collectors.toSet());
+                yield  new BodyClothing(productDomain.getId(),
+                        productDomain.getName(),
+                        productDomain.getDescription(),
+                        LocalDate.now(),
+                        new SinglePriceManagerPersist(priceManager.getId(),priceManager.getPrice()),
+                        new ClothingStockAdapter(bodyClothingStockManager.getStockPerSize()),
+                        bodyClothingStockManager.isAvailable(),
+                        productDomain.getIsFavorite(),
+                        images,
+                        productDomain.getProductType(),bodyClothingDomainDetails.getMaterial().toString(),
+                        bodyClothingDomainDetails.getPrintingTechnique(),
+                        bodyClothingDomainDetails.getType());
+                        /*
+                       new BodyClothing(productDomain.getId(),
+                                     productDomain.getName(),
+                        productDomain.getDescription(),
+                        LocalDate.now(),
+                        new SinglePriceManagerPersist(priceManager.getId(),priceManager.getPrice()),
+                        new ClothingStockAdapter(bodyClothingStockManager.getStockPerSize()),
+                        bodyClothingStockManager.isAvailable(),
+                        productDomain.getIsFavorite(),
+                        images,
+                        productDomain.getProductType(),
+                        bodyClothingDomainDetails.getMaterial(),
+                        bodyClothingDomainDetails.getPrintingTechnique());
+
+                         */
             }
             case CUP -> null;
-            case CLOTHING -> null;
+
             case PRINT -> null;
         };
     }

@@ -2,19 +2,19 @@ package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
-import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.adapter.out.persistence.SpringDataProductRepository;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
-import com.example.PaginaWebRufyan.domain.model.ProductDomainFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-@Component
+@Repository
 public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
+
+
     private final SpringDataProductRepository springDataProductRepository;
 
     public ProductRepositoryJPAImpl(SpringDataProductRepository springDataProductRepository) {
@@ -22,15 +22,14 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     }
 
     private  ProductDomain retrieveProduct(Long id){
-       return springDataProductRepository.findById(id)
-               .map(ProductMapper::toDomain)
+       return findProductById(id)
                .orElseThrow(()-> new ResourceNotFoundException("No se encontró el product con el id: "+ id));
     }
 
 
     @Override
     public ProductDomain saveProduct(ProductDomain product) {
-        return ProductMapper.toDomain(springDataProductRepository.save(ProductMapper.toEntity(product))) ;
+        return ProductMapper.toDomain(springDataProductRepository.save(Objects.requireNonNull(ProductMapper.toEntity(product)))) ;
     }
 
     @Override
@@ -41,20 +40,22 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
     @Override
     public void deleteProductById(Long id) {
-        ProductDomain productDomain = retrieveProduct(id);
+        ProductDomain productDomain = retrieveProductById(id);
         springDataProductRepository.deleteById(id);
     }
 
     @Override
-    public Optional<ProductDomain> findProductById(Long userId) {
-        return springDataProductRepository.findById(userId).map(ProductMapper::toDomain);
+    public Optional<ProductDomain> findProductById(Long productId) {
+        return springDataProductRepository.findById(productId).map(ProductMapper::toDomain);
     }
 
     @Override
-    public ProductDomain retrieveProductById(Long userId) {
-        return retrieveProduct(userId);
+    public ProductDomain retrieveProductById(Long productId) {
+        return findProductById(productId).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el Id: "+ productId));
     }
 
+
+    // Este metodo trae todos los productos, sin paginacion. evitar su uso
     @Override
     public List<ProductDomain> findAllProducts() {
         return springDataProductRepository.findAll().stream().map(ProductMapper::toDomain).toList();
@@ -86,5 +87,19 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
         return springDataProductRepository.findProductByIsAvailableAndProductTypeEnum(true,productTypeEnum ,pageable).map(ProductMapper::toDomain);
     }
 
+    @Override
+    public Page<ProductDomain> findProductsLikedByUser(Long userId, Pageable pageable) {
+        return springDataProductRepository.findProductsLikedByUser(userId,pageable).map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
+        return springDataProductRepository.findProductByIsFavorite(true, pageable).map(ProductMapper::toDomain);
+    }
+
+    @Override
+    public boolean existById(Long productId) {
+        return springDataProductRepository.existsById(productId);
+    }
 
 }

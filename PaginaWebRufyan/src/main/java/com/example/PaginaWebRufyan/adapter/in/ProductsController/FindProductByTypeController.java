@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/products/by-type")
 public class FindProductByTypeController {
     private final FindProductsByTypeUseCase findProductsByTypeUseCase;
 

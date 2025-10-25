@@ -25,4 +25,9 @@ public class StockableProductItemDetails extends CartItemDetails {
         return Map.of(getItemQuantity().getClass().getSimpleName(), getItemQuantity().getQuantity().toString());
 
     }
+    @Override
+    public boolean areSameDetails(CartItemDetails other) {
+        if(!(other instanceof StockableProductItemDetails stockableProductItemDetails)) return false;
+        return true;
+    }
 }

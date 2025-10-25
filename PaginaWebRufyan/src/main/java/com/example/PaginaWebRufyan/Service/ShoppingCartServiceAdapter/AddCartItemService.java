@@ -1,13 +1,11 @@
 package com.example.PaginaWebRufyan.Service.ShoppingCartServiceAdapter;
 
-import com.example.PaginaWebRufyan.Products.Entity.Painting;
 import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.CartItemCommand;
 import com.example.PaginaWebRufyan.domain.model.*;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ClothingItemDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingItemDetails;
 import com.example.PaginaWebRufyan.domain.port.in.ShoppingCartUseCase.AddCartItemUseCase;
-import com.example.PaginaWebRufyan.domain.port.out.CartItemMapper;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.ShoppingCartRepositoryPort;
 import org.springframework.stereotype.Service;
@@ -24,12 +22,12 @@ public class AddCartItemService implements AddCartItemUseCase {
     }
 
     @Override
-    public ShoppingCartDomain addCartItemUseCase(CartItemCommand cartItemCommand) {
+    public ShoppingCartDomain addCartItem(CartItemCommand cartItemCommand) {
         ShoppingCartDomain shoppingCartDomain = shoppingCartRepositoryPort.retrieveShoppingCart(cartItemCommand.userId());
-
+        ProductDomain productDomain = productRepositoryPort.retrieveProductById(cartItemCommand.productId());
 
         CartItemDetails cartItemDetails=  cartItemCommand.cartItemDetails();
-        ProductDomain productDomain = productRepositoryPort.retrieveProductById(cartItemCommand.productId());
+
 
         CartItemDomain cartItemDomain = new CartItemDomain(0L,productDomain,cartItemCommand.cartItemDetails());
         //Before  adding the item it will remove the item with the same CartItemDetails

@@ -8,17 +8,23 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepositoryPort {
     Optional<UserDomain> findUserById(Long userId);
     Optional<UserDomain> findUserByUsername(String username);
     List<UserDomain> findAllUsersByIds(List<Long> userIds);
     Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable);
+    Page<UserDomain> findUsersByUsernameMatch(String usernameParte, Pageable pageable);
+    Page<UserDomain> findUsersByNameMatch(String fullNamePart, Pageable pageable);
+    Page<UserDomain> findUsersByEmailMatch(String emailPart, Pageable pageable);
     UserDomain retrieveUserById(Long userId);
     UserDomain retrieveUserByUsername(String username);
     UserDomain saveUser(UserDomain userDomain);
+    UserDomain updateUser(UserDomain userDomain);
     void deleteById(Long userId);
+
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+    boolean existById(Long userId);
     void deleteUser(UserDomain userDomain);
 
 

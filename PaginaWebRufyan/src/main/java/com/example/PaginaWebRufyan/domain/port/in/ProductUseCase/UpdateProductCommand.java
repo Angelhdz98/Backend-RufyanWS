@@ -6,7 +6,7 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductSpecs;
 
 import java.util.Set;
 
-public record UpdateProductCommand(Long userId,
+public record UpdateProductCommand(Long productId,
         ProductSpecs productSpecs,
                                    ProductDomainDetails productDomainDetails,
                                    Set<ImageDomain> updatedImages) {

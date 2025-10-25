@@ -20,9 +20,15 @@ public interface ProductRepositoryPort {
    List<ProductDomain> findProductByType(ProductTypeEnum productType);
    Page<ProductDomain> findProductByType(ProductTypeEnum productTypeEnum, Pageable pageable);
 
+   Page<ProductDomain> findFavoriteProducts(Pageable pageable);
+
+   boolean existById(Long productId);
+
    //List<ProductDomain> findAvailableProducts(); // TODO: don't use this in production, change it for a Pageable
    Page<ProductDomain> findAvailableProducts(Pageable page);
 
    Page<ProductDomain> findAvailableProductsByType(ProductTypeEnum productTypeEnum, Pageable pageable);
+
+   Page<ProductDomain> findProductsLikedByUser(Long userId, Pageable pageable);
 
 }

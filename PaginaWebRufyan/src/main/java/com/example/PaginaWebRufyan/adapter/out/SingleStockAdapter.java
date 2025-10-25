@@ -1,51 +1,15 @@
 package com.example.PaginaWebRufyan.adapter.out;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
-@Setter
+@Entity
+@ToString
 @Getter
-@Embeddable
-public class SingleStockAdapter implements StockManager  {
+public class SingleStockAdapter extends StockManager  {
     private Integer stock;
-    /*@Override
-    public void decreaseStock(Product product, Map<String, String> additionalFeatures) {
-       if(Integer.parseInt(additionalFeatures.get("quantity")) >1){
-             setStock(getStock()-Integer.parseInt(additionalFeatures.get("quantity")));
-       }else{
-           setStock(getStock()-1);
-       }
+    protected SingleStockAdapter(){
+        this.stock = 1;
     }
-
-    @Override
-    public void increaseStock(Product product, Map<String, String> additionalFeatures) {
-        if(Integer.parseInt(additionalFeatures.get("quantity"))>1){
-            setStock(getStock()+Integer.parseInt(additionalFeatures.get("quantity")));
-        }else{
-            setStock(getStock()+1);
-        }
-
-
-    }
-
-    @Override
-    public Object getStockInfo() {
-
-
-        //stockState.put("message", "Available Stock Product");
-        return stock;
-
-    }
-
-    @Override
-    public Map<String, Object> getStockMap() {
-         Map<String, Object> response = new HashMap<>();
-         response.put("stock",stock);
-         return response;
-
-    }
-
-     */
-
 }

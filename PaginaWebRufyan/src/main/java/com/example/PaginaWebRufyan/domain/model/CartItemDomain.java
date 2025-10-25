@@ -20,7 +20,7 @@ public class CartItemDomain {
     }
 
     public BigDecimal getItemTotalAmount(){
-       return this.getProduct().getPriceManagerBase().getPriceWithDetails(details);
+       return getProduct().getPriceManagerBase().getPriceWithDetails(getDetails());
     }
 
 
