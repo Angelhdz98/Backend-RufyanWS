@@ -37,6 +37,7 @@ public class UserEntity {
 	private String username;
 	@NotNull
 	@Email
+    @Column(unique = true, nullable = false)
 	private String email;
 	private final LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
@@ -52,6 +53,10 @@ public class UserEntity {
 		this.updatedAt = LocalDateTime.now();
         this.stringFullName = fullName.getFullName();
 	}
+
+    protected UserEntity(){
+         createdAt=LocalDateTime.now();
+    }
 
 	@PreUpdate
     @PrePersist

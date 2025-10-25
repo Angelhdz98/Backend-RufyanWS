@@ -20,11 +20,19 @@ public class LikeEntity {
     private final Long productId;
     private final LocalDateTime likedAt;
 
+
     public LikeEntity(Long id, Long userId, Long productId) {
         this.id = id;
         this.userId = userId;
         this.productId = productId;
         this.likedAt = LocalDateTime.now();
+    }
+    protected  LikeEntity(){
+        this.id = 0L;
+        this.userId = 0L;
+        this.productId= 0L;
+        this.likedAt= LocalDateTime.now();
+
     }
 
 }

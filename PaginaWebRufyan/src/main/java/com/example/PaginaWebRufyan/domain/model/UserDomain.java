@@ -5,6 +5,7 @@ package com.example.PaginaWebRufyan.domain.model;
 
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
+import jakarta.persistence.Embedded;
 import lombok.Getter;
 
 @Getter
@@ -13,6 +14,7 @@ public class UserDomain {
     public static Integer MIN_USERNAME_LENGTH = 3;
 
     private final Long  id;
+    @Embedded
     private final FullName fullname;
     private final BirthDate birthDate;
     private final String username;

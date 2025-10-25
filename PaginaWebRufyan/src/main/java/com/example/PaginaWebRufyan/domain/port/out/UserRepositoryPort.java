@@ -19,6 +19,7 @@ public interface UserRepositoryPort {
     UserDomain retrieveUserById(Long userId);
     UserDomain retrieveUserByUsername(String username);
     UserDomain saveUser(UserDomain userDomain);
+    UserDomain updateUser(UserDomain userDomain);
     void deleteById(Long userId);
 
     boolean existsByEmail(String email);

@@ -51,7 +51,7 @@ public class JPAProductAdaptersTest {
     @Autowired
     ProductRepositoryJPAImpl productRepositoryJPA;
     @Autowired
-        private    ImageStorageProperties imageStorageProperties;
+    private    ImageStorageProperties imageStorageProperties;
 
 
     //Long id1= 1L; // commented cause JPA autoAsignThis
