@@ -41,8 +41,11 @@ public class FullName {
     public String getFullName(){
         StringBuilder nameCrafter = new StringBuilder(this.firstName);
         nameCrafter.append(" ") ;
-        if(!secondName.isBlank()) nameCrafter.append(secondName);
-        nameCrafter.append(firstLastname);
+        if(!secondName.isBlank()){
+            nameCrafter.append(secondName).append(" ");
+
+        }
+        nameCrafter.append(firstLastname).append(" ");
         if(!secondLastname.isBlank()) nameCrafter.append(secondLastname);
 
         return nameCrafter.toString();
