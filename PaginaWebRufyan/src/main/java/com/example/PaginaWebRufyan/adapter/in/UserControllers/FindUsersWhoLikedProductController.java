@@ -1,8 +1,10 @@
 package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
+import com.example.PaginaWebRufyan.DTO.UserEntityDTO2;
 import com.example.PaginaWebRufyan.adapter.in.GetCommand;
 import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.GetPagedUsersThatLikedUseCase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +25,7 @@ public class FindUsersWhoLikedProductController {
     }
 
     @GetMapping("/liked")
-    ResponseEntity<Page<UserDomain>> getUsersThatLikedProductById(GetCommand getCommand){
-        return ResponseEntity.ok(getPagedUsersThatLikedUseCase.getPagedUsersThatLiked(getCommand.productId(), PageRequest.of(getCommand.pageNumber().intValue(),getCommand.pageSize().intValue(), Sort.by(getCommand.sortBy()) )));
+    ResponseEntity<Page<UserEntityDTO2>> getUsersThatLikedProductById(GetCommand getCommand){
+        return ResponseEntity.ok(getPagedUsersThatLikedUseCase.getPagedUsersThatLiked(getCommand.productId(), PageRequest.of(getCommand.pageNumber().intValue(),getCommand.pageSize().intValue(), Sort.by(getCommand.sortBy()) )).map(UserEntityMapper::toDto));
     }
 }

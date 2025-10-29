@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
 import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
 import com.example.PaginaWebRufyan.DTO.UserEntityDTO2;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.CreateUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.FindUserByIdUseCase;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.FindUserByUsernameUseCase;
@@ -20,9 +21,9 @@ public class CreateNewUserController {
     public CreateNewUserController(CreateUserUseCase createUserUseCase) {
         this.createUserUseCase = createUserUseCase;
     }
-    @PostMapping()
+    @PostMapping(produces = "application/json", consumes =  "application/json" )
     public ResponseEntity<UserEntityDTO2> createNewUser(@RequestBody CreateUserCommand command){
-        return   ResponseEntity.ok(new UserEntityDTO2(createUserUseCase.createUser(command)));
+        return   ResponseEntity.ok(UserEntityMapper.toDto(createUserUseCase.createUser(command)));
     }
 
 }

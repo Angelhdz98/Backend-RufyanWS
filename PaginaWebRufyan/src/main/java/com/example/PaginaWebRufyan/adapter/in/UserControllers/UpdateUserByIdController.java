@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
 import com.example.PaginaWebRufyan.DTO.UpdateUserCommand;
 import com.example.PaginaWebRufyan.DTO.UserEntityDTO2;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdateUserUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +22,7 @@ public class UpdateUserByIdController {
 
     @PutMapping
     public ResponseEntity<UserEntityDTO2> updateUserById(@RequestBody UpdateUserCommand command){
-        return ResponseEntity.ok(new UserEntityDTO2(updateUserUseCase.updateUser(command)));
+        return ResponseEntity.ok(UserEntityMapper.toDto(updateUserUseCase.updateUser(command)));
     }
 
 }
