@@ -16,6 +16,7 @@ public interface UserRepositoryPort {
     Page<UserDomain> findUsersByUsernameMatch(String usernameParte, Pageable pageable);
     Page<UserDomain> findUsersByNameMatch(String fullNamePart, Pageable pageable);
     Page<UserDomain> findUsersByEmailMatch(String emailPart, Pageable pageable);
+    Page<UserDomain> findUsersPaged(Pageable pageable);
     UserDomain retrieveUserById(Long userId);
     UserDomain retrieveUserByUsername(String username);
     UserDomain saveUser(UserDomain userDomain);

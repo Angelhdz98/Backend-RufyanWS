@@ -66,6 +66,11 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
         );
     }
 
+    @Override
+    public Page<UserDomain> findUsersPaged(Pageable pageable) {
+        return persistenceRepo.findAll(pageable).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
 
     @Override
     public UserDomain retrieveUserById(Long userId) {
