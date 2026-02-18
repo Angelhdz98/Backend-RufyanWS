@@ -9,9 +9,9 @@ import lombok.*;
 @ToString
 @Getter
 public class OriginalStockManager extends StockManager {
-    private Integer stockCopies;
+    private final Integer stockCopies;
     private final Integer copiesMade;
-    private Boolean isOriginalAvailable;
+    private final Boolean isOriginalAvailable;
     // agregar una obra al carrito no la apartará
     //private Boolean isInCart = false;
 
