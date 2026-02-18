@@ -2,7 +2,7 @@ package com.example.PaginaWebRufyan.domain.model;
 
 
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,15 +14,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Component
 public class ImageProcessor {
 
+    private final ImageStorageProperties imgProperties;
+
+    public ImageProcessor(ImageStorageProperties imgProperties) {
+        this.imgProperties = imgProperties;
+    }
 
 
-
-
-
-    public static Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName, String uploadDir) {
+    public  Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName, String uploadDir) {
 
         return imageFiles.stream().map((file)->{
             try {
@@ -49,13 +51,13 @@ public class ImageProcessor {
 
         }).collect(Collectors.toSet());
 }
-    public static Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName) {
+    public  Set<ImageDomain> processImages(List<MultipartFile> imageFiles, String productName) {
 
         List<ImageDomain> collected = imageFiles.stream().map((file) -> {
             try {
                 // Primero se guarda el archivo en el sistema de archivo
                 String fileName = file.getOriginalFilename() + "_" + System.currentTimeMillis();
-                Path filePath = Paths.get(ImageStorageProperties.getUploadDir() + "/UploadedImages/UploadedPaintingImages");
+                Path filePath = Paths.get(imgProperties.getUploadDir() + "/UploadedImages/UploadedPaintingImages");
                 if (!Files.exists(filePath)) {
                     Files.createDirectories(filePath);
                 }

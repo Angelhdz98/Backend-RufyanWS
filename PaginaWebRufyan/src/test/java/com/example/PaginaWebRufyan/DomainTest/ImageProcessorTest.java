@@ -24,16 +24,19 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-@Import(ImageStorageProperties.class)
+
+
 public class ImageProcessorTest {
-@Autowired
+
         ImageStorageProperties imageStorageProperties;
+
     Path imagePath1;
     Path imagePath2;
     Path imagePath3;
     ClassLoader classLoader = getClass().getClassLoader();
 
+    @Autowired
+    ImageProcessor imageProcessor;
     List<MultipartFile> images;
 
     MockMultipartFile mockFile1;
@@ -53,7 +56,7 @@ public class ImageProcessorTest {
         testSpecificPath = tempDirBase.resolve(testId);
         Files.createDirectories(testSpecificPath);
         System.setProperty("app.upload-dir",testSpecificPath.toString());
-        imageStorageProperties.init();
+       // imageStorageProperties.init();
 
         try {
             imagePath1 = Paths.get(classLoader.getResource("static/obra1.jpg").toURI());
@@ -76,7 +79,7 @@ public class ImageProcessorTest {
     @Test
     void shouldSaveImagesOnDefaultPath(){
 
-        Set<ImageDomain> nameTest = ImageProcessor.processImages(images, "nameTest");
+        Set<ImageDomain> nameTest = imageProcessor.processImages(images, "nameTest");
 
        assertThat(nameTest.stream().findFirst().get().url()).doesNotContain("null");
     }
