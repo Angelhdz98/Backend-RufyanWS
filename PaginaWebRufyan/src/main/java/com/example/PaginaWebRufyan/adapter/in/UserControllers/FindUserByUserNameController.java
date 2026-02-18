@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/users/findByUsername")
+@RequestMapping("/users/by-Username")
 public class FindUserByUserNameController {
     private final FindUserByUsernameUseCase findUserByUsernameUseCase;
 
