@@ -1,13 +1,8 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
-import com.example.PaginaWebRufyan.Image.Image;
-import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.util.Set;
+import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
+
 
 
 public record ProductSpecs(String name,

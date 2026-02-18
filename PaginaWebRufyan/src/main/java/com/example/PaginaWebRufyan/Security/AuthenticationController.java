@@ -1,12 +1,7 @@
 package com.example.PaginaWebRufyan.Security;
 
-import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
-import com.example.PaginaWebRufyan.DTO.LoginCommand;
 import com.example.PaginaWebRufyan.Security.Service.AuthService;
-import com.example.PaginaWebRufyan.Security.Service.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
