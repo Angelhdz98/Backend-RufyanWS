@@ -38,6 +38,11 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
     }
 
     @Override
+    public Optional<UserDomain> findUserByEmail(String email) {
+        return persistenceRepo.findByEmail(email).map(ConverterUserEntityDomain::convertToDomain);
+    }
+
+    @Override
     public List<UserDomain> findAllUsersByIds(List<Long> userIds) {
        return  persistenceRepo.findAllById(userIds)
                .stream()
@@ -84,14 +89,24 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
         return ConverterUserEntityDomain.convertToDomain(persistenceRepo.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el username: ")));
     }
 
+    @Override
+    public UserDomain retrieveUserByEmail(String email) {
+         return ConverterUserEntityDomain.convertToDomainWihRole( persistenceRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("No existe el usuario con el email: "+email )));
+
+    }
+
 
     @Override
     public UserDomain saveUser(UserDomain userDomain) {
+        Optional<UserEntity> byEmail = persistenceRepo.findByEmail(userDomain.getEmail());
+        Optional<UserEntity> byUsername = persistenceRepo.findByUsername(userDomain.getUsername());
         if(!userDomain.getBirthDate().isAdult()|| userDomain.getBirthDate().getBirthDate().isAfter(LocalDate.now()))
             throw new IllegalArgumentException("Fecha invalida, no se permite acceso a menores de edad");
-        if(persistenceRepo.existsByEmail(userDomain.getEmail())) throw new AlreadyExistIdenticatorException("El email: "+ userDomain.getEmail()+ " ya está registrado ");
-        if(persistenceRepo.existsByUsername(userDomain.getUsername())) throw new AlreadyExistIdenticatorException("El username: "+ userDomain.getUsername()+ " ya está registrado ");
-         return ConverterUserEntityDomain.convertToDomain(persistenceRepo.save(ConverterUserEntityDomain.convertToEntity(userDomain)));
+        if( byEmail.isPresent() && !byEmail.get().getId().equals(userDomain.getId()) ) throw new AlreadyExistIdenticatorException("El email: "+ userDomain.getEmail()+ " ya está registrado ");
+        if(byUsername.isPresent() && !byUsername.get().getId().equals(userDomain.getId())) {
+            throw new AlreadyExistIdenticatorException("El username: " + userDomain.getUsername() + " ya está registrado ");
+        }
+         return ConverterUserEntityDomain.convertToDomainWihRole(persistenceRepo.save(ConverterUserEntityDomain.convertToEntity(userDomain)));
     }
 
     @Override
