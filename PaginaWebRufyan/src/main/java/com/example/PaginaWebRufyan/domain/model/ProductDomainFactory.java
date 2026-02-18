@@ -8,18 +8,26 @@ import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
 import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.UpdateProductCommand;
 import com.example.PaginaWebRufyan.domain.port.out.ImageMapper;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+@Component
 public class ProductDomainFactory {
 
-    public static ProductDomain createProduct(ProductSpecs productSpecs,
-                                              ProductDomainDetails productDetails){
+     private  final ImageProcessor imageProcessor;
 
-        Set<ImageDomain> imageDomains = ImageProcessor.processImages(productSpecs.productImages().stream().toList(), productSpecs.name());
+     public ProductDomainFactory(ImageProcessor imageProcessor){
+         this.imageProcessor = imageProcessor;
+     };
+
+    public  ProductDomain createProduct(ProductSpecs productSpecs,
+                                        ProductDomainDetails productDetails, Set<MultipartFile> images){
+
+        Set<ImageDomain> imageDomains = imageProcessor.processImages(images.stream().toList(), productSpecs.name());
 
        return switch ( productSpecs.productTypeEnum()){
             case PAINTING ->   {
@@ -38,8 +46,8 @@ public class ProductDomainFactory {
 
 
                 yield new PaintingDomain(null,productSpecs.name(),
-                        new PaintingStockManager(paintingStock.availableCopies(),paintingStock.copiesMade(),paintingStock.isOriginalAvailable()),
-                        new PaintingPriceManager(paintingPricing.pricePerCopy(),paintingPricing.pricePerOriginal()), imageDomains, paintingDetails,
+                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
                         productSpecs.productTypeEnum(),productSpecs.description(),productSpecs.isFavorite());
             }
             case CLOTHING ->  {
@@ -75,28 +83,28 @@ public class ProductDomainFactory {
 
     }
 
-    public static ProductDomain createProduct(Product product){
+    public  ProductDomain createProduct(Product product){
         return switch (product.getProductTypeEnum()){
             case PAINTING -> {
                 Painting paintingEntity= (Painting) product;
                 
                 PaintingPriceManagerPersist paintingPriceManagerPersist = (PaintingPriceManagerPersist) product.getPriceManagerPersist();
                 
-                OriginalStockAdapter originalStockAdapter =(OriginalStockAdapter) product.getStockManager();
+                OriginalStockManager originalStockManager =(OriginalStockManager) product.getStockManager();
                 
 
 
                 yield new PaintingDomain(product.getId(),
-                        product.getName() ,new PaintingStockManager(originalStockAdapter.getStockCopies(),
-                        originalStockAdapter.getCopiesMade(),
-                        originalStockAdapter.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()),product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(paintingEntity.getAlturaCm() ,paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(),product.getIsFavorite());
+                        product.getName() ,new PaintingStockManager(originalStockManager.getStockCopies(),
+                        originalStockManager.getCopiesMade(),
+                        originalStockManager.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()),product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(paintingEntity.getAlturaCm() ,paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(),product.getIsFavorite());
             }
             case CUP -> null;
              case CLOTHING ->  {
                  BodyClothing bodyClothing = (BodyClothing) product;
                  var productDetails = new BodyClothingDomainDetails(bodyClothing.getClothingMaterial(),((BodyClothing) product).getBodyClotheType(),bodyClothing.getPrintingTecnique());
 
-                 ClothingStockAdapter clothingStock = (ClothingStockAdapter) product.getStockManager();
+                 ClothingStockManager clothingStock = (ClothingStockManager) product.getStockManager();
 
                  SinglePriceManagerPersist priceManager = (SinglePriceManagerPersist)  product.getPriceManagerPersist();
 
@@ -109,9 +117,9 @@ public class ProductDomainFactory {
 
     }
 
-    public static ProductDomain updateProduct(UpdateProductCommand command){
+    public  ProductDomain updateProduct(UpdateProductCommand command, Set<MultipartFile> images){
 
-        Set<ImageDomain> imageDomains = ImageProcessor.processImages(command.productSpecs().productImages().stream().toList(), command.productSpecs().name());
+        Set<ImageDomain> imageDomains = imageProcessor.processImages(images.stream().toList(), command.productSpecs().name());
 
         imageDomains.addAll(command.updatedImages());
 
@@ -132,8 +140,8 @@ public class ProductDomainFactory {
 
 
                 yield new PaintingDomain(command.productId(),command.productSpecs().name(),
-                        new PaintingStockManager(paintingStock.availableCopies(),paintingStock.copiesMade(),paintingStock.isOriginalAvailable()),
-                        new PaintingPriceManager(paintingPricing.pricePerCopy(),paintingPricing.pricePerOriginal()), imageDomains, paintingDetails,
+                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
                         command.productSpecs().productTypeEnum(),command.productSpecs().description(),command.productSpecs().isFavorite());
             }
             case CUP -> null;
