@@ -38,10 +38,10 @@ public class BodyClothing extends Product {
         this.bodyClotheType = bodyClotheType;
     }
 
-    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist singlePriceManagerPersist, ClothingStockManager clothingStockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> images, ProductTypeEnum productTypeEnum , String clothingMaterial, BodyClotheTypesEnum BodyClothingType, PrintingTecniqueEnum printingTechnique) {
+    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist singlePriceManagerPersist, ClothingStockManager clothingStockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> images, ProductTypeEnum productTypeEnum , String clothingMaterial, BodyClotheTypesEnum bodyClothingType, PrintingTecniqueEnum printingTechnique) {
         super(id, name, description, creationDate, singlePriceManagerPersist, clothingStockManager, isAvailable, isFavorite, images, productTypeEnum);
         this.clothingMaterial = clothingMaterial;
-        this.printingTecnique = printingTecnique;
-        this.bodyClotheType = bodyClotheType;
+        this.printingTecnique = printingTechnique;
+        this.bodyClotheType = bodyClothingType;
     }
 }
