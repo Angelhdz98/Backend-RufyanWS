@@ -1,7 +1,7 @@
 package com.example.PaginaWebRufyan.domain.port.out;
 
 import com.example.PaginaWebRufyan.Products.Entity.Painting;
-import com.example.PaginaWebRufyan.adapter.out.OriginalStockAdapter;
+import com.example.PaginaWebRufyan.adapter.out.OriginalStockManager;
 import com.example.PaginaWebRufyan.adapter.out.PaintingPriceManagerPersist;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.PaintingDomain;
@@ -22,15 +22,15 @@ public class ProductFactoryMapper {
 
                     PaintingPriceManagerPersist paintingPriceManagerPersist = (PaintingPriceManagerPersist) product.getPriceManagerPersist();
 
-                    OriginalStockAdapter originalStockAdapter =(OriginalStockAdapter) product.getStockManager();
+                    OriginalStockManager originalStockManager =(OriginalStockManager) product.getStockManager();
 
                 Set<ImageDomain> images = product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet());
 
 
                 yield new PaintingDomain(product.getId(),
-                            product.getName(),new PaintingStockManager(originalStockAdapter.getStockCopies(),
-                            originalStockAdapter.getCopiesMade(),
-                            originalStockAdapter.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()), images ,new PaintingDomainDetails(paintingEntity.getAlturaCm(),paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(), product.getIsFavorite());
+                            product.getName(),new PaintingStockManager(originalStockManager.getStockCopies(),
+                            originalStockManager.getCopiesMade(),
+                            originalStockManager.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()), images ,new PaintingDomainDetails(paintingEntity.getAlturaCm(),paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(), product.getIsFavorite());
                 }
 
            case PRINT,CLOTHING, CUP -> null;
