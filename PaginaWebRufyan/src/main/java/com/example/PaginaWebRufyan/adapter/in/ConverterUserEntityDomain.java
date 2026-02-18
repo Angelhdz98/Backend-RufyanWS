@@ -12,7 +12,7 @@ public class ConverterUserEntityDomain {
  */
 
     public static UserEntity convertToEntity(UserDomain userDomain){
-        return new UserEntity(userDomain.getId(),userDomain.getFullname(),userDomain.getBirthDate(),userDomain.getUsername(),userDomain.getEmail());
+        return new UserEntity(userDomain.getId(),userDomain.getFullname(),userDomain.getBirthDate(),userDomain.getUsername(),userDomain.getEmail(), userDomain.getHashedPassword(), userDomain.getRole());
     }
    /*
    public static UserDomain convertToDomain(UserEntity userEntity, String email,UserProfilePicture profilePicture){
@@ -22,6 +22,9 @@ public class ConverterUserEntityDomain {
     }
 */
     public static UserDomain convertToDomain(UserEntity userEntity) {
-       return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail());
+       return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail(), userEntity.getPassword());
+    }
+    public static UserDomain convertToDomainWihRole(UserEntity userEntity) {
+        return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail(), userEntity.getPassword(), userEntity.getRole());
     }
 }

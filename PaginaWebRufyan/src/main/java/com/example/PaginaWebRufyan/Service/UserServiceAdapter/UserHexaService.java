@@ -28,7 +28,7 @@ private final UserRepositoryPort userRepositoryPort;
         if(userRepositoryPort.existsByEmail(createUserCommand.getEmail())) throw  new EmailAlreadyUsedException("An user with the same email "+createUserCommand.getEmail() + " is already registered ");
         if(userRepositoryPort.existsByUsername(createUserCommand.getUsername()))throw new UsernameAlreadyUsedException("An user with the same username "+createUserCommand.getUsername() + " is already registered ");
 
-        UserDomain newUser = new UserDomain(0L,createUserCommand.getFullName(),new BirthDate(createUserCommand.getBirthDate()),createUserCommand.getEmail(),createUserCommand.getUsername());
+        UserDomain newUser = new UserDomain(0L,createUserCommand.getFullName(),new BirthDate(createUserCommand.getBirthDate()),createUserCommand.getEmail(),createUserCommand.getUsername(), createUserCommand.getPassword());
         return userRepositoryPort.saveUser(newUser);
     }
 
@@ -49,7 +49,7 @@ private final UserRepositoryPort userRepositoryPort;
         if(!foundUser.get().getEmail().equals(command.getEmail()) && userRepositoryPort.existsByEmail(command.getEmail()) )
             throw new EmailAlreadyUsedException("Ya existe una cuenta registrada con el email: "+ command.getEmail());
 
-        UserDomain updatedUser = new UserDomain(command.getUserId(), command.getFullName(),new BirthDate(command.getBirthDate()),command.getUsername(),command.getEmail());
+        UserDomain updatedUser = new UserDomain(command.getUserId(), command.getFullName(),new BirthDate(command.getBirthDate()),command.getUsername(),command.getEmail(), command.getPassword());
        return userRepositoryPort.saveUser(updatedUser);
     }
 

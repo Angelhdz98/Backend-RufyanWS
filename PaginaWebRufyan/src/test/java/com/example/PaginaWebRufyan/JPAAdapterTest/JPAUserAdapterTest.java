@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -34,12 +35,15 @@ public class JPAUserAdapterTest {
     @Autowired
     private UserRepositoryJPAImp userRepositoryJPA;
 
+    private PasswordEncoder passwordEncoder;
     UserDomain userTest1;
     UserDomain userTest2;
     UserDomain userTest1UsernameEdited;
     UserDomain userTest3ExistentEmail;
    UserDomain userTest4ExistentUsername;
    UserDomain userTest3;
+   String password = "contraseña123";
+   String encodedPassword = passwordEncoder.encode(password);
     MockedStatic<ImageProcessor> mockedImageProcessor;
 @BeforeEach
     public void setUp(){
@@ -50,15 +54,15 @@ public class JPAUserAdapterTest {
 
         */
 
-        userTest1 = new UserDomain(null,new FullName("Enrique","", "Bravo","Dominguez"), new BirthDate(LocalDate.now().minusYears(20)),"ElEnrique","enrique@gmail.com");
-    userTest1UsernameEdited = new UserDomain(1L,new FullName("Enrique","", "Bravo","Dominguez"), new BirthDate(LocalDate.now().minusYears(20)),"ElEnriqueBravillo","enrique@gmail.com");
-        userTest2 = new UserDomain(null ,new FullName("Enriqueberta","Guadalupe", "De Los Angeles","Cruz"), new BirthDate(LocalDate.now().minusYears(19)),"Enriquecida","enriquecidaalmeJ@gmail.com");
-    userTest3 = new UserDomain(null,new FullName("Fulis","Mori", "De Los Angeles","Cruz"), new BirthDate(LocalDate.now().minusYears(19)),"Enri","enrifulis@gmail.com");
+        userTest1 = new UserDomain(null,new FullName("Enrique","", "Bravo","Dominguez"), new BirthDate(LocalDate.now().minusYears(20)),"ElEnrique","enrique@gmail.com", encodedPassword);
+    userTest1UsernameEdited = new UserDomain(1L,new FullName("Enrique","", "Bravo","Dominguez"), new BirthDate(LocalDate.now().minusYears(20)),"ElEnriqueBravillo","enrique@gmail.com", encodedPassword);
+        userTest2 = new UserDomain(null ,new FullName("Enriqueberta","Guadalupe", "De Los Angeles","Cruz"), new BirthDate(LocalDate.now().minusYears(19)),"Enriquecida","enriquecidaalmeJ@gmail.com", encodedPassword);
+    userTest3 = new UserDomain(null,new FullName("Fulis","Mori", "De Los Angeles","Cruz"), new BirthDate(LocalDate.now().minusYears(19)),"Enri","enrifulis@gmail.com", encodedPassword);
 
 
-    userTest3ExistentEmail = new UserDomain(null,new FullName("Alonso","Enrique" , "Gomez","Bruera"), new BirthDate(LocalDate.now().minusYears(45)),"ElAlonso","enrique@gmail.com");
+    userTest3ExistentEmail = new UserDomain(null,new FullName("Alonso","Enrique" , "Gomez","Bruera"), new BirthDate(LocalDate.now().minusYears(45)),"ElAlonso","enrique@gmail.com", encodedPassword);
 
-    userTest4ExistentUsername = new  UserDomain(null,new FullName("Enrique","Enrique" , "Torres","Mora"), new BirthDate(LocalDate.now().minusYears(25)),"ElEnrique","nuevocorreo@gmail.com");
+    userTest4ExistentUsername = new  UserDomain(null,new FullName("Enrique","Enrique" , "Torres","Mora"), new BirthDate(LocalDate.now().minusYears(25)),"ElEnrique","nuevocorreo@gmail.com", encodedPassword);
 
     }
 /*
@@ -112,7 +116,7 @@ public class JPAUserAdapterTest {
 
         UserDomain savedUser = userRepositoryJPA.saveUser((userTest1));
         UserDomain userDomain = new UserDomain(
-                savedUser.getId(), userTest1UsernameEdited.getFullname(), userTest1UsernameEdited.getBirthDate(),userTest1UsernameEdited.getUsername(),userTest1UsernameEdited.getEmail());
+                savedUser.getId(), userTest1UsernameEdited.getFullname(), userTest1UsernameEdited.getBirthDate(),userTest1UsernameEdited.getUsername(),userTest1UsernameEdited.getEmail(), encodedPassword);
         UserDomain updatedUser = userRepositoryJPA.updateUser(userDomain);
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getUsername()).isEqualTo(userTest1UsernameEdited.getUsername());
@@ -123,7 +127,7 @@ public class JPAUserAdapterTest {
     public void shouldReturnExceptionUpdatingAnUserWithRepeatedEmail(){
         entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
         UserEntity userEntity = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
-        UserDomain userToUpdate = new UserDomain(userEntity.getId(), userTest3ExistentEmail.getFullname(), userTest3ExistentEmail.getBirthDate(), userTest3ExistentEmail.getUsername(), userTest3ExistentEmail.getEmail());
+        UserDomain userToUpdate = new UserDomain(userEntity.getId(), userTest3ExistentEmail.getFullname(), userTest3ExistentEmail.getBirthDate(), userTest3ExistentEmail.getUsername(), userTest3ExistentEmail.getEmail(), encodedPassword);
 
         assertThrows(AlreadyExistIdenticatorException.class, ()->{
             userRepositoryJPA.updateUser(userToUpdate);
@@ -135,7 +139,7 @@ public class JPAUserAdapterTest {
     public void shouldReturnExceptionUpdatingAnUserWithRepeatedUsername(){
         entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
         UserEntity userEntity = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
-        UserDomain editedUserDomain = new UserDomain(userEntity.getId(), userTest4ExistentUsername.getFullname(), userTest4ExistentUsername.getBirthDate(), userTest4ExistentUsername.getUsername(), userTest4ExistentUsername.getEmail());
+        UserDomain editedUserDomain = new UserDomain(userEntity.getId(), userTest4ExistentUsername.getFullname(), userTest4ExistentUsername.getBirthDate(), userTest4ExistentUsername.getUsername(), userTest4ExistentUsername.getEmail(), encodedPassword);
 
         assertThrows(AlreadyExistIdenticatorException.class, ()->{
             userRepositoryJPA.updateUser(editedUserDomain);
