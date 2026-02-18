@@ -6,17 +6,22 @@ import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.CreateProductCo
 import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.CreateProductUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Set;
 
 @Service
 public class CreateProductService implements CreateProductUseCase {
    private final ProductRepositoryPort productRepositoryPort;
+   private final ProductDomainFactory productDomainFactory;
 
-    public CreateProductService(ProductRepositoryPort productRepositoryPort) {
+    public CreateProductService(ProductRepositoryPort productRepositoryPort, ProductDomainFactory productDomainFactory) {
         this.productRepositoryPort = productRepositoryPort;
+        this.productDomainFactory = productDomainFactory;
     }
 
     @Override
-    public ProductDomain createProduct(CreateProductCommand command) {
-        return productRepositoryPort.saveProduct(ProductDomainFactory.createProduct(command.productSpecs(),command.productDetails()));
+    public ProductDomain createProduct(CreateProductCommand command, Set<MultipartFile> images ) {
+        return productRepositoryPort.saveProduct(productDomainFactory.createProduct(command.productSpecs(),command.productDetails(),images));
     }
 }
