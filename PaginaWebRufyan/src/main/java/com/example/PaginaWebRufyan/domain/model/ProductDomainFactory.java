@@ -22,7 +22,7 @@ public class ProductDomainFactory {
 
      public ProductDomainFactory(ImageProcessor imageProcessor){
          this.imageProcessor = imageProcessor;
-     };
+     }
 
     public  ProductDomain createProduct(ProductSpecs productSpecs,
                                         ProductDomainDetails productDetails, Set<MultipartFile> images){
