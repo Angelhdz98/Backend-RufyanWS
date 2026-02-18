@@ -15,6 +15,7 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 
+    Optional<UserEntity> findByEmail(String email);
 
     Page<UserEntity> findByUsernameContainingIgnoreCase(String usernamePart, Pageable pageable);
     Page<UserEntity> findByStringFullNameContainingIgnoreCase(String namePart, Pageable pageable);
