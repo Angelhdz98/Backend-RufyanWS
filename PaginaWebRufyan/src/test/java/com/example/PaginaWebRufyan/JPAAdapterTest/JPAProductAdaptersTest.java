@@ -30,7 +30,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
 
-import static com.example.PaginaWebRufyan.domain.model.ProductDomainFactory.createProduct;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -53,6 +53,8 @@ public class JPAProductAdaptersTest {
     @Autowired
     private    ImageStorageProperties imageStorageProperties;
 
+    private ProductDomainFactory productDomainFactory;
+
 
     //Long id1= 1L; // commented cause JPA autoAsignThis
 
@@ -70,6 +72,9 @@ public class JPAProductAdaptersTest {
 
     ProductDomainDetails productDomainDetails;
     ProductDomainDetails productDomainDetails2;
+
+    Set<MultipartFile> images;
+
 
     {
         try {
@@ -95,7 +100,7 @@ public class JPAProductAdaptersTest {
          testSpecificPath = tempDirBase.resolve(testId);
          Files.createDirectories(testSpecificPath);
          System.setProperty("app.upload-dir",testSpecificPath.toString());
-        imageStorageProperties.init();
+
 
 
         byte[] image1Bytes = Files.readAllBytes(imagePath1);
@@ -106,7 +111,7 @@ public class JPAProductAdaptersTest {
         MockMultipartFile mockFile2 = new MockMultipartFile("obra2", "obra2.jpg", "image/jpg", image2Bytes);
         MockMultipartFile mockFile3 = new MockMultipartFile("obra3", "obra3.jpg", "image/jpg", image3Bytes);
 
-        Set<MultipartFile> images = Set.of(mockFile1,mockFile2, mockFile3);
+        images = Set.of(mockFile1,mockFile2, mockFile3);
 
         Map<ClothingSizeEnum, Integer> defaultStockPerSize = new HashMap<>();
 
@@ -116,11 +121,11 @@ public class JPAProductAdaptersTest {
         });
 
 
-        product1Specs = new ProductSpecs("Nametest1 ", "descripción 1 ", images, new PaintingStockDTO(true, 5, 10), new PaintingPricingDTO(new BigDecimal("2500"), new BigDecimal("500")), ProductTypeEnum.PAINTING, true);
+        product1Specs = new ProductSpecs("Nametest1 ", "descripción 1 ",  new PaintingStockDTO(true, 5, 10, StockEnum.PAINTING), new PaintingPricingDTO(new BigDecimal("2500"), new BigDecimal("500"),PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
 
-        product2Specs = new ProductSpecs("Nametest2 ", "descripción 2 ", images, new PaintingStockDTO(false, 0, 10), new PaintingPricingDTO(new BigDecimal("2000"), new BigDecimal("600")), ProductTypeEnum.PAINTING, true);
+        product2Specs = new ProductSpecs("Nametest2 ", "descripción 2 ",  new PaintingStockDTO(false, 0, 10, StockEnum.PAINTING), new PaintingPricingDTO(new BigDecimal("2000"), new BigDecimal("600"), PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
 
-        product3Specs = new ProductSpecs("Nametest3 ", "descripción 3 ", images, new BodyClothingStockDTO(defaultStockPerSize), new SinglePricingDTO(new BigDecimal("1200")), ProductTypeEnum.CLOTHING, false);
+        product3Specs = new ProductSpecs("Nametest3 ", "descripción 3 ",  new BodyClothingStockDTO(defaultStockPerSize, StockEnum.CLOTHING), new SinglePricingDTO(new BigDecimal("1200"), PricingTypeEnum.PERTAG), ProductTypeEnum.CLOTHING, false);
 
         // first value in table
         //firstProduct = productRepositoryJPA.saveProduct(createProduct(product1Specs, productDomainDetails));
@@ -136,7 +141,7 @@ public class JPAProductAdaptersTest {
     @DisplayName("Test para guardar un producto en la base de datos H2")
     public void shouldReturnAProductDomainAfterSavingIt() {
 
-        ProductDomain painting2 = ProductDomainFactory.createProduct(product2Specs, productDomainDetails);
+        ProductDomain painting2 = productDomainFactory.createProduct(product2Specs, productDomainDetails, images);
         ProductDomain savedProduct = productRepositoryJPA.saveProduct(painting2);
 
         //Assertions
@@ -153,7 +158,7 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para recuperar un producto por su id (cuando es seguro que se encontrará)")
     public void shouldRetrieveProductById() {
-        ProductDomain product = createProduct(product1Specs, productDomainDetails);
+        ProductDomain product = productDomainFactory.createProduct(product1Specs, productDomainDetails, images);
         firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(product)));
 
         assertThat(productRepositoryJPA.retrieveProductById(firstProduct.getId())).isInstanceOf(ProductDomain.class);
@@ -162,7 +167,7 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para buscar un producto por su id")
     public void shouldReturnAnOptionalSearchingAProductById() {
-        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(createProduct(product1Specs, productDomainDetails))));
+        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails,images))));
 
         Optional<ProductDomain> optionalProduct = productRepositoryJPA.findProductById(firstProduct.getId());
         assertThat(optionalProduct).isNotEmpty();
@@ -175,7 +180,7 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para actualizar un producto en la base de datos H2")
     public void shouldReturnProductUpdated() {
-        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(createProduct(product1Specs, productDomainDetails))));
+        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails,images ))));
         String newName = "Nombre actualizado";
         String newDescription = "Descripción actualizada";
 
@@ -191,7 +196,7 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para eliminar un producto por su id")
     public void shouldDeleteProductById() {
-        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(createProduct(product1Specs, productDomainDetails))));
+        firstProduct = toDomain(entityManager.persistAndFlush(toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails,images))));
 
         productRepositoryJPA.deleteProductById(firstProduct.getId());
 
@@ -204,8 +209,8 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para buscar todos los productos en la base de datos H2")
     public void shouldFindAllProducts() {
-        firstProduct =ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(createProduct(product1Specs, productDomainDetails))));
-        ProductDomain secondProduct = toDomain(entityManager.persistAndFlush(toEntity(createProduct(product2Specs, productDomainDetails)))) ;
+        firstProduct =ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails, images))));
+        ProductDomain secondProduct = toDomain(entityManager.persistAndFlush(toEntity(productDomainFactory.createProduct(product2Specs, productDomainDetails,images)))) ;
 
         List<ProductDomain> products = productRepositoryJPA.findAllProducts();
 
@@ -218,8 +223,8 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para buscar productos paginados en la base de datos H2")
     public void shouldFindPagedProducts() {
-        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(createProduct(product1Specs, productDomainDetails))));
-        ProductDomain secondProduct = toDomain(entityManager.persistAndFlush(toEntity( createProduct(product2Specs, productDomainDetails)) ));
+        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails, images))));
+        ProductDomain secondProduct = toDomain(entityManager.persistAndFlush(toEntity( productDomainFactory.createProduct(product2Specs, productDomainDetails, images)) ));
 
         Page<ProductDomain> pagedProducts = productRepositoryJPA.findPagedProducts(PageRequest.of(0, 2));
 
@@ -233,9 +238,9 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para encontar todos los productos por tipo de producto")
     public void shouldFindProductsByType() {
-        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(createProduct(product1Specs, productDomainDetails))));
-        ProductDomain secondProduct = ProductMapper.toDomain( entityManager.persistAndFlush( ProductMapper.toEntity(createProduct(product2Specs, productDomainDetails))));
-        ProductDomain thirdProduct =ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(createProduct(product3Specs, productDomainDetails2))));
+        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(productDomainFactory.createProduct(product1Specs, productDomainDetails,images))));
+        ProductDomain secondProduct = ProductMapper.toDomain( entityManager.persistAndFlush( ProductMapper.toEntity(productDomainFactory.createProduct(product2Specs, productDomainDetails,images))));
+        ProductDomain thirdProduct =ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(productDomainFactory.createProduct(product3Specs, productDomainDetails2,images))));
 
         List<ProductDomain> paintingProducts = productRepositoryJPA.findProductByType(ProductTypeEnum.PAINTING);
 
@@ -249,10 +254,10 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para encontar productos paginados por tipo de producto")
     public void shouldFindProductsByTypePaged() {
-        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product1Specs, productDomainDetails)))));
+        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product1Specs, productDomainDetails,images)))));
 
-        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product2Specs, productDomainDetails)))));
-        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product3Specs, productDomainDetails2)))));
+        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product2Specs, productDomainDetails,images)))));
+        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product3Specs, productDomainDetails2,images)))));
 
         Page<ProductDomain> paintingProducts = productRepositoryJPA.findProductByType(ProductTypeEnum.PAINTING, PageRequest.of(0, 2));
 
@@ -265,11 +270,11 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para encontar todos los productos disponibles paginados")
     public void shouldFindAvailableProductsPaged() {
-        firstProduct = ProductMapper.toDomain (entityManager.persistAndFlush( ProductMapper.toEntity(Objects.requireNonNull(createProduct(product1Specs, productDomainDetails)))));
+        firstProduct = ProductMapper.toDomain (entityManager.persistAndFlush( ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product1Specs, productDomainDetails,images)))));
 
-        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product2Specs, productDomainDetails)))));
+        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product2Specs, productDomainDetails,images)))));
 
-        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(createProduct(product3Specs, productDomainDetails2))));
+        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(productDomainFactory.createProduct(product3Specs, productDomainDetails2,images))));
 
         Page<ProductDomain> availableProducts = productRepositoryJPA.findAvailableProducts(PageRequest.of(0, 2));
 
@@ -281,11 +286,11 @@ public class JPAProductAdaptersTest {
     @Test
     @DisplayName("Test para encontar todos los productos disponibles por tipo de producto paginados")
     public void shouldFindAvailableProductsByTypePaged() {
-        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product1Specs, productDomainDetails)))));
-        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product2Specs, productDomainDetails)))));
+        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product1Specs, productDomainDetails,images)))));
+        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product2Specs, productDomainDetails,images)))));
 
 
-        ProductDomain product1 = createProduct(product3Specs, productDomainDetails2);
+        ProductDomain product1 = productDomainFactory.createProduct(product3Specs, productDomainDetails2,images);
         Product product = ProductMapper.toEntity(product1);
 
         Product product2persisted = entityManager.persistAndFlush(product);
@@ -303,11 +308,11 @@ public class JPAProductAdaptersTest {
     }
 
     public void shouldFindFavoriteProductsPaged() {
-        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product1Specs, productDomainDetails)))));
+        firstProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product1Specs, productDomainDetails,images)))));
 
-        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(createProduct(product2Specs, productDomainDetails)))));
+        ProductDomain secondProduct = ProductMapper.toDomain(entityManager.persistAndFlush(ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product2Specs, productDomainDetails,images)))));
 
-        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush( ProductMapper.toEntity(Objects.requireNonNull(createProduct(product3Specs, productDomainDetails)))));
+        ProductDomain thirdProduct = ProductMapper.toDomain(entityManager.persistAndFlush( ProductMapper.toEntity(Objects.requireNonNull(productDomainFactory.createProduct(product3Specs, productDomainDetails,images)))));
 
         Page<ProductDomain> favoriteProducts = productRepositoryJPA.findFavoriteProducts(PageRequest.of(0, 2));
 
