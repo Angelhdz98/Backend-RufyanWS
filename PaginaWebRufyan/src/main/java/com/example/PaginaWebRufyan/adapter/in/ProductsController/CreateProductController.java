@@ -17,18 +17,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@PreAuthorize("permitAll()")
+@PreAuthorize("hasRole('ADMIN')")
 public class CreateProductController {
     private final CreateProductUseCase createProductUseCase;
 
     public CreateProductController(CreateProductUseCase createProductUseCase) {
         this.createProductUseCase = createProductUseCase;
-        System.out.println("Hexa controlador activado");
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ProductDTO> createProduct(@RequestPart("command") CreateProductCommand command,  @RequestPart("images") List<MultipartFile> images) {
+    ResponseEntity<ProductDTO> createProduct(@RequestPart("command") CreateProductCommand command,  @RequestPart("images") List<MultipartFile> addedImages) {
 
-        return ResponseEntity.ok(ProductDTOMapper.toDTO(createProductUseCase.createProduct(command, new HashSet<>(images))));
+        return ResponseEntity.ok(ProductDTOMapper.toDTO(createProductUseCase.createProduct(command, new HashSet<>(addedImages))));
 
     }
 
