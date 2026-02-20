@@ -9,5 +9,5 @@ import java.util.Set;
 public record UpdateProductCommand(Long productId,
         ProductSpecs productSpecs,
                                    ProductDomainDetails productDomainDetails,
-                                   Set<ImageDomain> updatedImages) {
+                                   Set<ImageDomain> images) {
 }

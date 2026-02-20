@@ -121,7 +121,7 @@ public class ProductDomainFactory {
 
         Set<ImageDomain> imageDomains = imageProcessor.processImages(images.stream().toList(), command.productSpecs().name());
 
-        imageDomains.addAll(command.updatedImages());
+        imageDomains.addAll(command.images());
 
         return switch ( command.productSpecs().productTypeEnum()){
             case PAINTING ->   {
