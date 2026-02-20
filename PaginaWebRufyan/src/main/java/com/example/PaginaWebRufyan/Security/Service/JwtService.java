@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -41,10 +42,10 @@ public class JwtService {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("name",userDomain.getFullname().getFullName());
-        claims.put("roles",userDomain.getRole().toString());
+        claims.put("role",userDomain.getRole().toString());
 
 return Jwts.builder()
-        .setId(userDomain.getId().toString())
+        .setId(UUID.randomUUID().toString())
         .addClaims(claims)
         .setSubject(userDomain.getEmail())
         .setIssuedAt(new Date(System.currentTimeMillis()))
