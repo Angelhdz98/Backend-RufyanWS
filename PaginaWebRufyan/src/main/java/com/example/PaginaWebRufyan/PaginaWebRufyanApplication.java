@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 @SpringBootApplication
 public class PaginaWebRufyanApplication {
-	@Value("spring.datasource.admin-password")
+	@Value("${spring.datasource.admin-password}")
 	private String adminPassword;
 	public static void main(String[] args) {
 		SpringApplication.run(PaginaWebRufyanApplication.class, args);
