@@ -17,7 +17,7 @@ public class Token {
     @Id
     @GeneratedValue
     public Long id;
-    @Column(unique = true)
+    @Column(columnDefinition = "TEXT",unique = true, length = 1000)
     public String token;
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
