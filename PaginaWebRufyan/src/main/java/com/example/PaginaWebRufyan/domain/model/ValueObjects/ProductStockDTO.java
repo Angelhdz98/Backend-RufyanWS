@@ -1,10 +1,7 @@
  package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
- import com.example.PaginaWebRufyan.adapter.out.ClothingStockManager;
- import com.example.PaginaWebRufyan.adapter.out.StockManager;
  import com.fasterxml.jackson.annotation.JsonSubTypes;
  import com.fasterxml.jackson.annotation.JsonTypeInfo;
- import lombok.NoArgsConstructor;
 
 
  @JsonTypeInfo(
