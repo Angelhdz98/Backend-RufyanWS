@@ -46,6 +46,7 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
+        saveUserToken(user, accessToken);
         return new TokenResponse(accessToken,refreshToken);
 
     }
