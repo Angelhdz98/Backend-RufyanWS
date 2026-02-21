@@ -83,6 +83,8 @@ public class SecurityConfig {
                                 .authenticated()
                                 .requestMatchers("/products", "/products/**")
                                 .permitAll()
+                                .requestMatchers("/like","/like/")
+                                .hasRole("CLIENT")
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
                                 .requestMatchers("/users","/user-register").permitAll()
                                 .anyRequest().authenticated()
