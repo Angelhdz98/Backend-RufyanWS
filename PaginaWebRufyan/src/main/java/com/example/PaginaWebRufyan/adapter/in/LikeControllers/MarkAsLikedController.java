@@ -3,18 +3,20 @@ package com.example.PaginaWebRufyan.adapter.in.LikeControllers;
 import com.example.PaginaWebRufyan.adapter.in.ProductLikedDto;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.CreateLikeUseCase;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/like")
+@RestController
+@PreAuthorize("hasRole('CLIENT')")
 public class MarkAsLikedController {
    private final CreateLikeUseCase createLikeUseCase;
     public MarkAsLikedController(CreateLikeUseCase createLikeUseCase) {
         this.createLikeUseCase = createLikeUseCase;
     }
 
-    @PostMapping
+    @PostMapping("/like")
     ResponseEntity<ProductLikedDto> markProductAsLiked(@RequestBody LikeCommand likeCommand){
      return ResponseEntity.ok( new ProductLikedDto(createLikeUseCase.markAsLiked(likeCommand).getProductId()));
     }
