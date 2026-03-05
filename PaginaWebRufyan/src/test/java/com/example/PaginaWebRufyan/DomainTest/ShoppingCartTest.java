@@ -119,7 +119,7 @@ public class ShoppingCartTest {
 
         ShoppingCartDomain shoppingCartWithUser = new ShoppingCartDomain(id, null, Set.of(cartMock1, cartMock2));
         shoppingCartWithUser
-                .deleteItem(cartMock1);
+                .deleteItem(cartMock1.getId());
         assertThat(shoppingCartWithUser.getItems().size())
                 .isEqualTo(1);
         assertThat(shoppingCartWithUser.getItems()).contains(cartMock2);
@@ -174,7 +174,7 @@ public class ShoppingCartTest {
         ShoppingCartDomain shoppingCartWithUser = new ShoppingCartDomain(id, null, Set.of(cartMock1, cartMock2));
 
         assertThrows(ResourceNotFoundException.class, ()-> {
-            shoppingCartWithUser.deleteItem(cartMock3);
+            shoppingCartWithUser.deleteItem(cartMock3.getId());
         });
 
     }
