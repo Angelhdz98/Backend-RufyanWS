@@ -16,6 +16,7 @@ public class AddCartItemService implements AddCartItemUseCase {
     private final ShoppingCartRepositoryPort shoppingCartRepositoryPort;
     private final ProductRepositoryPort productRepositoryPort;
 
+
     public AddCartItemService(ShoppingCartRepositoryPort shoppingCartRepositoryPort, ProductRepositoryPort productRepositoryPort) {
         this.shoppingCartRepositoryPort = shoppingCartRepositoryPort;
         this.productRepositoryPort = productRepositoryPort;
@@ -29,7 +30,7 @@ public class AddCartItemService implements AddCartItemUseCase {
         CartItemDetails cartItemDetails=  cartItemCommand.cartItemDetails();
 
 
-        CartItemDomain cartItemDomain = new CartItemDomain(0L,productDomain,cartItemCommand.cartItemDetails());
+         CartItemDomain cartItemDomain = new CartItemDomain(0L,productDomain,cartItemCommand.cartItemDetails());
         //Before  adding the item it will remove the item with the same CartItemDetails
         shoppingCartDomain.getItems().removeIf((CartItemDomain item)-> switch (productDomain.getProductType()) {
               case PAINTING -> {
