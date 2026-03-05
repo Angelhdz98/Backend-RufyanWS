@@ -3,12 +3,10 @@ package com.example.PaginaWebRufyan.Service.UserServiceAdapter;
 import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.EmailAlreadyUsedException;
-import com.example.PaginaWebRufyan.Security.Service.AuthService;
-import com.example.PaginaWebRufyan.Security.Service.JwtService;
-import com.example.PaginaWebRufyan.Security.Service.TokenResponse;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.CreateUserUseCase;
+import com.example.PaginaWebRufyan.domain.port.out.ShoppingCartRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class CreateUserService implements CreateUserUseCase {
        private final UserRepositoryPort userRepositoryPort;
        private final PasswordEncoder passwordEncoder;
+       private final ShoppingCartRepositoryPort shoppingCartRepositoryPort;
 
 
     @Override
@@ -28,6 +27,7 @@ public class CreateUserService implements CreateUserUseCase {
 
         UserDomain newUser = new UserDomain(0L,createUserCommand.getFullName(),new BirthDate(createUserCommand.getBirthDate()),createUserCommand.getUsername(),createUserCommand.getEmail(), passwordEncoder.encode(createUserCommand.getPassword()));
         UserDomain savedUser = userRepositoryPort.saveUser(newUser);
+        shoppingCartRepositoryPort.createShoppingCart(savedUser.getId());
         return savedUser;
     }
 }
