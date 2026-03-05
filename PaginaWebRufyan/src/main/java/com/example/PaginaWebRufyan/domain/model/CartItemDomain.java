@@ -23,7 +23,12 @@ public class CartItemDomain {
        return getProduct().getPriceManagerBase().getPriceWithDetails(getDetails());
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "CartItemDomain{" +
+                "id=" + id +
+                ", product=" + product.getName() +
+                ", details=" + details.showDetails() +
+                '}';
+    }
 }
