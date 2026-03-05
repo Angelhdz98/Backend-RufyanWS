@@ -7,19 +7,15 @@ import com.example.PaginaWebRufyan.Security.Roles.RoleEnum;
 import com.example.PaginaWebRufyan.Security.Service.AuthService;
 import com.example.PaginaWebRufyan.Security.Service.JwtService;
 import com.example.PaginaWebRufyan.Security.Service.TokenResponse;
-import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
 import com.example.PaginaWebRufyan.adapter.in.ProductDTO;
 import com.example.PaginaWebRufyan.adapter.in.ProductLikedDto;
-import com.example.PaginaWebRufyan.domain.model.ImageStorageProperties;
 import com.example.PaginaWebRufyan.domain.model.PaintingDomainDetails;
-import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
 import com.example.PaginaWebRufyan.domain.port.in.ProductUseCase.CreateProductCommand;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.security.Keys;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,20 +26,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -64,6 +58,8 @@ public class LikesControllerTest {
     @Value("${spring.datasource.admin-password}")
     private String adminPassword;
 
+    @Autowired
+    private ImageInitializer imageInitializer;
 
 
     static UserDomain admin = new UserDomain(1L, new FullName("Rodrigo", "", "muñoz", "silva"), new BirthDate(LocalDate.of(1997,03,28)),"RufyanSilvaMuralista", "rufyanone@gmail.com", "contra123", RoleEnum.ROLE_ADMIN);
@@ -91,25 +87,14 @@ public class LikesControllerTest {
     static TokenResponse loginUser;
     static TokenResponse loginAdmin;
 
-    Set<File> initialImages= new HashSet<>();
-    Set<File> editedImages= new HashSet<>();
-    ClassPathResource resource1  =new ClassPathResource("images/obra1.jpg");
-    ClassPathResource resource2  =new ClassPathResource("images/obra2.jpg");
-    ClassPathResource resource3  =new ClassPathResource("images/obra3.jpg");
-    File file1;
-    File file2;
-    File file3;
-    File file4;
+    Set<MultipartFile> initialImages= new HashSet<>();
+    Set<MultipartFile> editedImages= new HashSet<>();
+
+
     ProductSpecs productSpecs1;
     ProductSpecs productSpecs2;
     ProductSpecs productSpecsUpdated;
-    ProductDomain defaultProduct1;
-    ProductDomain defaultProduct2;
-    ProductDomain bodyClothingProduct;
-    ProductDomain defaultProductUpdated;
-    Integer stockCopies =5;
-    Integer copiesMade = 10;
-    Boolean isOriginalAvailable= true;
+
 
     String titulo1= "PRODUCT TEST 1";
     String titulo2= "product test 2";
@@ -118,10 +103,6 @@ public class LikesControllerTest {
     Path p1;
     Path p2;
 
-    byte[] image1Bytes = new byte[50*1024];
-    byte[] image2Bytes = new byte[50*1024];
-    byte[] image3Bytes = new byte[50*1024];
-    byte[] image4Bytes = new byte[50*1024];
 
 
 
@@ -138,14 +119,13 @@ public class LikesControllerTest {
 
 
 
-    ImageStorageProperties imageStorageProperties;
 
 
     @BeforeAll
     static void startDb(){
 
 
-        byte[] key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256).getEncoded();
+        //byte[] key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256).getEncoded();
         // System.out.println("contranesa: "+  Base64.getEncoder().encodeToString(key));;
 
 
@@ -153,7 +133,7 @@ public class LikesControllerTest {
 
     }
     @BeforeEach
-    void setUp(){
+    void setUp() throws IOException {
 
         loginUser = authService.login(new LoginCommand(userBuyerEmail, userBuyerPassword));
         loginAdmin = authService.login(new LoginCommand(admin.getEmail(), adminPassword));
@@ -163,22 +143,9 @@ public class LikesControllerTest {
 
         tokenUser = loginUser.accessToken();
 
+        imageInitializer.readFiles();
 
 
-
-        try {
-            //Firs Read the image content
-            file1 = resource1.getFile();
-            file2 = resource2.getFile();
-            file3 = resource3.getFile();
-            file4 = resource1.getFile();
-            p1 = resource1.getFile().toPath();
-            p2 = resource2.getFile().toPath();
-            image1Bytes = Files.readAllBytes(p1);
-            image1Bytes = Files.readAllBytes(p2);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         //saving image content on a mockMultiparfile
         /*file1 = new MockMultipartFile("images",
                 "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, image1Bytes);
@@ -191,8 +158,8 @@ public class LikesControllerTest {
 
          */
         //creating commands for new  products
-        initialImages = Set.of(file1, file2);
-        editedImages = Set.of( file3, file4);
+        initialImages = imageInitializer.getSet1Files();
+        editedImages = imageInitializer.getSet2Files();
 
         String description1 = "description product";
         String description2 = "description product2";
@@ -239,8 +206,8 @@ public class LikesControllerTest {
 
         return RestAssured.given()
                 .header("Authorization", "Bearer " + token)
-                .multiPart("images", "obra1.jpg", image1Bytes, "image/jpeg")
-                .multiPart("images", "obra2.jpg", image2Bytes, "image/jpeg")
+                .multiPart("images", "obra1.jpg", imageInitializer.getImage1Bytes(), "image/jpeg")
+                .multiPart("images", "obra2.jpg", imageInitializer.getImage2Bytes(), "image/jpeg")
                 .multiPart("command", "command.json",
                         objectMapper.writeValueAsBytes(product1Command),
                         "application/json")
@@ -265,8 +232,7 @@ public class LikesControllerTest {
                 .header("Authorization","Bearer "+tokenUser)
                 .when()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new LikeCommand(userClient.getId(), product.id())))
-                .post("/like")
+                .post("/like/"+product.id())
                 .then()
                 .statusCode(200).extract().as(ProductLikedDto.class);
 
@@ -282,8 +248,7 @@ public class LikesControllerTest {
                 .header("Authorization", "Bearer " + tokenUser)
                 .contentType(ContentType.JSON)
                 .when()
-                .body(objectMapper.writeValueAsString(new LikeCommand(userClient.getId(), product.id())))
-                .post("/like")
+                .post("/like/"+product.id())
                 .then()
                 .extract().as(ProductLikedDto.class);
 
@@ -292,8 +257,7 @@ public class LikesControllerTest {
                 .header("Authorization", "Bearer " + tokenUser)
                 .contentType(ContentType.JSON)
                 .when()
-                .body(objectMapper.writeValueAsString(new LikeCommand(userClient.getId(), product.id())))
-                .delete("/like")
+                .delete("/like/"+product.id())
                 .then()
                 .statusCode(204);
 
@@ -312,8 +276,8 @@ public class LikesControllerTest {
         RestAssured.given()
                 .when()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsBytes(new LikeCommand(0L, product.id())))
-                .post("/like")
+
+                .post("/like/"+ product.id())
                 .then()
                 .statusCode(403);
 
