@@ -7,4 +7,5 @@ public interface ShoppingCartRepositoryPort {
     ShoppingCartDomain retrieveShoppingCart(Long userId);
     ShoppingCartDomain updateShoppingCart(Long userId, ShoppingCartDomain shoppingCartDomain);
     ShoppingCartDomain emptyShoppingCart(Long userId);
+    ShoppingCartDomain createShoppingCart(Long userId);
 }
