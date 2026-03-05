@@ -42,7 +42,7 @@ public class ImageInitializer {
         this.file1 =  new MockMultipartFile(retrieveFile1.getName(),"image1.jpg","image/jpeg", resource1.getInputStream());
         this.file2 =  new MockMultipartFile(retrieveFile2.getName(),"image2.jpg","image/jpeg", resource2.getInputStream());
         this.file3 =  new MockMultipartFile(retrieveFile3.getName(),"image3.jpg","image/jpeg", resource3.getInputStream());
-        file4 =  new MockMultipartFile(retrieveFile1.getName(),"image1.jpg","image/jpeg", resource1.getInputStream()); ;
+        file4 =  new MockMultipartFile(retrieveFile1.getName(),"image1.jpg","image/jpeg", resource1.getInputStream());
         Path p1 = retrieveFile1.toPath();
         Path p2 = retrieveFile2.toPath();
         image1Bytes = Files.readAllBytes(p1);
