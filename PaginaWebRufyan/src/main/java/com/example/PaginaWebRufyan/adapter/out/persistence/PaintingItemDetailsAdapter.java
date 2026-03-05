@@ -1,10 +1,10 @@
 package com.example.PaginaWebRufyan.adapter.out.persistence;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 
 @Getter
-@Embeddable
+@Entity
 public class PaintingItemDetailsAdapter extends CartItemDetailsAdapter {
     private final Boolean isOriginalSelected;
     public PaintingItemDetailsAdapter(Integer quantity, Boolean isOriginalSelected) {

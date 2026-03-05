@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.Buys.Entity;
 
 import com.example.PaginaWebRufyan.adapter.out.persistence.CartItemDetailsAdapter;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
-import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,10 +22,14 @@ public class CartItem {
     @JoinColumn(name="product_id")
     @JsonBackReference
     private Product product;
-    @Embedded
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id")
     private CartItemDetailsAdapter cartItemDetails;
     private BigDecimal totalPrice;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopping_cart_id")
+    private ShoppingCartEntity shoppingCart;
 
 
     // options for details are: boolean original, ClothingSize size,

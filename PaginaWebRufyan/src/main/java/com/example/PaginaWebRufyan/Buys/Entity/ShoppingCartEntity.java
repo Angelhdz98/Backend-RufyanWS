@@ -5,23 +5,27 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class ShoppingCartEntity {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
-   @OneToMany(fetch = FetchType.EAGER,
-           cascade = {CascadeType.ALL},orphanRemoval = true)
+   @OneToMany(  mappedBy = "shoppingCart",
+           fetch = FetchType.EAGER,
+           cascade = {CascadeType.ALL},
+           orphanRemoval = true)
    //@ToString.Exclude
    @EqualsAndHashCode.Exclude
-    private Set<CartItem> itemList;
+    private List<CartItem> itemList= new ArrayList<>();
     private BigDecimal totalAmount;
     private LocalDate updatedAt;
 
@@ -31,7 +35,9 @@ public class ShoppingCartEntity {
         updatedAt = LocalDate.now();
     }
 
-    public ShoppingCartEntity(Long id, Long userId, Set<CartItem> itemList, BigDecimal totalAmount) {
+
+
+    public ShoppingCartEntity(Long id, Long userId, List<CartItem> itemList, BigDecimal totalAmount) {
         this.id = id;
         this.userId = userId;
         this.itemList = itemList;

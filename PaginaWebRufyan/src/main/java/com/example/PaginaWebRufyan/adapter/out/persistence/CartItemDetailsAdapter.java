@@ -1,11 +1,15 @@
 package com.example.PaginaWebRufyan.adapter.out.persistence;
 
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class CartItemDetailsAdapter {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 private Integer quantity;
 
     public CartItemDetailsAdapter(Integer quantity) {
