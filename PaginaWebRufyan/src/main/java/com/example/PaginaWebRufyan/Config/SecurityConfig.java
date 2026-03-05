@@ -79,8 +79,8 @@ public class SecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
-                                .requestMatchers("/shopping-cart/add_item")
-                                .authenticated()
+                                .requestMatchers("/shopping-cart/**", "/shopping-cart")
+                                .hasRole("CLIENT")
                                 .requestMatchers("/products", "/products/**")
                                 .permitAll()
                                 .requestMatchers("/like","/like/")
