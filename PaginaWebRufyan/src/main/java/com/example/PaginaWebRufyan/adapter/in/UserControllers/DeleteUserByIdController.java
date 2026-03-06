@@ -1,21 +1,19 @@
 package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.DeleteUserByIdUseCase;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@PreAuthorize("hasRole('ADMIN')")
 public class DeleteUserByIdController {
    private final DeleteUserByIdUseCase deleteUserByIdUseCase;
 
     public DeleteUserByIdController(DeleteUserByIdUseCase deleteUserByIdUseCase) {
         this.deleteUserByIdUseCase = deleteUserByIdUseCase;
     }
-    @DeleteMapping
-    public void  deleteUserById(@RequestBody Long userId) {
+    @DeleteMapping("/user/{userId}")
+    public void  deleteUserById(@PathVariable Long userId) {
         deleteUserByIdUseCase.deleteUserById(userId);
 
     }
