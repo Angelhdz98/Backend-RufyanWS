@@ -27,13 +27,14 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
     private final JwtService jwtService;
     private final CreateUserService createUserService;
     private final AuthenticationManager authenticationManager;
+    private final UserEntityMapper userEntityMapper;
 
     public RegisterUserDTO register(CreateUserCommand createUserCommand){
         UserDomain userDomain = createUserService.createUser(createUserCommand);
         String jwtToken = jwtService.generateToken(userDomain);
         String refreshToken = jwtService.generateRefreshToken(userDomain);
         saveUserToken(userDomain, jwtToken);
-        return new RegisterUserDTO(new TokenResponse(jwtToken,refreshToken), UserEntityMapper.toDto(userDomain));
+        return new RegisterUserDTO(new TokenResponse(jwtToken,refreshToken), userEntityMapper.toDto(userDomain));
     }
 
     public TokenResponse login(LoginCommand loginCommand){

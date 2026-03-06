@@ -18,16 +18,18 @@ public class UpdateUserController {
 
     private final UpdateUserUseCase updateUserUseCase;
     private final CurrentUserService currentUserService;
-    public UpdateUserController(UpdateUserUseCase updateUserUseCase, CurrentUserService currentUserService) {
+    private final UserEntityMapper userEntityMapper;
+    public UpdateUserController(UpdateUserUseCase updateUserUseCase, CurrentUserService currentUserService, UserEntityMapper userEntityMapper) {
         this.updateUserUseCase = updateUserUseCase;
         this.currentUserService = currentUserService;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @PutMapping("/users")
     public ResponseEntity<UserEntityDTO2> updateUser(@RequestPart CreateUserCommand command)  {
         UserDomain currentUser = currentUserService.getCurrentUser();
         UpdateUserCommand updateCommand = new UpdateUserCommand(command.getEmail(), command.getPassword(), command.getUsername(), command.getFullName(), command.getBirthDate(), currentUser.getId());
-        return ResponseEntity.ok(UserEntityMapper.toDto(updateUserUseCase.updateUser(updateCommand)));
+        return ResponseEntity.ok(userEntityMapper.toDto(updateUserUseCase.updateUser(updateCommand)));
     }
 
 }

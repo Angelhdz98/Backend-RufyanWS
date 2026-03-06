@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users/by-Username")
 public class FindUserByUserNameController {
     private final FindUserByUsernameUseCase findUserByUsernameUseCase;
-
-    public FindUserByUserNameController(FindUserByUsernameUseCase findUserByUsernameUseCase) {
+    private final UserEntityMapper userEntityMapper;
+    public FindUserByUserNameController(FindUserByUsernameUseCase findUserByUsernameUseCase, UserEntityMapper userEntityMapper) {
         this.findUserByUsernameUseCase = findUserByUsernameUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @GetMapping
     public ResponseEntity<UserEntityDTO2> retrieveUserByUsername(@RequestBody String username){
-        return ResponseEntity.ok( UserEntityMapper.toDto(findUserByUsernameUseCase.findUserByUsername(username)));
+        return ResponseEntity.ok( userEntityMapper.toDto(findUserByUsernameUseCase.findUserByUsername(username)));
     }
 }

@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/users")
 public class CreateNewUserController {
     private final CreateUserUseCase createUserUseCase;
+    private final UserEntityMapper userEntityMapper;
 
-    public CreateNewUserController(CreateUserUseCase createUserUseCase) {
+    public CreateNewUserController(CreateUserUseCase createUserUseCase, UserEntityMapper userEntityMapper) {
         this.createUserUseCase = createUserUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
     @PostMapping(produces = "application/json", consumes =  "application/json" )
     public ResponseEntity<UserEntityDTO2> createNewUser(@RequestBody CreateUserCommand command){
-        return  ResponseEntity.ok(UserEntityMapper.toDto(createUserUseCase.createUser(command)));
+        return  ResponseEntity.ok(userEntityMapper.toDto(createUserUseCase.createUser(command)));
     }
 
 }

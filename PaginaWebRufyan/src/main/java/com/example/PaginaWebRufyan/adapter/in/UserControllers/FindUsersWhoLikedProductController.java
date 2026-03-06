@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class FindUsersWhoLikedProductController {
     private final GetPagedUsersThatLikedUseCase getPagedUsersThatLikedUseCase;
-
-    public FindUsersWhoLikedProductController(GetPagedUsersThatLikedUseCase getPagedUsersThatLikedUseCase) {
+    private final UserEntityMapper userEntityMapper;
+    public FindUsersWhoLikedProductController(GetPagedUsersThatLikedUseCase getPagedUsersThatLikedUseCase, UserEntityMapper userEntityMapper) {
         this.getPagedUsersThatLikedUseCase = getPagedUsersThatLikedUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @GetMapping("/liked")
     ResponseEntity<Page<UserEntityDTO2>> getUsersThatLikedProductById(GetCommand getCommand){
-        return ResponseEntity.ok(getPagedUsersThatLikedUseCase.getPagedUsersThatLiked(getCommand.productId(), PageRequest.of(getCommand.pageNumber().intValue(),getCommand.pageSize().intValue(), Sort.by(getCommand.sortBy()) )).map(UserEntityMapper::toDto));
+        return ResponseEntity.ok(getPagedUsersThatLikedUseCase.getPagedUsersThatLiked(getCommand.productId(), PageRequest.of(getCommand.pageNumber().intValue(),getCommand.pageSize().intValue(), Sort.by(getCommand.sortBy()) )).map(userEntityMapper::toDto));
     }
 }

@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class FindPagedUsersController {
 
     private final FindPagedUsersUseCase findPagedUsersUseCase;
+    private final UserEntityMapper userEntityMapper;
 
-    public FindPagedUsersController(FindPagedUsersUseCase findPagedUsersUseCase) {
+    public FindPagedUsersController(FindPagedUsersUseCase findPagedUsersUseCase, UserEntityMapper userEntityMapper) {
         this.findPagedUsersUseCase = findPagedUsersUseCase;
+        this.userEntityMapper = userEntityMapper;
     }
     @GetMapping
     ResponseEntity<Page<UserEntityDTO2>> retrievePagedUsers(Pageable pageable){
-        return ResponseEntity.ok(findPagedUsersUseCase.findPagedUsers(pageable).map(UserEntityMapper::toDto));
+        return ResponseEntity.ok(findPagedUsersUseCase.findPagedUsers(pageable).map(userEntityMapper::toDto));
     }
 
 }
