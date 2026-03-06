@@ -9,11 +9,11 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdateUserUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
+//It does not update User email or password
 @RestController
-
 public class UpdateUserController {
 
     private final UpdateUserUseCase updateUserUseCase;
@@ -24,7 +24,7 @@ public class UpdateUserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserEntityDTO2> updateUser(@RequestBody CreateUserCommand command){
+    public ResponseEntity<UserEntityDTO2> updateUser(@RequestPart CreateUserCommand command)  {
         UserDomain currentUser = currentUserService.getCurrentUser();
         UpdateUserCommand updateCommand = new UpdateUserCommand(command.getEmail(), command.getPassword(), command.getUsername(), command.getFullName(), command.getBirthDate(), currentUser.getId());
         return ResponseEntity.ok(UserEntityMapper.toDto(updateUserUseCase.updateUser(updateCommand)));
