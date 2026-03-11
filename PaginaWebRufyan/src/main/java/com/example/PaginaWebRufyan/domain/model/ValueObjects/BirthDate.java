@@ -1,8 +1,6 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.Period;
