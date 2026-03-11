@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
 import com.example.PaginaWebRufyan.DTO.UserEntityDTO2;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
-import com.example.PaginaWebRufyan.domain.port.in.userUseCase.FindUserByIdUseCase;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.FindUserByUsernameUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -8,7 +8,6 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.CreateUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.ShoppingCartRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
