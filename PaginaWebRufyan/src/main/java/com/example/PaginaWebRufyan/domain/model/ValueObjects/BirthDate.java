@@ -6,8 +6,8 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.Period;
-@ToString
-@Getter
+
+
 public class BirthDate {
     @JsonFormat(pattern = "yyyy-M-d")
     private final LocalDate birthDate;
@@ -33,4 +33,13 @@ return getAge()>=18;
         return birthDate.isAfter(LocalDate.now())?0: Period.between(birthDate,LocalDate.now()).getYears();
     }
 
+    @Override
+    public String toString() {
+        return "BirthDate{" +
+                "birthDate=" + birthDate +
+                '}';
+    }
+    public LocalDate getBirthDate(){
+        return birthDate;
+    }
 }
