@@ -28,6 +28,7 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
     private final CreateUserService createUserService;
     private final AuthenticationManager authenticationManager;
     private final UserEntityMapper userEntityMapper;
+    private final ConverterUserEntityDomain converterUserEntityDomain = new ConverterUserEntityDomain();
 
     public RegisterUserDTO register(CreateUserCommand createUserCommand){
         UserDomain userDomain = createUserService.createUser(createUserCommand);
@@ -54,7 +55,7 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
 
     protected void saveUserToken (UserDomain user, String jwtToken){
         Token token = Token.builder()
-                .userEntity(ConverterUserEntityDomain.convertToEntity(user))
+                .userEntity(converterUserEntityDomain.convertToEntity(user))
                 .tokenType(Token.TokenType.BEARER)
                 .token(jwtToken)
                 .isExpired(false)

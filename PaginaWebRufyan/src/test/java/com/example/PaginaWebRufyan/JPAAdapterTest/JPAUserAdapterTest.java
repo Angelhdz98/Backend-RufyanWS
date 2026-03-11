@@ -8,7 +8,6 @@ import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryJPAImp;
-import org.h2.engine.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +33,8 @@ public class JPAUserAdapterTest {
     TestEntityManager entityManager;
     @Autowired
     private UserRepositoryJPAImp userRepositoryJPA;
+
+    private final ConverterUserEntityDomain converterUserEntityDomain = new ConverterUserEntityDomain();
 
     private PasswordEncoder passwordEncoder;
     UserDomain userTest1;
@@ -96,18 +97,14 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para evitar guardar un usuario con email repetido")
     public void shouldThrowExceptionPersistingAnUserWithRepeatedEmail(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        assertThrows(AlreadyExistIdenticatorException.class, ()->{
-            userRepositoryJPA.saveUser(userTest3ExistentEmail);
-        });
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        assertThrows(AlreadyExistIdenticatorException.class, ()-> userRepositoryJPA.saveUser(userTest3ExistentEmail));
     }
     @Test
     @DisplayName("Test para evitar guardar una usuario con username repetido")
     public void shouldThrowExceptionPersistingAnUserWithRepeatedUsername(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        assertThrows(AlreadyExistIdenticatorException.class, ()->{
-            userRepositoryJPA.saveUser(userTest4ExistentUsername);
-        });
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        assertThrows(AlreadyExistIdenticatorException.class, ()-> userRepositoryJPA.saveUser(userTest4ExistentUsername));
     }
 
     @Test
@@ -125,25 +122,21 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para evitar actualizar un usuario con email repetido")
     public void shouldReturnExceptionUpdatingAnUserWithRepeatedEmail(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        UserEntity userEntity = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        UserEntity userEntity = entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest2));
         UserDomain userToUpdate = new UserDomain(userEntity.getId(), userTest3ExistentEmail.getFullname(), userTest3ExistentEmail.getBirthDate(), userTest3ExistentEmail.getUsername(), userTest3ExistentEmail.getEmail(), encodedPassword);
 
-        assertThrows(AlreadyExistIdenticatorException.class, ()->{
-            userRepositoryJPA.updateUser(userToUpdate);
-        });
+        assertThrows(AlreadyExistIdenticatorException.class, ()-> userRepositoryJPA.updateUser(userToUpdate));
 
     }
     @Test
     @DisplayName("Test para evitar actualizar un usuario con userName repetido")
     public void shouldReturnExceptionUpdatingAnUserWithRepeatedUsername(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        UserEntity userEntity = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        UserEntity userEntity = entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest2));
         UserDomain editedUserDomain = new UserDomain(userEntity.getId(), userTest4ExistentUsername.getFullname(), userTest4ExistentUsername.getBirthDate(), userTest4ExistentUsername.getUsername(), userTest4ExistentUsername.getEmail(), encodedPassword);
 
-        assertThrows(AlreadyExistIdenticatorException.class, ()->{
-            userRepositoryJPA.updateUser(editedUserDomain);
-        });
+        assertThrows(AlreadyExistIdenticatorException.class, ()-> userRepositoryJPA.updateUser(editedUserDomain));
 
 
     }
@@ -151,7 +144,7 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para buscar un usario por id ")
     public void shouldFindUserById(){
-        UserEntity savedUser = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
+        UserEntity savedUser = entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
         UserDomain findUser = userRepositoryJPA.retrieveUserById(savedUser.getId());
         assertThat(findUser).isNotNull();
         assertThat(findUser.getEmail()).isEqualTo(savedUser.getEmail());
@@ -160,7 +153,7 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para buscar un usuario por username")
     public void shouldFindUserByUsername(){
-        UserEntity savedUser = entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
+        UserEntity savedUser = entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
         UserDomain findUser = userRepositoryJPA.retrieveUserByUsername(savedUser.getUsername());
         assertThat(findUser).isNotNull();
         assertThat(findUser.getEmail()).isEqualTo(savedUser.getEmail());
@@ -170,9 +163,9 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para buscar usuario que hagan match por usermame ")
     public void shouldFindUsersByUsernameMatch(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest3));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest2));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest3));
 
         Page<UserDomain> usersByMatching = userRepositoryJPA.findUsersByUsernameMatch("enri", PageRequest.of(0, 3));
         assertThat(usersByMatching).isNotNull();
@@ -184,9 +177,9 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para encontrar los usuarios por nombre completo que hagan match con el substring ")
     public void shouldFindUsersByFullNameMatch(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest3));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest2));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest3));
 
 
         Page<UserDomain> usersByMatching = userRepositoryJPA.findUsersByNameMatch("Enri", PageRequest.of(0, 3));
@@ -199,9 +192,9 @@ public class JPAUserAdapterTest {
     @Test
     @DisplayName("Test para encontrar los usuarios por email que hagan match con el substring")
     public  void shouldFindUsersByEmailMatching(){
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest1));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest2));
-        entityManager.persistAndFlush(ConverterUserEntityDomain.convertToEntity(userTest3));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest1));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest2));
+        entityManager.persistAndFlush(converterUserEntityDomain.convertToEntity(userTest3));
         Page<UserDomain> usersByMatching = userRepositoryJPA.findUsersByEmailMatch("enri", PageRequest.of(0, 3));
         assertThat(usersByMatching).isNotNull();
         assertThat(usersByMatching.getContent().size()).isGreaterThan(0);

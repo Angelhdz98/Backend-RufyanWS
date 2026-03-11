@@ -37,12 +37,12 @@ public class PaginaWebRufyanApplication {
 
 			var encoder = new BCryptPasswordEncoder();
 			if(!repo.existsByUsername("RufyanSilva")){
-
+				ConverterUserEntityDomain converterUserEntityDomain = new ConverterUserEntityDomain();
 				//System.out.println("Creando Admin");
 				UserEntity adminUser = new UserEntity(0L,
 						new FullName("Rodrigo", "", "Silva", ""), new BirthDate(LocalDate.of(1996, 3, 6)),
 						"RufyanSilva", "rufyanone@gmail.com", encoder.encode(adminPassword), RoleEnum.ROLE_ADMIN);
-				UserDomain saveUser = repo.saveUser(ConverterUserEntityDomain.convertToDomainWihRole(adminUser));
+				UserDomain saveUser = repo.saveUser(converterUserEntityDomain.convertToDomainWihRole(adminUser));
 
 			}
 		};

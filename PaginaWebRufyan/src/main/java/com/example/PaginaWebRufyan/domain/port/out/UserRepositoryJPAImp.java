@@ -20,78 +20,80 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
 
 
     private final SpringDataUserRepository persistenceRepo;
+    private final ConverterUserEntityDomain converterUserEntityDomain;
 
-    public UserRepositoryJPAImp(SpringDataUserRepository persistenceRepo)
+    public UserRepositoryJPAImp(SpringDataUserRepository persistenceRepo, ConverterUserEntityDomain converterUserEntityDomain)
     {
         this.persistenceRepo= persistenceRepo;
+        this.converterUserEntityDomain = converterUserEntityDomain;
     }
 
     @Override
     public Optional<UserDomain> findUserById(Long userId) {
-         return persistenceRepo.findById(userId).map(ConverterUserEntityDomain::convertToDomain);
+         return persistenceRepo.findById(userId).map(converterUserEntityDomain::convertToDomain);
 
     }
 
     @Override
     public Optional<UserDomain> findUserByUsername(String username) {
-        return persistenceRepo.findByUsername(username).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findByUsername(username).map(converterUserEntityDomain::convertToDomain);
     }
 
     @Override
     public Optional<UserDomain> findUserByEmail(String email) {
-        return persistenceRepo.findByEmail(email).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findByEmail(email).map(converterUserEntityDomain::convertToDomain);
     }
 
     @Override
     public List<UserDomain> findAllUsersByIds(List<Long> userIds) {
        return  persistenceRepo.findAllById(userIds)
                .stream()
-               .map(ConverterUserEntityDomain::convertToDomain)
+               .map(converterUserEntityDomain::convertToDomain)
                .collect(Collectors.toList());
     }
 
     @Override
     public Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable) {
-        return persistenceRepo.findUsersWhoLikedProduct(productId,pageable).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findUsersWhoLikedProduct(productId,pageable).map(converterUserEntityDomain::convertToDomain);
     }
 
     @Override
     public Page<UserDomain> findUsersByUsernameMatch(String usernameParte, Pageable pageable) {
-        return persistenceRepo.findByUsernameContainingIgnoreCase(usernameParte, pageable).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findByUsernameContainingIgnoreCase(usernameParte, pageable).map(converterUserEntityDomain::convertToDomain);
     }
 
     @Override
     public Page<UserDomain> findUsersByNameMatch(String fullNamePart, Pageable pageable) {
-        return persistenceRepo.findByStringFullNameContainingIgnoreCase(fullNamePart,pageable).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findByStringFullNameContainingIgnoreCase(fullNamePart,pageable).map(converterUserEntityDomain::convertToDomain);
     }
 
     @Override
     public Page<UserDomain> findUsersByEmailMatch(String emailPart, Pageable pageable) {
-        return persistenceRepo.findByEmailContainingIgnoreCase(emailPart,pageable).map(ConverterUserEntityDomain::convertToDomain
+        return persistenceRepo.findByEmailContainingIgnoreCase(emailPart,pageable).map(converterUserEntityDomain::convertToDomain
         );
     }
 
     @Override
     public Page<UserDomain> findUsersPaged(Pageable pageable) {
-        return persistenceRepo.findAll(pageable).map(ConverterUserEntityDomain::convertToDomain);
+        return persistenceRepo.findAll(pageable).map(converterUserEntityDomain::convertToDomain);
     }
 
 
     @Override
     public UserDomain retrieveUserById(Long userId) {
-         return ConverterUserEntityDomain
+         return converterUserEntityDomain
                  .convertToDomain(persistenceRepo.findById(userId)
                  .orElseThrow(()-> new ResourceNotFoundException("usuario no encontrado con el id: "+ userId) ));
     }
 
     @Override
     public UserDomain retrieveUserByUsername(String username) {
-        return ConverterUserEntityDomain.convertToDomain(persistenceRepo.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el username: ")));
+        return converterUserEntityDomain.convertToDomain(persistenceRepo.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el username: ")));
     }
 
     @Override
     public UserDomain retrieveUserByEmail(String email) {
-         return ConverterUserEntityDomain.convertToDomainWihRole( persistenceRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("No existe el usuario con el email: "+email )));
+         return converterUserEntityDomain.convertToDomainWihRole( persistenceRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("No existe el usuario con el email: "+email )));
 
     }
 
@@ -106,9 +108,10 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
         if(byUsername.isPresent() && !byUsername.get().getId().equals(userDomain.getId())) {
             throw new AlreadyExistIdenticatorException("El username: " + userDomain.getUsername() + " ya está registrado ");
         }
-         return ConverterUserEntityDomain.convertToDomainWihRole(persistenceRepo.save(ConverterUserEntityDomain.convertToEntity(userDomain)));
+         return converterUserEntityDomain.convertToDomainWihRole(persistenceRepo.save(converterUserEntityDomain.convertToEntity(userDomain)));
     }
 
+    //it does not update Email and password
     @Override
     public UserDomain updateUser(UserDomain userDomain) {
 
@@ -122,14 +125,25 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
             throw new AlreadyExistIdenticatorException("El username: "+ userDomain.getUsername()+ " ya está registrado ");
         userEntity.setUsername(userDomain.getUsername());
 
-        if (!userDomain.getEmail().equals(userEntity.getEmail()) && persistenceRepo.existsByEmail(userDomain.getEmail())) throw new AlreadyExistIdenticatorException("El email: "+ userDomain.getEmail()+ " ya está registrado ");
-
-        userEntity.setEmail(userDomain.getEmail());
-
-        return ConverterUserEntityDomain.convertToDomain(persistenceRepo.save(userEntity));
+        return converterUserEntityDomain.convertToDomain(persistenceRepo.save(userEntity));
 
 
     }
+
+    @Override
+    public UserDomain updateUserPassword(Long userId, String newHashedPassword) {
+        UserEntity userEntity = converterUserEntityDomain.convertToEntity(retrieveUserById(userId));
+        userEntity.setPassword(newHashedPassword);
+        return converterUserEntityDomain.convertToDomain(persistenceRepo.save(userEntity)) ;
+    }
+
+    @Override
+    public UserDomain UpdateUserEmail(Long userId, String newEmail) {
+        UserEntity userEntity = converterUserEntityDomain.convertToEntity(retrieveUserById(userId));
+        userEntity.setEmail(newEmail);
+        return converterUserEntityDomain.convertToDomain(persistenceRepo.save(userEntity)) ;
+    }
+
 
     @Override
     public void deleteById(Long userId) {
@@ -154,6 +168,6 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
 
     @Override
     public void deleteUser(UserDomain userDomain) {
-        persistenceRepo.delete(ConverterUserEntityDomain.convertToEntity(userDomain));
+        persistenceRepo.delete(converterUserEntityDomain.convertToEntity(userDomain));
     }
 }

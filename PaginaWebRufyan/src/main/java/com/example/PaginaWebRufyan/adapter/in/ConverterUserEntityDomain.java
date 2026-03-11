@@ -3,28 +3,21 @@ package com.example.PaginaWebRufyan.adapter.in;
 import com.example.PaginaWebRufyan.User.Entity.UserEntity;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConverterUserEntityDomain {
-/*
-   public static UserEntity convertToEntity(UserDomain userDomain, UserProfilePicture profilePicture){
-        return new UserEntity(userDomain.getId(),userDomain.getFullname(),userDomain.getBirthDate(),userDomain.getUsername(),userDomain.getEmail());
-    }
- */
 
-    public static UserEntity convertToEntity(UserDomain userDomain){
+    public ConverterUserEntityDomain(){}
+
+    public  UserEntity convertToEntity(UserDomain userDomain){
         return new UserEntity(userDomain.getId(),userDomain.getFullname(),userDomain.getBirthDate(),userDomain.getUsername(),userDomain.getEmail(), userDomain.getHashedPassword(), userDomain.getRole());
     }
-   /*
-   public static UserDomain convertToDomain(UserEntity userEntity, String email,UserProfilePicture profilePicture){
-        return new UserDomain(userEntity.getId(),userEntity.getFullName(), userEntity.getBirthDate(),userEntity.getUsername(),userEntity.getEmail());
 
-
+    public  UserDomain convertToDomain(UserEntity userEntity) {
+       return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail(), userEntity.getPassword(), userEntity.getRole());
     }
-*/
-    public static UserDomain convertToDomain(UserEntity userEntity) {
-       return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail(), userEntity.getPassword());
-    }
-    public static UserDomain convertToDomainWihRole(UserEntity userEntity) {
+    public  UserDomain convertToDomainWihRole(UserEntity userEntity) {
         return new UserDomain(userEntity.getId(),userEntity.getFullName(), new BirthDate(userEntity.getBirthDate()),userEntity.getUsername(),userEntity.getEmail(), userEntity.getPassword(), userEntity.getRole());
     }
 }
