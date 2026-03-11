@@ -1,7 +1,7 @@
 package com.example.PaginaWebRufyan.Service.UserServiceAdapter;
 
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
-import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdatePassword;
+import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdatePasswordUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UpdateUserPasswordService implements UpdatePassword {
+public class UpdateUserPasswordService implements UpdatePasswordUseCase {
     private final UserRepositoryPort userRepositoryPort;
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -23,12 +23,7 @@ public class UpdateUserPasswordService implements UpdatePassword {
         UserDomain currentUser = userRepositoryPort.retrieveUserById(userId);
         if(!encoder.matches(oldPassword,currentUser.getHashedPassword()))throw  new IllegalArgumentException("La contraseña no coincide");
 
-        userRepositoryPort.updateUser(new UserDomain(currentUser.getId(),
-                currentUser.getFullname(),
-                currentUser.getBirthDate(),
-                currentUser.getUsername(),
-                currentUser.getEmail(),
-                encoder.encode(newPassword)));
+userRepositoryPort.updateUserPassword(currentUser.getId(), encoder.encode(newPassword));
 
     }
 }

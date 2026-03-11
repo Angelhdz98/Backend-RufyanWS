@@ -2,7 +2,6 @@ package com.example.PaginaWebRufyan.Service.UserServiceAdapter;
 
 import com.example.PaginaWebRufyan.DTO.UpdateUserCommand;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
-import com.example.PaginaWebRufyan.Exceptions.EmailAlreadyUsedException;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdateUserUseCase;
@@ -11,14 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 //It does not change password and email just verify the password
 @Service
 public class UpdateUserService implements UpdateUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UpdateUserService(UserRepositoryPort userRepositoryPort){
         this.userRepositoryPort = userRepositoryPort;
@@ -29,7 +25,7 @@ public class UpdateUserService implements UpdateUserUseCase {
     public UserDomain updateUser(UpdateUserCommand command)  {
         UserDomain userToUpdate = userRepositoryPort.retrieveUserById(command.getUserId());
 
-        if(!userToUpdate.getHashedPassword().equals(passwordEncoder.encode(command.getPassword())))throw new RuntimeException("La contraseña no coincide");
+
         //Identification update data will be changed for a specifics services and controllers
      /*   if (!userToUpdate.getEmail().equals(
                 command.getEmail())) {

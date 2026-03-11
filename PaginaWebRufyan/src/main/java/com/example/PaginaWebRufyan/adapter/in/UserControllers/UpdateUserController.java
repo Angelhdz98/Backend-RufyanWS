@@ -26,9 +26,9 @@ public class UpdateUserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserEntityDTO2> updateUser(@RequestPart CreateUserCommand command)  {
+    public ResponseEntity<UserEntityDTO2> updateUser(@RequestPart CreateUserCommand createUserCommand)  {
         UserDomain currentUser = currentUserService.getCurrentUser();
-        UpdateUserCommand updateCommand = new UpdateUserCommand(command.getEmail(), command.getPassword(), command.getUsername(), command.getFullName(), command.getBirthDate(), currentUser.getId());
+        UpdateUserCommand updateCommand = new UpdateUserCommand(createUserCommand.getEmail(), createUserCommand.getPassword(), createUserCommand.getUsername(), createUserCommand.getFullName(), createUserCommand.getBirthDate(), currentUser.getId());
         return ResponseEntity.ok(userEntityMapper.toDto(updateUserUseCase.updateUser(updateCommand)));
     }
 

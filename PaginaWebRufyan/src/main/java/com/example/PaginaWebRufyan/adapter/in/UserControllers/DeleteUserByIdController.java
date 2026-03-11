@@ -12,7 +12,7 @@ public class DeleteUserByIdController {
     public DeleteUserByIdController(DeleteUserByIdUseCase deleteUserByIdUseCase) {
         this.deleteUserByIdUseCase = deleteUserByIdUseCase;
     }
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/users/{userId}")
     public void  deleteUserById(@PathVariable Long userId) {
         deleteUserByIdUseCase.deleteUserById(userId);
 
