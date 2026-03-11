@@ -86,7 +86,9 @@ public class SecurityConfig {
                                 .requestMatchers("/like","/like/")
                                 .hasRole("CLIENT")
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
-                                .requestMatchers("/users","/user-register").permitAll()
+                                .requestMatchers("/user-register").permitAll()
+                                .requestMatchers("/users",
+                                        "/users/**").authenticated()
                                 .anyRequest().authenticated()
 
 
