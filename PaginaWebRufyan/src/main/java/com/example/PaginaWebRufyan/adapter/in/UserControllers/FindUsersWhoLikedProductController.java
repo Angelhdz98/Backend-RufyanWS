@@ -2,13 +2,10 @@ package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
 import com.example.PaginaWebRufyan.DTO.UserEntityDTO2;
 import com.example.PaginaWebRufyan.adapter.in.GetCommand;
-import com.example.PaginaWebRufyan.adapter.in.LikeControllers.LikeCommand;
-import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.GetPagedUsersThatLikedUseCase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
