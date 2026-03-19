@@ -138,13 +138,11 @@ public class UserRepositoryJPAImp implements UserRepositoryPort {
     }
 
     @Override
-    public UserDomain UpdateUserEmail(Long userId, String newEmail) {
+    public UserDomain updateUserEmail(Long userId, String newEmail) {
         UserEntity userEntity = converterUserEntityDomain.convertToEntity(retrieveUserById(userId));
         userEntity.setEmail(newEmail);
         return converterUserEntityDomain.convertToDomain(persistenceRepo.save(userEntity)) ;
     }
-
-
     @Override
     public void deleteById(Long userId) {
         persistenceRepo.deleteById(userId);
