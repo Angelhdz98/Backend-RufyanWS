@@ -1,9 +1,10 @@
 package com.example.PaginaWebRufyan.Security.Roles;
 
+
 public enum RoleEnum {
-ADMIN,
-CLIENT,
-INVITED,
-DEVELOPER
+ROLE_ADMIN,
+    ROLE_CLIENT,
+    ROLE_INVITED,
+    ROLE_DEVELOPER
 }
 

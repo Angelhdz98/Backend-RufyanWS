@@ -9,15 +9,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class ImageStoragePropertiesTest {
 
+    ImageStorageProperties imageStorageProperties;
+
     @Test
     @DisplayName("Test para inicializar ImageStorageProperties correctamente")
     void getUploadDir() {
 
 
-        String uploadDir = ImageStorageProperties.getUploadDir();
+
+        String uploadDir = imageStorageProperties.getUploadDir();
         assertThat(uploadDir).isNotNull();
         assertThat(uploadDir).isNotEqualTo("null");
-        System.out.println("uploadDir:  "+ ImageStorageProperties.getUploadDir());
+        System.out.println("uploadDir:  "+ imageStorageProperties.getUploadDir());
 
 
 

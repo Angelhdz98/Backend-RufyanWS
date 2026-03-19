@@ -6,6 +6,6 @@ import com.example.PaginaWebRufyan.domain.model.UserDomain;
 
 public interface UpdateUserUseCase {
 
-    UserDomain updateUser(UpdateUserCommand command);
+    UserDomain updateUser(UpdateUserCommand command) ;
 
 }

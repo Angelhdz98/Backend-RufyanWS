@@ -24,7 +24,7 @@ public class BodyClothing extends Product {
     private PrintingTecniqueEnum printingTecnique;
     private BodyClotheTypesEnum bodyClotheType;
 
-    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist priceManagerPersist, ClothingStockAdapter stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> image, ProductTypeEnum productTypeEnum, String clothingMaterial, PrintingTecniqueEnum printingTecnique, BodyClotheTypesEnum bodyClotheType) {
+    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist priceManagerPersist, ClothingStockManager stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> image, ProductTypeEnum productTypeEnum, String clothingMaterial, PrintingTecniqueEnum printingTecnique, BodyClotheTypesEnum bodyClotheType) {
         super(id, name, description, creationDate, priceManagerPersist, stockManager, isAvailable, isFavorite, image, productTypeEnum);
         this.clothingMaterial = clothingMaterial;
         this.printingTecnique = printingTecnique;
@@ -38,10 +38,10 @@ public class BodyClothing extends Product {
         this.bodyClotheType = bodyClotheType;
     }
 
-    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist singlePriceManagerPersist, ClothingStockAdapter clothingStockAdapter, Boolean isAvailable, Boolean isFavorite, Set<Image> images,ProductTypeEnum productTypeEnum , String clothingMaterial, BodyClotheTypesEnum BodyClothingType, PrintingTecniqueEnum printingTechnique) {
-        super(id, name, description, creationDate, singlePriceManagerPersist, clothingStockAdapter, isAvailable, isFavorite, images, productTypeEnum);
+    public BodyClothing(Long id, String name, String description, LocalDate creationDate, SinglePriceManagerPersist singlePriceManagerPersist, ClothingStockManager clothingStockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> images, ProductTypeEnum productTypeEnum , String clothingMaterial, BodyClotheTypesEnum bodyClothingType, PrintingTecniqueEnum printingTechnique) {
+        super(id, name, description, creationDate, singlePriceManagerPersist, clothingStockManager, isAvailable, isFavorite, images, productTypeEnum);
         this.clothingMaterial = clothingMaterial;
-        this.printingTecnique = printingTecnique;
-        this.bodyClotheType = bodyClotheType;
+        this.printingTecnique = printingTechnique;
+        this.bodyClotheType = bodyClothingType;
     }
 }

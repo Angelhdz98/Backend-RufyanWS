@@ -12,7 +12,7 @@ import java.util.Map;
 @Entity
 @ToString
 @Getter
-public class ClothingStockAdapter extends StockManager {
+public class ClothingStockManager extends StockManager {
     @ElementCollection
     @CollectionTable(name = "clothing_size_stock",
                      joinColumns = @JoinColumn(name = "clothing_id"))
@@ -22,13 +22,13 @@ public class ClothingStockAdapter extends StockManager {
     private Map<ClothingSizeEnum, Integer> stockPerSize= new HashMap<>();
 
     // en caso de no asignar stock se inicializa con cero
-    public ClothingStockAdapter(){
+    public ClothingStockManager(){
         Map<ClothingSizeEnum, Integer> stockMap = new LinkedHashMap<>();
                 Arrays.stream(ClothingSizeEnum.values()).forEach((ClothingSizeEnum clothingSizeEnum)-> stockMap.put(clothingSizeEnum,0));
                 this.stockPerSize = stockMap;
 
     }
-    public ClothingStockAdapter(Map<ClothingSizeEnum, Integer> stockPerSize) {
+    public ClothingStockManager(Map<ClothingSizeEnum, Integer> stockPerSize) {
         this.stockPerSize = stockPerSize;
     }
 

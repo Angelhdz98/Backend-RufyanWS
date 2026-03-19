@@ -151,11 +151,10 @@ public class ProductCRUDUseCasesTest {
  */
         //
 
-         productSpecs= new ProductSpecs("Titulo obra", "descripción x", images, new PaintingStockDTO(PaintingStockManager.DEFAULT_ORIGINAL_AVAILABLE,PaintingStockManager.DEFAULT_STOCK_COPIES,PaintingStockManager.DEFAULT_COPIES_MADE), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE,PaintingPriceManager.MIN_ORIGINAL_PRICE), ProductTypeEnum.PAINTING, true );
+         productSpecs= new ProductSpecs("Titulo obra", "descripción x",  new PaintingStockDTO(PaintingStockManager.DEFAULT_ORIGINAL_AVAILABLE,PaintingStockManager.DEFAULT_STOCK_COPIES,PaintingStockManager.DEFAULT_COPIES_MADE), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE,PaintingPriceManager.MIN_ORIGINAL_PRICE), ProductTypeEnum.PAINTING, true );
 
          productSpecsUpdated = new ProductSpecs(productSpecs.name().toLowerCase(),
                  "descripción x",
-                 addedImages,
                  new PaintingStockDTO(PaintingStockManager.DEFAULT_ORIGINAL_AVAILABLE,PaintingStockManager.DEFAULT_STOCK_COPIES,PaintingStockManager.DEFAULT_COPIES_MADE), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE,PaintingPriceManager.MIN_ORIGINAL_PRICE), ProductTypeEnum.PAINTING, true );
 
          ImageDomain image1 = new ImageDomain(1L,productSpecs.name(),"localchost:8080/images/paintings/"+file1);
@@ -178,7 +177,9 @@ public class ProductCRUDUseCasesTest {
     public void shouldCreateAProduct(){
 
         when(productRepositoryPort.saveProduct(any(ProductDomain.class))).thenReturn(defaultProduct1);
-        ProductDomain resultProduct = createProductUseCase.createProduct(new CreateProductCommand(productSpecs, new PaintingDomainDetails()));
+        ProductDomain resultProduct = createProductUseCase.createProduct(
+                new CreateProductCommand(productSpecs, new PaintingDomainDetails()), images);
+
 
         verify(productRepositoryPort).saveProduct(any(ProductDomain.class));
         assertThat(resultProduct.getName()).isEqualTo(productSpecs.name());
@@ -273,7 +274,7 @@ public class ProductCRUDUseCasesTest {
         when(productRepositoryPort.updateProduct(any())).thenReturn(defaultProductUpdated);
 
         UpdateProductCommand command = new UpdateProductCommand(id, productSpecsUpdated, new PaintingDomainDetails(), defaultProductUpdated.getImages());
-        ProductDomain updateProductById = updateProductByIdUseCase.updateProductById(command);
+        ProductDomain updateProductById = updateProductByIdUseCase.updateProductById(command, images);
 
         assertThat(updateProductById.getId()).isEqualTo(defaultProductUpdated.getId());
         assertThat(updateProductById.getImages()).isNotEmpty();

@@ -15,11 +15,12 @@ public interface SpringDataUserRepository extends JpaRepository<UserEntity, Long
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 
+    Optional<UserEntity> findByEmail(String email);
 
     Page<UserEntity> findByUsernameContainingIgnoreCase(String usernamePart, Pageable pageable);
     Page<UserEntity> findByStringFullNameContainingIgnoreCase(String namePart, Pageable pageable);
     Page<UserEntity> findByEmailContainingIgnoreCase(String emailPart, Pageable pageable);
-
+    //Page<UserEntity> findPagedUsers();
     @Query("SELECT u FROM UserEntity u " +
             "WHERE u.id IN (SELECT l.userId FROM Likes l WHERE l.productId = :productId)")
     Page<UserEntity> findUsersWhoLikedProduct(@Param("productId") Long productId, Pageable pageable);

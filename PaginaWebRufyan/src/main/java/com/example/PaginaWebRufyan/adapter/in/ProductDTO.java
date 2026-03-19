@@ -8,5 +8,12 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductStockDTO;
 
 import java.util.Set;
 
-public record ProductDTO(String name, Set<ImageDomain> images, ProductStockDTO productStockDTO, ProductPricingDTO productPricingDTO, ProductTypeEnum productTypeEnum, ProductDomainDetails productDetails) {
+public record ProductDTO(Long id,
+                         String name,
+                         Set<ImageDomain> images,
+                         String description,
+                         ProductStockDTO productStockDTO,
+                         ProductPricingDTO productPricingDTO,
+                         ProductTypeEnum productTypeEnum,
+                         ProductDomainDetails productDetails) {
 }

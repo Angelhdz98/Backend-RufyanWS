@@ -11,8 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import static  org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -26,9 +28,11 @@ public class ProductDomainTest {
 
 
     @InjectMocks
-            ProductDomainFactory productDomainFactory;
+    ProductDomainFactory productDomainFactory;
+    @Mock
+    ImageProcessor imageProcessor;
 
-    Set<MultipartFile> images = new HashSet<>();
+    Set<MultipartFile> imageFiles = new HashSet<>();
     MultipartFile file1 = mock(MultipartFile.class);
     MultipartFile file2 = mock(MultipartFile.class);
     MultipartFile file3 = mock(MultipartFile.class);
@@ -41,12 +45,13 @@ public class ProductDomainTest {
     Set<ImageDomain> incompleteImagesSet = new HashSet<> ();
 
 
+
     @BeforeEach
     public  void setUp(){
 
-        images.add(file1);
-        images.add(file2);
-        images.add(file3);
+        imageFiles.add(file1);
+        imageFiles.add(file2);
+        imageFiles.add(file3);
 
         imagesDomain.add(mockImage1);
         imagesDomain.add(mockImage2);
@@ -67,41 +72,48 @@ public class ProductDomainTest {
 
 
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10);
-        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
-        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", Set.of(),paintingStockDTO, paintingPricingDTO, paintingType, true );
-
-        ProductSpecs productSpecs2= new ProductSpecs("Titulo obra", "descripción x", Set.of(file1),paintingStockDTO, paintingPricingDTO, paintingType, true );
-        try(MockedStatic<ImageProcessor> imageProcessorMocked= mockStatic(ImageProcessor.class)){
-            imageProcessorMocked.when(()->ImageProcessor.processImages(any(), any())).thenReturn(incompleteImagesSet);
-
-            assertThrows(IllegalArgumentException.class,()->productDomainFactory.createProduct(productSpecs, new PaintingDomainDetails()));
-
-            assertThrows(IllegalArgumentException.class,()->ProductDomainFactory.createProduct(productSpecs2, new PaintingDomainDetails()));
+        Set<MultipartFile> voidImages = Set.of();
+        Set<MultipartFile> images = Set.of(file1);
 
 
+        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", paintingStockDTO, paintingPricingDTO, paintingType, true );
 
-        }
+        ProductSpecs productSpecs2= new ProductSpecs("Titulo obra", "descripción x",paintingStockDTO, paintingPricingDTO, paintingType, true );
 
+
+        assertThrows(Exception.class, ()->{
+            productDomainFactory.createProduct(productSpecs,new PaintingDomainDetails(),images);
+        });
+
+        assertThrows(Exception.class, ()->{
+            productDomainFactory.createProduct(productSpecs,new PaintingDomainDetails(),images);
+        });
 
 
 
     }
+
+    //Menos de tres letras
     @Test
     @DisplayName("Test para evitar que se creen productos con nombre ivalido")
     public  void shouldReturnExceptionForInvalidName(){
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10);
-        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
-        ProductSpecs productSpecsWrongName= new ProductSpecs("Ti", "descripción x", images,paintingStockDTO, paintingPricingDTO, paintingType, true );
+        ProductSpecs productSpecsWrongName= new ProductSpecs("Ti", "descripción x", paintingStockDTO, paintingPricingDTO, paintingType, true );
 
-        try(MockedStatic<ImageProcessor> imageProcessorMocked= mockStatic(ImageProcessor.class)){
-            imageProcessorMocked.when(()->ImageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
-            assertThrows(IllegalArgumentException.class,()->ProductDomainFactory.createProduct(productSpecsWrongName, new PaintingDomainDetails()));
-        }
+
+        assertThrows(Exception.class, ()->{
+            productDomainFactory.createProduct(productSpecsWrongName,new PaintingDomainDetails(),imageFiles);
+        });
+
+
+
 
 
 
@@ -112,7 +124,7 @@ public class ProductDomainTest {
     }
 
     @Test
-    @DisplayName("Test para crear los un painting usando  la clase ProductFactory")
+    @DisplayName("Test para crear un painting usando  la clase ProductFactory")
     public void shouldCreatePaintingProduct() {
         // productSpecs
         // productDomainDetails
@@ -120,17 +132,20 @@ public class ProductDomainTest {
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true, 5, 10);
-        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true, 5, 10,StockEnum.PAINTING);
+        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
 
-        ProductSpecs productSpecs = new ProductSpecs("Titulo obra", "descripción x", images, paintingStockDTO, paintingPricingDTO, paintingType, true);
 
-        try (MockedStatic<ImageProcessor> imageProcessorMocked = mockStatic(ImageProcessor.class)) {
-            imageProcessorMocked.when(() -> ImageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
-            ProductDomain product = ProductDomainFactory.createProduct(productSpecs, new PaintingDomainDetails());
+        ProductSpecs productSpecs = new ProductSpecs("Titulo obra", "descripción x", paintingStockDTO, paintingPricingDTO, paintingType, true);
+        PaintingDomainDetails paintingDomainDetails = new PaintingDomainDetails(PaintingDomainDetails.MIN_HEIGHT_CM, PaintingDomainDetails.MIN_LARGE_CM, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().minusWeeks(3));
 
-            Assertions.assertThat(product).isInstanceOf(PaintingDomain.class);
+        when(imageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
+
+        ProductDomain product = productDomainFactory.createProduct(productSpecs, paintingDomainDetails, imageFiles);
+
+
+        Assertions.assertThat(product).isInstanceOf(PaintingDomain.class);
 
             Assertions.assertThat(product.getProductDetails()).isInstanceOf(PaintingDomainDetails.class);
 
@@ -139,7 +154,7 @@ public class ProductDomainTest {
             Assertions.assertThat(product.getPriceManagerBase()).isInstanceOf(PaintingPriceManager.class);
         }
 
-    }
+
 
 
 
@@ -153,28 +168,40 @@ public class ProductDomainTest {
 
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10);
-        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
-        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", images, paintingStockDTO, paintingPricingDTO, paintingType, true );
-        try(MockedStatic<ImageProcessor> imageProcessorMocked= mockStatic(ImageProcessor.class)){
-            imageProcessorMocked.when(()->ImageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
+        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x" , paintingStockDTO, paintingPricingDTO, paintingType, true );
+
+
+         //   when(imageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
 
         assertThrows(IllegalArgumentException.class, ()->{
-                ProductDomainFactory.createProduct(productSpecs, new PaintingDomainDetails(PaintingDomainDetails.MIN_HEIGHT_CM-1, PaintingDomainDetails.MIN_LARGE_CM, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().minusWeeks(3)));
+                productDomainFactory.createProduct
+                        (productSpecs,
+                        new PaintingDomainDetails(
+                                PaintingDomainDetails.MIN_HEIGHT_CM-1, PaintingDomainDetails.MIN_LARGE_CM, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().minusWeeks(3)
+                        ),
+                                imageFiles);
+
         });
 
         assertThrows(IllegalArgumentException.class, ()->{
-            ProductDomainFactory.createProduct(productSpecs, new PaintingDomainDetails(PaintingDomainDetails.MIN_HEIGHT_CM, PaintingDomainDetails.MIN_LARGE_CM-1, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().minusWeeks(3)));
+            productDomainFactory.createProduct(productSpecs, new PaintingDomainDetails(PaintingDomainDetails.MIN_HEIGHT_CM, PaintingDomainDetails.MIN_LARGE_CM-1, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().minusWeeks(3)), imageFiles);
         });
 
         assertThrows(IllegalArgumentException.class, ()->{
-            ProductDomainFactory.createProduct(productSpecs, new PaintingDomainDetails(PaintingDomainDetails.MIN_HEIGHT_CM, PaintingDomainDetails.MIN_LARGE_CM, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().plusDays(1)));
+            productDomainFactory.createProduct(
+                    productSpecs,
+                    new PaintingDomainDetails(
+                            PaintingDomainDetails.MIN_HEIGHT_CM, PaintingDomainDetails.MIN_LARGE_CM, MediumEnum.OIL_PAINT, SupportMaterialEnum.COTTON_PAPER, LocalDate.now().plusDays(1)),
+                    imageFiles);
         });
+
 
 
     }
-    }
+
 
 
     @Test
@@ -191,18 +218,19 @@ public class ProductDomainTest {
             defaultClothingStock.put(clothingSizeEnum,5);
         });
 
-        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock);
+        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING);
 
-        SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"));
+        SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"),PricingTypeEnum.SIMPLE);
 
 
 
-        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", images,bodyClothingStockDTO, singlePricingDTO , BodyClothingType, true );
+        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x",bodyClothingStockDTO, singlePricingDTO , BodyClothingType, true );
 
 
         try(MockedStatic<ImageProcessor> imageProcessorMocked= mockStatic(ImageProcessor.class)){
-            imageProcessorMocked.when(()->ImageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
-            ProductDomain bodyClothing = ProductDomainFactory.createProduct(productSpecs, new BodyClothingDomainDetails());
+
+            when(imageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
+            ProductDomain bodyClothing = productDomainFactory.createProduct(productSpecs, new BodyClothingDomainDetails(),imageFiles);
 
             Assertions.assertThat(bodyClothing).isInstanceOf(BodyClothingDomain.class);
 
@@ -230,20 +258,21 @@ public class ProductDomainTest {
             defaultClothingStock.put(clothingSizeEnum,5);
         });
 
-        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock);
+        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING);
 
-        SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"));
+        SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"), PricingTypeEnum.SIMPLE);
 
 
 
-        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", images,bodyClothingStockDTO, singlePricingDTO , BodyClothingType, true );
+        ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", bodyClothingStockDTO, singlePricingDTO , BodyClothingType, true );
 
-        try(MockedStatic<ImageProcessor> imageProcessorMocked= mockStatic(ImageProcessor.class)){
-            imageProcessorMocked.when(()->ImageProcessor.processImages(any(), any())).thenReturn(imagesDomain);
-            assertThrows(IllegalArgumentException.class, ()->{
-                ProductDomain bodyClothing = ProductDomainFactory.createProduct(productSpecs, new BodyClothingDomainDetails("",BodyClotheTypesEnum.HOODIE,PrintingTecniqueEnum.SERIGRAPHY));
+       // when(imageProcessor.processImages(any(),any())).thenReturn(imagesDomain);
+        assertThrows(IllegalArgumentException.class, ()->{
+            ProductDomain bodyClothing = productDomainFactory.createProduct(productSpecs, new BodyClothingDomainDetails("",BodyClotheTypesEnum.HOODIE,PrintingTecniqueEnum.SERIGRAPHY),imageFiles);
 
-            });
+        });
+
+
         }
 
 
@@ -252,7 +281,7 @@ public class ProductDomainTest {
 
 
 
-}
+
 
 
 

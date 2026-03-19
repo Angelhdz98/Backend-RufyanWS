@@ -1,9 +1,6 @@
 package com.example.PaginaWebRufyan.adapter.out.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +15,7 @@ public class LikeEntity {
     private final Long id;
     private final Long userId;
     private final Long productId;
+    @Column(nullable = false)
     private final LocalDateTime likedAt;
 
 

@@ -11,15 +11,20 @@ import java.util.Optional;
 public interface UserRepositoryPort {
     Optional<UserDomain> findUserById(Long userId);
     Optional<UserDomain> findUserByUsername(String username);
+    Optional<UserDomain> findUserByEmail(String email);
     List<UserDomain> findAllUsersByIds(List<Long> userIds);
     Page<UserDomain> findAllUsersWhoLikedProduct(Long productId, Pageable pageable);
     Page<UserDomain> findUsersByUsernameMatch(String usernameParte, Pageable pageable);
     Page<UserDomain> findUsersByNameMatch(String fullNamePart, Pageable pageable);
     Page<UserDomain> findUsersByEmailMatch(String emailPart, Pageable pageable);
+    Page<UserDomain> findUsersPaged(Pageable pageable);
     UserDomain retrieveUserById(Long userId);
     UserDomain retrieveUserByUsername(String username);
+    UserDomain retrieveUserByEmail(String email);
     UserDomain saveUser(UserDomain userDomain);
     UserDomain updateUser(UserDomain userDomain);
+    UserDomain updateUserPassword(Long userId, String newHashedPassword);
+    UserDomain updateUserEmail(Long userId, String newEmail);
     void deleteById(Long userId);
 
     boolean existsByEmail(String email);

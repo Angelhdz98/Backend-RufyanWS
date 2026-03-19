@@ -42,14 +42,16 @@ public class JpaLikesRepository implements LikesRepositoryPort {
 
     @Override
     public boolean existsLike(Long userId, Long productId) {
-        return springDataLikesRepo.exists(Example.of(new LikeEntity(null,userId,productId)));
+        return springDataLikesRepo.findByUserIdAndProductId(userId, productId).isPresent();
      }
 
     @Override
     public void unmarkAsLiked(Long userId,Long productId) {
-        Optional<LikeDomain> optionalLike= springDataLikesRepo.findOne(Example.of(new LikeEntity(null, userId,productId))).map(LikeMapper::mapToDomain);
+        Optional<LikeDomain> optionalLike= springDataLikesRepo.findByUserIdAndProductId(userId,productId).map(LikeMapper::mapToDomain);
         if(optionalLike.isEmpty()) throw new ResourceNotFoundException("No se ha generado ese like userId: "+ userId+ "productId: "+ productId);
-        springDataLikesRepo.delete(LikeMapper.mapToEntity(optionalLike.get()));
+       springDataLikesRepo.delete(LikeMapper.mapToEntity(optionalLike.get()));
+
+
     }
 
     @Override

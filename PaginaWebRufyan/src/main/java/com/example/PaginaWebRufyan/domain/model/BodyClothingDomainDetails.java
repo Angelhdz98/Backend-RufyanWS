@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.domain.model;
 
+import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BodyClotheTypesEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PrintingTecniqueEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
@@ -10,12 +11,15 @@ public class BodyClothingDomainDetails extends ProductDomainDetails {
     private final String material;
     private final BodyClotheTypesEnum type; //posible enum
     private final PrintingTecniqueEnum printingTechnique;
+    private final ProductTypeEnum productType;
 
 
     public BodyClothingDomainDetails( ) {
         this.material = "100% algodon ";
         this.type = BodyClotheTypesEnum.T_SHIRT;
         this.printingTechnique = PrintingTecniqueEnum.SERIGRAPHY;
+        this.productType = ProductTypeEnum.CLOTHING;
+
     }
 
 
@@ -24,6 +28,7 @@ public class BodyClothingDomainDetails extends ProductDomainDetails {
         this.material = material;
         this.type = type;
         this.printingTechnique = printingTechnique;
+        this.productType = ProductTypeEnum.CLOTHING;
     }
 
     @Override

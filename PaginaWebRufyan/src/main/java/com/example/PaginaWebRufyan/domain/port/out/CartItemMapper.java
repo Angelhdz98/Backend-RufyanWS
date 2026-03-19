@@ -6,7 +6,6 @@ import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.CartItemDetailsFactory;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
-import com.example.PaginaWebRufyan.domain.model.ProductDomainFactory;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 
 public class CartItemMapper {
@@ -37,7 +36,7 @@ Product product,
         CartItemDetailsAdapter cartItemDetailsAdapter = CartItemDetailsMapper.toEntity(cartItemDomain.getDetails(),cartItemDomain.getProduct().getProductType());
 
 
-        return new CartItem(cartItemDomain.getId(),productPersistenceAdapter,cartItemDetailsAdapter,cartItemDomain.getItemTotalAmount());
+        return new CartItem(cartItemDomain.getId(),productPersistenceAdapter,cartItemDetailsAdapter,cartItemDomain.getItemTotalAmount(), null);
 
     }
 

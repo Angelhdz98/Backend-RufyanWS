@@ -1,18 +1,19 @@
 package com.example.PaginaWebRufyan.domain.model;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
-import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 
 @Getter
+@ToString
 public class ShoppingCartDomain {
     private final Long id;
     private final Long userId;
-    private final  Set<CartItemDomain> items = new LinkedHashSet<>();
+    private final  Set<CartItemDomain> items =new HashSet<>();
 
     public BigDecimal getSubtotalAmount(){
         return items.stream().map(CartItemDomain::getItemTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -27,9 +28,8 @@ public class ShoppingCartDomain {
         items.add(itemDomain);
     }
 
-    public void deleteItem(CartItemDomain itemDomain){
-        if(!items.contains(itemDomain)) throw  new ResourceNotFoundException("no se encontró el item que se quiere eliminar");
-        items.remove(itemDomain);
+    public void deleteItem(Long cartItemIdToDelete){
+          items.removeIf(item-> item.getId().equals(cartItemIdToDelete));
     }
 
     public ShoppingCartDomain(Long id, Long userId) {

@@ -38,18 +38,26 @@ public class FullName {
         this.secondLastname = secondLastname;
     }
 
+
     public String getFullName(){
         StringBuilder nameCrafter = new StringBuilder(this.firstName);
-        nameCrafter.append(" ") ;
-        if(!secondName.isBlank()) nameCrafter.append(secondName);
-        nameCrafter.append(firstLastname);
-        if(!secondLastname.isBlank()) nameCrafter.append(secondLastname);
+        nameCrafter.append(" ");
 
-        return nameCrafter.toString();
+        if(!secondName.isBlank()){
+            nameCrafter.append(secondName).append(" ");
+        }
 
+        nameCrafter.append(firstLastname).append(" ");
+
+        if(!secondLastname.isBlank()) {
+            nameCrafter.append(secondLastname);
+        }
+
+        return nameCrafter.toString().trim();
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return getFullName();
+    }
 }

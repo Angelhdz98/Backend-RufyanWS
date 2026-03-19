@@ -5,9 +5,11 @@ import com.example.PaginaWebRufyan.DTO.UpdateUserCommand;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.EmailAlreadyUsedException;
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.*;
+import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
+import com.example.PaginaWebRufyan.domain.port.out.ShoppingCartRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,8 @@ import static org.mockito.Mockito.*;
 public class UserCRUDUseCasesTest {
     @Mock
     UserRepositoryPort userRepositoryPort;
+    @Mock
+    ShoppingCartRepositoryPort shoppingCartRepository;
     @InjectMocks
     CreateUserService createUserService;
     @InjectMocks
@@ -95,6 +99,7 @@ public void setUp(){
         when(userRepositoryPort.existsByUsername(any(String.class))).
                 thenReturn(false);
         when(userRepositoryPort.saveUser(any())).thenReturn(mockResponse);
+        when(shoppingCartRepository.createShoppingCart(any())).thenReturn(new ShoppingCartDomain(10L,10L));
 //        when(mockResponse.getFullname()).thenReturn(new FullName("Rambo", "Alvaro", "Fomez", "Delao"));
   //      when(mockResponse.getEmail()).thenReturn("emailprueba@gmail.com");
     //    when(mockResponse.getUsername()).thenReturn("ramboDelaO");
@@ -110,7 +115,7 @@ public void setUp(){
                 )
         );
         verify(userRepositoryPort, times(1)).saveUser(any());
-
+        verify(shoppingCartRepository,times(1)).createShoppingCart(any());
 
     }
     @Test
@@ -347,7 +352,7 @@ public void setUp(){
     }
 
     @Test
-    @DisplayName("Test para encontrar los usuarios ")
+    @DisplayName("Test para eliminar un usuario ")
     public void shouldDeleteUserSuccessfully(){
 
     UserDomain mockUser = mock(UserDomain.class);

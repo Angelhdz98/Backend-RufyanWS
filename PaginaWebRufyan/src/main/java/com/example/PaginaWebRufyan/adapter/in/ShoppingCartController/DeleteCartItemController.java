@@ -1,27 +1,31 @@
 package com.example.PaginaWebRufyan.adapter.in.ShoppingCartController;
 
 
+import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CurrentUserService;
 import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
+import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.ShoppingCartUseCase.DeleteCartItemUseCase;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/shopping-cart/remove-item")
+@RequestMapping
 public class DeleteCartItemController {
     private final DeleteCartItemUseCase deleteCartItemUseCase;
-
-    public DeleteCartItemController(DeleteCartItemUseCase deleteCartItemUseCase) {
+    private final CurrentUserService currentUserService;
+    private final ShoppingCartDomainToDTO shoppingCartDomainToDTO;
+    public DeleteCartItemController(DeleteCartItemUseCase deleteCartItemUseCase, CurrentUserService currentUserService, ShoppingCartDomainToDTO shoppingCartDomainToDTO) {
         this.deleteCartItemUseCase = deleteCartItemUseCase;
+        this.currentUserService = currentUserService;
+        this.shoppingCartDomainToDTO = shoppingCartDomainToDTO;
     }
-    @PutMapping
-    ResponseEntity<ShoppingCartDTO> deleteCartItem(@RequestBody DeleteCartItemCommand cartItemCommand) {
-        ShoppingCartDomain shoppingCartDomain = deleteCartItemUseCase.deleteCartItem(cartItemCommand);
+    @PutMapping("/shopping-cart/remove-item/{cartItemId}")
+    ResponseEntity<ShoppingCartDTO> deleteCartItem(@PathVariable Long cartItemId ) {
+        UserDomain currentUser = currentUserService.getCurrentUser();
+        ShoppingCartDomain shoppingCartDomain = deleteCartItemUseCase.deleteCartItem(
+                new DeleteCartItemCommand(currentUser.getId(),cartItemId));
 
-        return ResponseEntity.ok(ShoppingCartDomainToDTO.toDTO(shoppingCartDomain));
+        return ResponseEntity.ok(shoppingCartDomainToDTO.toDTO(shoppingCartDomain));
     }
 
 }

@@ -19,7 +19,7 @@ public class ProductMapper {
     public static ProductDomain toDomain(Product product){
         return switch (product.getProductTypeEnum()) {
             case PAINTING -> {
-                OriginalStockAdapter paintingStock = (OriginalStockAdapter) product.getStockManager();
+                OriginalStockManager paintingStock = (OriginalStockManager) product.getStockManager();
 
                 PaintingPriceManagerPersist priceManager = (PaintingPriceManagerPersist) product.getPriceManagerPersist();
 
@@ -31,7 +31,7 @@ public class ProductMapper {
 
                 BodyClothing bodyClothing = (BodyClothing) product;
 
-                ClothingStockAdapter clothingStock = (ClothingStockAdapter) product.getStockManager();
+                ClothingStockManager clothingStock = (ClothingStockManager) product.getStockManager();
 
                 SinglePriceManagerPersist singlePriceManagerPersist = (SinglePriceManagerPersist) product.getPriceManagerPersist();
 
@@ -61,7 +61,7 @@ public class ProductMapper {
                         productDomain.getDescription(),
                         LocalDate.now(),
                         new PaintingPriceManagerPersist(priceManager.getId(),priceManager.getPricePerCopy(), priceManager.getPricePerOriginal()),
-                        new OriginalStockAdapter(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),
+                        new OriginalStockManager(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),
                         paintingStockManager.isAvailable(),
                         productDomain.getIsFavorite(),
                         images,
@@ -81,7 +81,7 @@ public class ProductMapper {
                         productDomain.getDescription(),
                         LocalDate.now(),
                         new SinglePriceManagerPersist(priceManager.getId(),priceManager.getPrice()),
-                        new ClothingStockAdapter(bodyClothingStockManager.getStockPerSize()),
+                        new ClothingStockManager(bodyClothingStockManager.getStockPerSize()),
                         bodyClothingStockManager.isAvailable(),
                         productDomain.getIsFavorite(),
                         images,
