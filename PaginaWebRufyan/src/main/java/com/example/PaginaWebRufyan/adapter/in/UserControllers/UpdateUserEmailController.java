@@ -23,7 +23,7 @@ private final UserEntityMapper userEntityMapper;
         this.currentUserService = currentUserService;
         this.userEntityMapper = userEntityMapper;
     }
-    @PutMapping
+    @PutMapping("/users/update-email")
     public ResponseEntity<UserEntityDTO2> updateEmail(@RequestPart String newEmail, @RequestPart String password){
 
         UserDomain currentUser = currentUserService.getCurrentUser();
