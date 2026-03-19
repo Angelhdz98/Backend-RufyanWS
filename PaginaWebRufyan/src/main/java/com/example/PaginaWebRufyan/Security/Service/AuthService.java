@@ -11,6 +11,7 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.UserEntityMapper;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.LoginUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.RefreshTokenUseCase;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.RegisterUserUseCase;
+import com.example.PaginaWebRufyan.domain.port.out.UserEmailVerifiedRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,19 +24,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthService implements RegisterUserUseCase, LoginUserUseCase, RefreshTokenUseCase {
     private final UserRepositoryPort userRepositoryPort;
-    private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final CreateUserService createUserService;
     private final AuthenticationManager authenticationManager;
     private final UserEntityMapper userEntityMapper;
+    private final TokenRepository tokenRepository;
+    private final UserEmailVerifiedRepositoryPort userEmailVerifiedRepositoryPort;
     private final ConverterUserEntityDomain converterUserEntityDomain = new ConverterUserEntityDomain();
+
 
     public RegisterUserDTO register(CreateUserCommand createUserCommand){
         UserDomain userDomain = createUserService.createUser(createUserCommand);
         String jwtToken = jwtService.generateToken(userDomain);
         String refreshToken = jwtService.generateRefreshToken(userDomain);
         saveUserToken(userDomain, jwtToken);
+        userEmailVerifiedRepositoryPort.createVerification(userDomain.getId());
         return new RegisterUserDTO(new TokenResponse(jwtToken,refreshToken), userEntityMapper.toDto(userDomain));
+
     }
 
     public TokenResponse login(LoginCommand loginCommand){
@@ -45,6 +50,7 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
                         ,loginCommand.password())
         );
         UserDomain user = userRepositoryPort.retrieveUserByEmail(loginCommand.identificator());
+        //userEmailVerifiedRepositoryPort.
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
