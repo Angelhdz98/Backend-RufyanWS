@@ -16,12 +16,6 @@ public class UpdateUserEmailService implements UpdateUserEmailUseCase {
     @Override
     public UserDomain updateEmail(Long userId, String userEmail) {
         UserDomain currentUser = userRepositoryPort.retrieveUserById(userId);
-        return userRepositoryPort.updateUser(new UserDomain(
-                currentUser.getId(),
-                currentUser.getFullname(),
-                currentUser.getBirthDate(),
-                currentUser.getUsername(),
-                userEmail,
-                currentUser.getHashedPassword()));
+        return userRepositoryPort.updateUserEmail(userId,userEmail);
     }
 }
