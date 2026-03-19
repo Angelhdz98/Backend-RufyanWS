@@ -1,7 +1,5 @@
 package com.example.PaginaWebRufyan.adapter.in.UserControllers;
 
-import com.example.PaginaWebRufyan.Exceptions.InvalidTokenException;
-import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CurrentUserService;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.VerifyUserEmailUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
