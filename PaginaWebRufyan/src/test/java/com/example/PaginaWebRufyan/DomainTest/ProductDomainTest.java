@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import static  org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -72,7 +71,7 @@ public class ProductDomainTest {
 
 
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING_STOCK);
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
         Set<MultipartFile> voidImages = Set.of();
@@ -102,7 +101,7 @@ public class ProductDomainTest {
     public  void shouldReturnExceptionForInvalidName(){
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING_STOCK);
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
         ProductSpecs productSpecsWrongName= new ProductSpecs("Ti", "descripción x", paintingStockDTO, paintingPricingDTO, paintingType, true );
@@ -132,7 +131,7 @@ public class ProductDomainTest {
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true, 5, 10,StockEnum.PAINTING);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true, 5, 10,StockEnum.PAINTING_STOCK);
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
 
@@ -168,7 +167,7 @@ public class ProductDomainTest {
 
         ProductTypeEnum paintingType = ProductTypeEnum.PAINTING;
 
-        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING);
+        PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING_STOCK);
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
         ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x" , paintingStockDTO, paintingPricingDTO, paintingType, true );
@@ -218,7 +217,7 @@ public class ProductDomainTest {
             defaultClothingStock.put(clothingSizeEnum,5);
         });
 
-        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING);
+        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING_STOCK);
 
         SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"),PricingTypeEnum.SIMPLE);
 
@@ -258,7 +257,7 @@ public class ProductDomainTest {
             defaultClothingStock.put(clothingSizeEnum,5);
         });
 
-        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING);
+        BodyClothingStockDTO bodyClothingStockDTO = new BodyClothingStockDTO(defaultClothingStock, StockEnum.CLOTHING_STOCK);
 
         SinglePricingDTO singlePricingDTO =  new SinglePricingDTO(new BigDecimal("350"), PricingTypeEnum.SIMPLE);
 

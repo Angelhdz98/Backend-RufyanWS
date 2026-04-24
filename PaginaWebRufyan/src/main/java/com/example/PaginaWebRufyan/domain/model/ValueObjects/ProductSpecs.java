@@ -5,7 +5,8 @@ import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 
 
 
-public record ProductSpecs(String name,
+public record ProductSpecs
+        (String name,
                            String description,
                            ProductStockDTO productStock,
                            ProductPricingDTO productPricing,

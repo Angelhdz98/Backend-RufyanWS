@@ -5,8 +5,10 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.BodyClotheTypesEnum
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PrintingTecniqueEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class BodyClothingDomainDetails extends ProductDomainDetails {
     private final String material;
     private final BodyClotheTypesEnum type; //posible enum

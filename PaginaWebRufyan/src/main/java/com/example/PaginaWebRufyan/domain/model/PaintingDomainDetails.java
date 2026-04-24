@@ -5,11 +5,13 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.MediumEnum;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.SupportMaterialEnum;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 
 @Getter
+@ToString
 public class PaintingDomainDetails extends ProductDomainDetails {
     public final static Integer MIN_HEIGHT_CM =10;
     public final static Integer MIN_LARGE_CM =10;

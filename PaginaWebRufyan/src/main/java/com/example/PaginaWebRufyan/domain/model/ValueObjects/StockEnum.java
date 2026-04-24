@@ -1,8 +1,8 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 public enum StockEnum {
-    PAINTING,
-    CLOTHING,
-    SIMPLE,
+    PAINTING_STOCK,
+    CLOTHING_STOCK,
+    SINGLE_STOCK,
 
 }

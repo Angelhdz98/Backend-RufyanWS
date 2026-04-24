@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = PaintingPricingDTO.class, name = "ORIGINAL"),
-        @JsonSubTypes.Type(value = SinglePricingDTO.class, name = "CLOTHING"),
+        @JsonSubTypes.Type(value = SinglePricingDTO.class, name = "SINGLE"),
         @JsonSubTypes.Type(value = SinglePricingDTO.class, name = "SIMPLE"),
 })
 public interface ProductPricingDTO {

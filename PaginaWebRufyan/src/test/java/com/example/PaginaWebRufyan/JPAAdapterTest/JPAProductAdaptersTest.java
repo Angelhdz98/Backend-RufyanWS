@@ -121,11 +121,11 @@ public class JPAProductAdaptersTest {
         });
 
 
-        product1Specs = new ProductSpecs("Nametest1 ", "descripción 1 ",  new PaintingStockDTO(true, 5, 10, StockEnum.PAINTING), new PaintingPricingDTO(new BigDecimal("2500"), new BigDecimal("500"),PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
+        product1Specs = new ProductSpecs("Nametest1 ", "descripción 1 ",  new PaintingStockDTO(true, 5, 10, StockEnum.PAINTING_STOCK), new PaintingPricingDTO(new BigDecimal("2500"), new BigDecimal("500"),PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
 
-        product2Specs = new ProductSpecs("Nametest2 ", "descripción 2 ",  new PaintingStockDTO(false, 0, 10, StockEnum.PAINTING), new PaintingPricingDTO(new BigDecimal("2000"), new BigDecimal("600"), PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
+        product2Specs = new ProductSpecs("Nametest2 ", "descripción 2 ",  new PaintingStockDTO(false, 0, 10, StockEnum.PAINTING_STOCK), new PaintingPricingDTO(new BigDecimal("2000"), new BigDecimal("600"), PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true);
 
-        product3Specs = new ProductSpecs("Nametest3 ", "descripción 3 ",  new BodyClothingStockDTO(defaultStockPerSize, StockEnum.CLOTHING), new SinglePricingDTO(new BigDecimal("1200"), PricingTypeEnum.PERTAG), ProductTypeEnum.CLOTHING, false);
+        product3Specs = new ProductSpecs("Nametest3 ", "descripción 3 ",  new BodyClothingStockDTO(defaultStockPerSize, StockEnum.CLOTHING_STOCK), new SinglePricingDTO(new BigDecimal("1200"), PricingTypeEnum.PERTAG), ProductTypeEnum.CLOTHING, false);
 
         // first value in table
         //firstProduct = productRepositoryJPA.saveProduct(createProduct(product1Specs, productDomainDetails));

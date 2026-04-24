@@ -2,10 +2,12 @@ package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
+@ToString
 public class PaintingPricingDTO implements ProductPricingDTO {
 
     private BigDecimal pricePerOriginal;

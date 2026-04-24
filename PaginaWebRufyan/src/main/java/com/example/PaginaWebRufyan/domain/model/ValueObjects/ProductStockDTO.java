@@ -11,9 +11,9 @@
          visible = true
  )
  @JsonSubTypes({
-         @JsonSubTypes.Type(value = PaintingStockDTO.class, name = "PAINTING"),
-         @JsonSubTypes.Type(value = BodyClothingStockDTO.class, name = "CLOTHING"),
-         @JsonSubTypes.Type(value = SimpleStockDTO.class, name = "SIMPLE")
+         @JsonSubTypes.Type(value = PaintingStockDTO.class, name = "PAINTING_STOCK"),
+         @JsonSubTypes.Type(value = BodyClothingStockDTO.class, name = "CLOTHING_STOCK"),
+         @JsonSubTypes.Type(value = SimpleStockDTO.class, name = "SINGLE_STOCK")
  })
 public interface ProductStockDTO {
 }

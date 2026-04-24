@@ -1,43 +1,299 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="fcd0290b-9f1c-4f22-8958-c5172da0196a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/Painting.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/Painting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Entity/UserEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/PaginaWebRufyanApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/PaginaWebRufyanApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/Service/UserService.java" afterDir="false" />
+    <list default="true" id="fcd0290b-9f1c-4f22-8958-c5172da0196a" name="Changes" comment="UserEmailVerification added to register">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/adapter/in/ProductsController/CreateProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/adapter/in/ProductsController/CreateProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/BodyClothingDomainDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/BodyClothingDomainDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/PaintingDomainDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/PaintingDomainDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/PaintingPricingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/PaintingPricingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/PaintingStockDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/PaintingStockDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductPricingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductPricingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductSpecs.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductSpecs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductStockDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/ProductStockDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/SinglePricingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/SinglePricingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/StockEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/model/ValueObjects/StockEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/port/out/ProductDTOMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/domain/port/out/ProductDTOMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/AuthControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/AuthControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/LikesControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/LikesControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/ProductControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests/ProductControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/DomainTest/ProductDomainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/DomainTest/ProductDomainTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/JPAAdapterTest/JPAProductAdaptersTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/JPAAdapterTest/JPAProductAdaptersTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/angelhdz98/Documents/Documents/Proyecto rufyan/Backend_Rufyan/Backend-RufyanWS" value="2wlqKu2avzDHrtW9wxiHnJwClEx" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="edit-panel" value="GPT-5 mini" />
+      <entry key="chat-panel" value="GPT-5 mini" />
+      <entry key="agent-panel" value="GPT-5 mini" />
+    </selectedModels>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Record" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="Exception" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="angelhdz98 &lt;hernandeztorresjoseangel@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Hexa-impl" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Angelhdz98&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Angelhdz98/Backend-RufyanWS&quot;,
+    &quot;accountId&quot;: &quot;2f430363-ea15-436c-bb5d-0047e6aaa495&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;Angelhdz98&quot;,
+    &quot;repository&quot;: &quot;Backend-RufyanWS&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="17" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="environmentProperties">
+      <map>
+        <entry key="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <entry key="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+        <entry key="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+      </map>
+    </option>
+    <option name="jreName" value="17" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2wlqKu2avzDHrtW9wxiHnJwClEx" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/angelhdz98/Documents/Proyecto rufyan/Backend_Rufyan/Backend-RufyanWS/PaginaWebRufyan"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PaginaWebRufyanApplication.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ControllerTests in PaginaWebRufyan.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DockerSmokeTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DockerSmokeTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ImageProcessorTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ImageStoragePropertiesTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.JWTServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LikesControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaintingPriceManagerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaintingPriceManagerTest.shouldGetTotalPaintingPriceWithDetails.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest.shouldCreateAProduct.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest.shouldEditAProduct.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest.shouldFindPagedProducts.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductDomainTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ShoppingCartControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ShoppingCartServiceTest.shouldAddCarItemToShoppingCartCorrectly.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ShoppingCartTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserCRUDUseCasesTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PaginaWebRufyanApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/angelhdz98/Documents/Documents/Proyecto rufyan/Backend_Rufyan/Backend-RufyanWS&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.PaginaWebRufyan.domain.model.ValueObjects" />
+      <recent name="com.example.PaginaWebRufyan.domain.port.in.userUseCase" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.ControllerTests in PaginaWebRufyan">
+    <configuration name="ControllerTests in PaginaWebRufyan" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PaginaWebRufyan" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <envs>
+        <env name="APP_PORT" value="8080" />
+        <env name="DB_HOST" value="mysql-db" />
+        <env name="DB_PASSWORD" value="silvaMuralistaRufyan" />
+        <env name="DB_ROOT_PASSWORD" value="kB6amK8FM15o0D" />
+        <env name="DB_USER" value="rufyan_user" />
+        <env name="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <env name="JWT_SECRET_KEY" value="yckSZsLhfysFenCxvA5NtyHn6mrkBKFTcq+Jh4vlmTk=" />
+        <env name="MAIL_PASSWORD" value="sdthfwcbprsuspmd " />
+        <env name="MAIL_USERNAME" value="hernandeztorresjoseangel@gmail.com" />
+        <env name="MP_ACCESS_TOKEN" value="TESTUSER1850907398 " />
+        <env name="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+        <env name="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+      </envs>
+      <dir value="$PROJECT_DIR$/PaginaWebRufyan/src/test/java/com/example/PaginaWebRufyan/ControllerTests" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LikesControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PaginaWebRufyan" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.PaginaWebRufyan.ControllerTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.PaginaWebRufyan.ControllerTests" />
+      <option name="MAIN_CLASS_NAME" value="com.example.PaginaWebRufyan.ControllerTests.LikesControllerTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+        <env name="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <env name="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ShoppingCartServiceTest.shouldAddCarItemToShoppingCartCorrectly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PaginaWebRufyan" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.PaginaWebRufyan.serviceTest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.PaginaWebRufyan.serviceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.PaginaWebRufyan.serviceTest.ShoppingCartServiceTest" />
+      <option name="METHOD_NAME" value="shouldAddCarItemToShoppingCartCorrectly" />
+      <option name="TEST_OBJECT" value="method" />
+      <envs>
+        <env name="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+        <env name="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <env name="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserCRUDUseCasesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="PaginaWebRufyan" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.PaginaWebRufyan.serviceTest.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.PaginaWebRufyan.serviceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.PaginaWebRufyan.serviceTest.UserCRUDUseCasesTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+        <env name="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <env name="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin" />
+        <env name="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+        <env name="TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE" value="/var/run/docker.sock" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.ShoppingCartControllerTest" />
+      <item itemvalue="JUnit.UserControllerTest" />
+      <item itemvalue="JUnit.ControllerTests in PaginaWebRufyan" />
+      <item itemvalue="JUnit.LikesControllerTest" />
+      <item itemvalue="JUnit.ShoppingCartServiceTest.shouldAddCarItemToShoppingCartCorrectly" />
+      <item itemvalue="JUnit.UserCRUDUseCasesTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.ControllerTests in PaginaWebRufyan" />
+        <item itemvalue="JUnit.LikesControllerTest" />
+        <item itemvalue="JUnit.UserCRUDUseCasesTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="fcd0290b-9f1c-4f22-8958-c5172da0196a" name="Changes" comment="" />
@@ -46,6 +302,484 @@
       <option name="presentableId" value="Default" />
       <updated>1746626447857</updated>
     </task>
+    <task id="LOCAL-00079" summary="creatin the no args constructor to define a StockEnum by default">
+      <option name="closed" value="true" />
+      <created>1772735262266</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735262266</updated>
+    </task>
+    <task id="LOCAL-00080" summary="creating the no args constructor to define a StockEnum by default">
+      <option name="closed" value="true" />
+      <created>1772735463411</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735463411</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Test created for retrieve and update shopping cart by adding or deleting cart items just by clients">
+      <option name="closed" value="true" />
+      <created>1772735596190</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735596190</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Refactor ShoppingCartDomain: change item storage to HashSet and update deleteItem method to remove by ID">
+      <option name="closed" value="true" />
+      <created>1772735624816</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735624816</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Shopping cartDTO changed to be a Component with no static methods">
+      <option name="closed" value="true" />
+      <created>1772735694154</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735694154</updated>
+    </task>
+    <task id="LOCAL-00084" summary="new way to map the entity so jpa could recognize de items">
+      <option name="closed" value="true" />
+      <created>1772735810482</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735810482</updated>
+    </task>
+    <task id="LOCAL-00085" summary="createShopping cart created">
+      <option name="closed" value="true" />
+      <created>1772735852236</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735852236</updated>
+    </task>
+    <task id="LOCAL-00086" summary="A ShoppingCartMapper instance used for map cart and createShoppingCart method implemented">
+      <option name="closed" value="true" />
+      <created>1772735951871</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1772735951871</updated>
+    </task>
+    <task id="LOCAL-00087" summary="A ShoppingCartMapper instance used for map cart and createShoppingCart method implemented">
+      <option name="closed" value="true" />
+      <created>1772736022870</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736022872</updated>
+    </task>
+    <task id="LOCAL-00088" summary="Class created for create te image resources for testing controllers">
+      <option name="closed" value="true" />
+      <created>1772736232322</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736232323</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Class created for create te user client for testing controllers">
+      <option name="closed" value="true" />
+      <created>1772736282211</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736282212</updated>
+    </task>
+    <task id="LOCAL-00090" summary="image initializer's logic was replaced with the class ones">
+      <option name="closed" value="true" />
+      <created>1772736382181</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736382181</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Add CreateUserCommandMapper for converting between CreateUserCommand and UserDomain">
+      <option name="closed" value="true" />
+      <created>1772736418989</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736418993</updated>
+    </task>
+    <task id="LOCAL-00092" summary="unnecesary semicolon deleted">
+      <option name="closed" value="true" />
+      <created>1772736532523</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736532523</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Add JSON serialization support to ItemQuantity class">
+      <option name="closed" value="true" />
+      <created>1772736552238</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736552238</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Update security configuration to restrict access to shopping cart endpoints for CLIENT role">
+      <option name="closed" value="true" />
+      <created>1772736580546</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1772736580546</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Test updated to Mock ShoppingCartRepository while creating a user">
+      <option name="closed" value="true" />
+      <created>1772819081007</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1772819081008</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Add UpdateUserController for handling user update requests">
+      <option name="closed" value="true" />
+      <created>1772819235969</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1772819235969</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Add DeleteAccountController for user account deletion and update DeleteUserByIdController for path variable usage by admin user">
+      <option name="closed" value="true" />
+      <created>1772826584138</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1772826584138</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Add UpdatePassword functionality with controller and service for user password updates">
+      <option name="closed" value="true" />
+      <created>1772826774158</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1772826774158</updated>
+    </task>
+    <task id="LOCAL-00099" summary="@Request body changed for @Request part">
+      <option name="closed" value="true" />
+      <created>1772826868649</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1772826868649</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Creating constructor method to delete lombok @RequiredArgsConstructor">
+      <option name="closed" value="true" />
+      <created>1772826971327</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1772826971327</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Method changed to don't update user email and  password will be a special controller instead">
+      <option name="closed" value="true" />
+      <created>1772827060814</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1772827060814</updated>
+    </task>
+    <task id="LOCAL-00102" summary="UserEntityMapper.toDto changed to be a public no static method">
+      <option name="closed" value="true" />
+      <created>1772832184093</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1772832184093</updated>
+    </task>
+    <task id="LOCAL-00103" summary="Add UpdateUserEmail functionality with controller and service">
+      <option name="closed" value="true" />
+      <created>1772832302722</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1772832302722</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Method created to have a String of the Birthdate and from LocalDate">
+      <option name="closed" value="true" />
+      <created>1773244479538</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1773244479538</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Refactor ConverterUserEntityDomain to use instance methods and add Spring @Component annotation">
+      <option name="closed" value="true" />
+      <created>1773244849355</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1773244849356</updated>
+    </task>
+    <task id="LOCAL-00106" summary="Refactor ConverterUserEntityDomain to use instance methods and add Spring @Component annotation">
+      <option name="closed" value="true" />
+      <created>1773245451578</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245451578</updated>
+    </task>
+    <task id="LOCAL-00107" summary="unused imports deleted">
+      <option name="closed" value="true" />
+      <created>1773245473747</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245473748</updated>
+    </task>
+    <task id="LOCAL-00108" summary="separating controllers to update user info, updating password, and updating email">
+      <option name="closed" value="true" />
+      <created>1773245747397</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245747397</updated>
+    </task>
+    <task id="LOCAL-00109" summary="separating controllers to update user info, updating password, and updating email">
+      <option name="closed" value="true" />
+      <created>1773245770898</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245770898</updated>
+    </task>
+    <task id="LOCAL-00110" summary="added the URIs about users">
+      <option name="closed" value="true" />
+      <created>1773245795184</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245795184</updated>
+    </task>
+    <task id="LOCAL-00111" summary="RequestBody changed for RequestPart">
+      <option name="closed" value="true" />
+      <created>1773245820834</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245820834</updated>
+    </task>
+    <task id="LOCAL-00112" summary="unused import deleted">
+      <option name="closed" value="true" />
+      <created>1773245854736</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245854736</updated>
+    </task>
+    <task id="LOCAL-00113" summary="unused import deleted">
+      <option name="closed" value="true" />
+      <created>1773245887603</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245887603</updated>
+    </task>
+    <task id="LOCAL-00114" summary="unused import deleted">
+      <option name="closed" value="true" />
+      <created>1773245904414</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1773245904415</updated>
+    </task>
+    <task id="LOCAL-00115" summary="A VerificationToken entity created for having a token for each user that need to verify email">
+      <option name="closed" value="true" />
+      <created>1773941829381</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1773941829386</updated>
+    </task>
+    <task id="LOCAL-00116" summary="Implement email verification functionality with JPA repository">
+      <option name="closed" value="true" />
+      <created>1773942039064</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1773942039064</updated>
+    </task>
+    <task id="LOCAL-00117" summary="properties for having the app-password-email sender">
+      <option name="closed" value="true" />
+      <created>1773942215124</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1773942215124</updated>
+    </task>
+    <task id="LOCAL-00118" summary="Service for verify email using the email sender for send an email with verifying link.">
+      <option name="closed" value="true" />
+      <created>1773942570163</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1773942570163</updated>
+    </task>
+    <task id="LOCAL-00119" summary="adding the correct URI">
+      <option name="closed" value="true" />
+      <created>1773942599993</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1773942599993</updated>
+    </task>
+    <task id="LOCAL-00120" summary="Exception for invalid tokens">
+      <option name="closed" value="true" />
+      <created>1773942796830</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1773942796830</updated>
+    </task>
+    <task id="LOCAL-00121" summary="verificationTokenRepositoryPort userEmailVerificationRepositoryPort and EmailVerificationService used while creating a new user">
+      <option name="closed" value="true" />
+      <created>1773943258681</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943258681</updated>
+    </task>
+    <task id="LOCAL-00122" summary="Dependencies for Send emails">
+      <option name="closed" value="true" />
+      <created>1773943273542</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943273542</updated>
+    </task>
+    <task id="LOCAL-00123" summary="new method for updatingUserEmailImplemented">
+      <option name="closed" value="true" />
+      <created>1773943382652</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943382653</updated>
+    </task>
+    <task id="LOCAL-00124" summary="typo corrected">
+      <option name="closed" value="true" />
+      <created>1773943401738</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943401738</updated>
+    </task>
+    <task id="LOCAL-00125" summary="unused import deleted">
+      <option name="closed" value="true" />
+      <created>1773943617026</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943617026</updated>
+    </task>
+    <task id="LOCAL-00126" summary="User controller test created and all are passed correctly">
+      <option name="closed" value="true" />
+      <created>1773943981184</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1773943981184</updated>
+    </task>
+    <task id="LOCAL-00127" summary="UserEmailVerification added to register">
+      <option name="closed" value="true" />
+      <created>1773956361744</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1773956361744</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
+  </component>
+  <component name="TerminalProjectNonSharedOptionsProvider">
+    <envs>
+      <env key="PATH" value="/usr/bin:/usr/local/bin:/usr/sbin:/usr/sbin:/bin:/sbin:/home/angelhdz98/.local/bin" />
+      <env key="DOCKER_HOST" value="unix:///var/run/docker.sock" />
+    </envs>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+    <option featureType="dependencySupport" implementationName="java:junit:junit" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.security:spring-security-core" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.validation:jakarta.validation-api" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
+    <option featureType="dependencySupport" implementationName="java:org.hibernate.validator:hibernate-validator" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-webmvc" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add UpdatePassword functionality with controller and service for user password updates" />
+    <MESSAGE value="@Request body changed for @Request part" />
+    <MESSAGE value="Creating constructor method to delete lombok @RequiredArgsConstructor" />
+    <MESSAGE value="Method changed to don't update user email and  password will be a special controller instead" />
+    <MESSAGE value="UserEntityMapper.toDto changed to be a public no static method" />
+    <MESSAGE value="Add UpdateUserEmail functionality with controller and service" />
+    <MESSAGE value="Method created to have a String of the Birthdate and from LocalDate" />
+    <MESSAGE value="Refactor ConverterUserEntityDomain to use instance methods and add Spring @Component annotation" />
+    <MESSAGE value="unused imports deleted" />
+    <MESSAGE value="separating controllers to update user info, updating password, and updating email" />
+    <MESSAGE value="added the URIs about users" />
+    <MESSAGE value="RequestBody changed for RequestPart" />
+    <MESSAGE value="A VerificationToken entity created for having a token for each user that need to verify email" />
+    <MESSAGE value="Implement email verification functionality with JPA repository" />
+    <MESSAGE value="properties for having the app-password-email sender" />
+    <MESSAGE value="Service for verify email using the email sender for send an email with verifying link." />
+    <MESSAGE value="adding the correct URI" />
+    <MESSAGE value="Exception for invalid tokens" />
+    <MESSAGE value="verificationTokenRepositoryPort userEmailVerificationRepositoryPort and EmailVerificationService used while creating a new user" />
+    <MESSAGE value="Dependencies for Send emails" />
+    <MESSAGE value="new method for updatingUserEmailImplemented" />
+    <MESSAGE value="typo corrected" />
+    <MESSAGE value="unused import deleted" />
+    <MESSAGE value="User controller test created and all are passed correctly" />
+    <MESSAGE value="UserEmailVerification added to register" />
+    <option name="LAST_COMMIT_MESSAGE" value="UserEmailVerification added to register" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/PaginaWebRufyan/src/main/java/com/example/PaginaWebRufyan/adapter/in/ShoppingCartController/DeleteCartItemController.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain" memberName="items" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

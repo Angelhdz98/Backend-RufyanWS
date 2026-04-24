@@ -201,10 +201,10 @@ byte[] key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256).getEnco
         String description1 = "description product";
         String description2 = "description product2";
          productSpecs1 = new ProductSpecs(titulo1, description1,
-                new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES, PaintingStockManager.DEFAULT_COPIES_MADE, StockEnum.PAINTING), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL ), ProductTypeEnum.PAINTING, true );
+                new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES, PaintingStockManager.DEFAULT_COPIES_MADE, StockEnum.PAINTING_STOCK), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL ), ProductTypeEnum.PAINTING, true );
          productSpecs2 = new ProductSpecs(titulo2, description2,
-                new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES+2, PaintingStockManager.DEFAULT_COPIES_MADE+2, StockEnum.PAINTING), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE.add(BigDecimal.valueOf(100)),  PaintingPriceManager.MIN_COPY_PRICE.add(BigDecimal.valueOf(100)), PricingTypeEnum.ORIGINAL ), ProductTypeEnum.PAINTING, false );
-        productSpecsUpdated = new ProductSpecs(titulo1.toLowerCase(),description1,  new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES, PaintingStockManager.DEFAULT_COPIES_MADE, StockEnum.PAINTING), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true );
+                new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES+2, PaintingStockManager.DEFAULT_COPIES_MADE+2, StockEnum.PAINTING_STOCK), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE.add(BigDecimal.valueOf(100)),  PaintingPriceManager.MIN_COPY_PRICE.add(BigDecimal.valueOf(100)), PricingTypeEnum.ORIGINAL ), ProductTypeEnum.PAINTING, false );
+        productSpecsUpdated = new ProductSpecs(titulo1.toLowerCase(),description1,  new PaintingStockDTO(true, PaintingStockManager.DEFAULT_STOCK_COPIES, PaintingStockManager.DEFAULT_COPIES_MADE, StockEnum.PAINTING_STOCK), new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL), ProductTypeEnum.PAINTING, true );
 
 
 
