@@ -37,10 +37,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -102,7 +99,7 @@ public class ProductCRUDUseCasesTest {
     }
 
 
-    Set<MultipartFile> images = new HashSet<>();
+    List<MultipartFile> images = List.of();
     Set<MultipartFile> addedImages = new HashSet<>();
     MockMultipartFile file1;
     MockMultipartFile file2;
@@ -274,7 +271,8 @@ public class ProductCRUDUseCasesTest {
         when(productRepositoryPort.updateProduct(any())).thenReturn(defaultProductUpdated);
 
         UpdateProductCommand command = new UpdateProductCommand(id, productSpecsUpdated, new PaintingDomainDetails(), defaultProductUpdated.getImages());
-        ProductDomain updateProductById = updateProductByIdUseCase.updateProductById(command, images);
+        ProductDomain updateProductById =
+                updateProductByIdUseCase.updateProductById(command, Optional.of(images));
 
         assertThat(updateProductById.getId()).isEqualTo(defaultProductUpdated.getId());
         assertThat(updateProductById.getImages()).isNotEmpty();

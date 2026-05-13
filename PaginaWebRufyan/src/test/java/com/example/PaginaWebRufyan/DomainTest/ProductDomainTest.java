@@ -31,7 +31,7 @@ public class ProductDomainTest {
     @Mock
     ImageProcessor imageProcessor;
 
-    Set<MultipartFile> imageFiles = new HashSet<>();
+    List<MultipartFile> imageFiles = List.of();
     MultipartFile file1 = mock(MultipartFile.class);
     MultipartFile file2 = mock(MultipartFile.class);
     MultipartFile file3 = mock(MultipartFile.class);
@@ -74,8 +74,8 @@ public class ProductDomainTest {
         PaintingStockDTO paintingStockDTO = new PaintingStockDTO(true,5,10, StockEnum.PAINTING_STOCK);
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE, PricingTypeEnum.ORIGINAL);
 
-        Set<MultipartFile> voidImages = Set.of();
-        Set<MultipartFile> images = Set.of(file1);
+        List<MultipartFile> voidImages = List.of();
+        List<MultipartFile> images = List.of(file1);
 
 
         ProductSpecs productSpecs= new ProductSpecs("Titulo obra", "descripción x", paintingStockDTO, paintingPricingDTO, paintingType, true );
