@@ -7,7 +7,9 @@ import com.example.PaginaWebRufyan.domain.model.CartItemDetailsFactory;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CartItemMapper {
 /*
 ProductDomain product, CartItemDetailsAdapter cartItemDetailsAdapter
@@ -19,9 +21,17 @@ Product product,
  CartItemDetailsAdapter cartItemDetails
 
  */
-    public static CartItemDomain toDomain(CartItem cartItem){
+    private final ProductMapper productMapper;
 
-        ProductDomain productDomain = ProductMapper.toDomain(cartItem.getProduct());
+    public CartItemMapper(ProductMapper productMapper) {
+        this.productMapper = productMapper;
+    }
+
+    public  CartItemDomain toDomain(CartItem cartItem){
+
+
+
+        ProductDomain productDomain = productMapper.toDomain(cartItem.getProduct());
 
         assert productDomain != null;
         CartItemDetails cartItemDetails = CartItemDetailsFactory.createCartItemDetails(productDomain, cartItem.getCartItemDetails());
@@ -29,9 +39,9 @@ Product product,
         return new CartItemDomain(cartItem.getId(), productDomain,cartItemDetails);
     }
 
-    public static CartItem toEntity(CartItemDomain cartItemDomain){
+    public  CartItem toEntity(CartItemDomain cartItemDomain){
 
-        Product productPersistenceAdapter = ProductMapper.toEntity(cartItemDomain.getProduct());
+        Product productPersistenceAdapter = productMapper.toEntity(cartItemDomain.getProduct());
 
         CartItemDetailsAdapter cartItemDetailsAdapter = CartItemDetailsMapper.toEntity(cartItemDomain.getDetails(),cartItemDomain.getProduct().getProductType());
 
