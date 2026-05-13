@@ -10,12 +10,22 @@ import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingPriceManager;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingStockManager;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Component
 public class ProductFactoryMapper {
-    public static ProductDomain toDomain(Product product) {
+
+    private final ImageMapper imageMapper;
+
+    public ProductFactoryMapper(ImageMapper imageMapper) {
+        this.imageMapper = imageMapper;
+    }
+
+    public  ProductDomain toDomain(Product product) {
+
+
        return switch (product.getProductTypeEnum()) {
             case PAINTING -> {
                     Painting paintingEntity= (Painting) product;
@@ -24,7 +34,7 @@ public class ProductFactoryMapper {
 
                     OriginalStockManager originalStockManager =(OriginalStockManager) product.getStockManager();
 
-                Set<ImageDomain> images = product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet());
+                Set<ImageDomain> images = product.getImages().stream().map(imageMapper::toDomain).collect(Collectors.toSet());
 
 
                 yield new PaintingDomain(product.getId(),

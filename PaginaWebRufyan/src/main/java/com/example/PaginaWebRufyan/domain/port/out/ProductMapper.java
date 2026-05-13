@@ -7,16 +7,24 @@ import com.example.PaginaWebRufyan.adapter.out.*;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 import com.example.PaginaWebRufyan.domain.model.*;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BodyClothingStockManager;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.ImageDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingPriceManager;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingStockManager;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Component
 public class ProductMapper {
+    private final ImageMapper imageMapper;
 
-    public static ProductDomain toDomain(Product product){
+    public ProductMapper(ImageMapper imageMapper) {
+        this.imageMapper = imageMapper;
+    }
+
+
+    public ProductDomain toDomain(Product product){
         return switch (product.getProductTypeEnum()) {
             case PAINTING -> {
                 OriginalStockManager paintingStock = (OriginalStockManager) product.getStockManager();
@@ -25,7 +33,7 @@ public class ProductMapper {
 
                 Painting painting = (Painting) product;
 
-               yield new PaintingDomain(painting.getId(),painting.getName(), new PaintingStockManager(paintingStock.getStockCopies(), paintingStock.getCopiesMade(), paintingStock.getIsOriginalAvailable()), new PaintingPriceManager(priceManager.getPricePerCopy(),priceManager.getPricePerOriginal()), painting.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(painting.getAlturaCm(), painting.getLargoCm(), painting.getMedium(), painting.getSupportMaterial(),painting.getCreationDate()),painting.getProductTypeEnum(), painting.getDescription(),painting.getIsFavorite());
+               yield new PaintingDomain(painting.getId(),painting.getName(), new PaintingStockManager(paintingStock.getStockCopies(), paintingStock.getCopiesMade(), paintingStock.getIsOriginalAvailable()), new PaintingPriceManager(priceManager.getPricePerCopy(),priceManager.getPricePerOriginal()), painting.getImages().stream().map(imageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(painting.getAlturaCm(), painting.getLargoCm(), painting.getMedium(), painting.getSupportMaterial(),painting.getCreationDate()),painting.getProductTypeEnum(), painting.getDescription(),painting.getIsFavorite());
             }
             case CLOTHING -> {
 
@@ -35,7 +43,7 @@ public class ProductMapper {
 
                 SinglePriceManagerPersist singlePriceManagerPersist = (SinglePriceManagerPersist) product.getPriceManagerPersist();
 
-                yield new BodyClothingDomain(bodyClothing.getId(), bodyClothing.getName() ,new BodyClothingStockManager(clothingStock.getStockPerSize()), new SinglePriceManager(singlePriceManagerPersist.getPrice()) , bodyClothing.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new BodyClothingDomainDetails(bodyClothing.getClothingMaterial(),bodyClothing.getBodyClotheType(),bodyClothing.getPrintingTecnique()), bodyClothing.getProductTypeEnum(), bodyClothing.getDescription(),bodyClothing.getIsFavorite());
+                yield new BodyClothingDomain(bodyClothing.getId(), bodyClothing.getName() ,new BodyClothingStockManager(clothingStock.getStockPerSize()), new SinglePriceManager(singlePriceManagerPersist.getPrice()) , bodyClothing.getImages().stream().map(imageMapper::toDomain).collect(Collectors.toSet()), new BodyClothingDomainDetails(bodyClothing.getClothingMaterial(),bodyClothing.getBodyClotheType(),bodyClothing.getPrintingTecnique()), bodyClothing.getProductTypeEnum(), bodyClothing.getDescription(),bodyClothing.getIsFavorite());
 
 
             }
@@ -43,7 +51,7 @@ public class ProductMapper {
 
         };
     }
-    public static Product toEntity(ProductDomain productDomain){
+    public  Product toEntity(ProductDomain productDomain){
 
         return switch (productDomain.getProductType()){
             case PAINTING -> {
@@ -54,9 +62,7 @@ public class ProductMapper {
 
                 PaintingDomainDetails paintingDomainDetails = (PaintingDomainDetails) productDomain.getProductDetails();
 
-                Set<Image> images = productDomain.getImages().stream().map(ImageMapper::toEntity).collect(Collectors.toSet());
-
-                yield new Painting(productDomain.getId(),
+                Painting painting = new Painting(productDomain.getId(),
                         productDomain.getName(),
                         productDomain.getDescription(),
                         LocalDate.now(),
@@ -64,19 +70,27 @@ public class ProductMapper {
                         new OriginalStockManager(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),
                         paintingStockManager.isAvailable(),
                         productDomain.getIsFavorite(),
-                        images,
+                        new java.util.HashSet<>(),
                         productDomain.getProductType(),
                         paintingDomainDetails.getAlturaCm(),
                         paintingDomainDetails.getLargoCm(),
                         paintingDomainDetails.getMedium(),
                         paintingDomainDetails.getSupportMaterial());
+
+                Set<Image> images = productDomain.getImages().stream().map((ImageDomain imageDomain)->{
+                    return imageMapper.toEntity(imageDomain, painting);
+                }).collect(Collectors.toSet());
+
+                painting.setImages(images);
+
+                yield painting;
             }
             case CLOTHING -> {
                 SinglePriceManager priceManager = (SinglePriceManager) productDomain.getPriceManagerBase();
                 BodyClothingStockManager bodyClothingStockManager = (BodyClothingStockManager) productDomain.getStockManagerBase();
                 BodyClothingDomainDetails bodyClothingDomainDetails = (BodyClothingDomainDetails) productDomain.getProductDetails();
-                Set<Image> images = productDomain.getImages().stream().map(ImageMapper::toEntity).collect(Collectors.toSet());
-                yield  new BodyClothing(productDomain.getId(),
+
+                BodyClothing bodyClothing = new BodyClothing(productDomain.getId(),
                         productDomain.getName(),
                         productDomain.getDescription(),
                         LocalDate.now(),
@@ -84,25 +98,18 @@ public class ProductMapper {
                         new ClothingStockManager(bodyClothingStockManager.getStockPerSize()),
                         bodyClothingStockManager.isAvailable(),
                         productDomain.getIsFavorite(),
-                        images,
+                        new java.util.HashSet<>(),
                         productDomain.getProductType(),bodyClothingDomainDetails.getMaterial().toString(),
                         bodyClothingDomainDetails.getPrintingTechnique(),
                         bodyClothingDomainDetails.getType());
-                        /*
-                       new BodyClothing(productDomain.getId(),
-                                     productDomain.getName(),
-                        productDomain.getDescription(),
-                        LocalDate.now(),
-                        new SinglePriceManagerPersist(priceManager.getId(),priceManager.getPrice()),
-                        new ClothingStockAdapter(bodyClothingStockManager.getStockPerSize()),
-                        bodyClothingStockManager.isAvailable(),
-                        productDomain.getIsFavorite(),
-                        images,
-                        productDomain.getProductType(),
-                        bodyClothingDomainDetails.getMaterial(),
-                        bodyClothingDomainDetails.getPrintingTechnique());
 
-                         */
+                Set<Image> images = productDomain.getImages().stream().map((ImageDomain imageDomain)->{
+                    return imageMapper.toEntity(imageDomain, bodyClothing);
+                }).collect(Collectors.toSet());
+
+                bodyClothing.setImages(images);
+
+                yield bodyClothing;
             }
             case CUP -> null;
 

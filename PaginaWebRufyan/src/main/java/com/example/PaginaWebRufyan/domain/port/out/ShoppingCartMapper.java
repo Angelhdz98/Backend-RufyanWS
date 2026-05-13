@@ -15,13 +15,22 @@ import java.util.stream.Collectors;
 @Component
 public class ShoppingCartMapper {
 
+    private final CartItemMapper cartItemMapper;
+    private final ProductMapper productMapper;
+
+    public ShoppingCartMapper(CartItemMapper cartItemMapper, ProductMapper productMapper) {
+        this.cartItemMapper = cartItemMapper;
+        this.productMapper = productMapper;
+    }
+
+
     public  ShoppingCartEntity toEntity(ShoppingCartDomain shoppingCartDomain){
 
         ShoppingCartEntity shoppingCartEntity = new ShoppingCartEntity();
         shoppingCartEntity.setId(shoppingCartDomain.getId());
         shoppingCartEntity.setUserId(shoppingCartDomain.getUserId());
 
-        List<CartItem> cartItems = shoppingCartDomain.getItems().stream().map(CartItemMapper::toEntity).toList();
+        List<CartItem> cartItems = shoppingCartDomain.getItems().stream().map(cartItemMapper::toEntity).toList();
     cartItems.forEach(item-> item.setShoppingCart(shoppingCartEntity));
     shoppingCartEntity.getItemList().clear();
     shoppingCartEntity.getItemList().addAll(cartItems);
@@ -43,7 +52,7 @@ shoppingCartEntity.setTotalAmount(shoppingCartDomain.getSubtotalAmount());
 
          */
      Set<CartItemDomain> cartItemDomainSet = itemList.stream().map((CartItem item) -> {
-         ProductDomain product = ProductMapper.toDomain(item.getProduct());
+         ProductDomain product = productMapper.toDomain(item.getProduct());
          assert product != null;
          CartItemDetails itemDetails = CartItemDetailsFactory.createCartItemDetails(product, item.getCartItemDetails());
          return new CartItemDomain(item.getId(), product, itemDetails);
