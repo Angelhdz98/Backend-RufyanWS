@@ -6,11 +6,13 @@ import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.GetPagedUsersThat
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/like/users-liked")
+@RestController
+@PreAuthorize("permitAll()")
 public class GetPagedUsersThatLikedController {
 
     private final GetPagedUsersThatLikedUseCase getPagedUsersThatLikedUseCase;
@@ -19,7 +21,7 @@ public class GetPagedUsersThatLikedController {
         this.getPagedUsersThatLikedUseCase = getPagedUsersThatLikedUseCase;
     }
 
-    @GetMapping
+    @GetMapping("/like/users-liked")
     Page<UserDomain> getPagedUsersThatLiked(@RequestBody GetCommand getCommand){
         PageRequest pageRequest = PageRequest.of(getCommand.pageNumber().intValue(), getCommand.pageSize().intValue());
         if(!getCommand.sortBy().isBlank()){
