@@ -26,11 +26,9 @@ public class CreateProductController {
         this.createProductUseCase = createProductUseCase;
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ProductDTO> createProduct(@RequestPart("command") CreateProductCommand command,  @RequestPart("images") List<MultipartFile> addedImages) {
-
-
-        return ResponseEntity.ok(ProductDTOMapper.toDTO(createProductUseCase.createProduct(command, new HashSet<>(addedImages))));
-
+    ResponseEntity<ProductDTO> createProduct(@RequestPart("command") CreateProductCommand command,  @RequestPart("images") List<MultipartFile> images) {
+        return ResponseEntity.ok(ProductDTOMapper.toDTO(
+                createProductUseCase.createProduct(command, images)));
     }
 
 }

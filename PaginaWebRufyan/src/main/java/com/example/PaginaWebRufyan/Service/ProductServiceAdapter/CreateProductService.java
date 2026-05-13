@@ -8,7 +8,8 @@ import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Set;
+import java.util.List;
+
 
 @Service
 public class CreateProductService implements CreateProductUseCase {
@@ -21,7 +22,7 @@ public class CreateProductService implements CreateProductUseCase {
     }
 
     @Override
-    public ProductDomain createProduct(CreateProductCommand command, Set<MultipartFile> images ) {
+    public ProductDomain createProduct(CreateProductCommand command, List<MultipartFile> images ) {
         return productRepositoryPort.saveProduct(productDomainFactory.createProduct(command.productSpecs(),command.productDetails(),images));
     }
 }

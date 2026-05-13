@@ -38,7 +38,7 @@ public class MercadoPagoService {
                 .currencyId("MXN")
                 .quantity(cartItem.getCartItemDetails().getQuantity())
                 .description(cartItem.getProduct().getDescription())
-                .pictureUrl(cartItem.getProduct().getImage().stream().findFirst().orElseThrow().getUrl())
+                .pictureUrl(cartItem.getProduct().getImages().stream().findFirst().orElseThrow().getUrl())
                 .title(cartItem.getProduct().getName())
                 .unitPrice(cartItem.getTotalPrice())
                 .build();
