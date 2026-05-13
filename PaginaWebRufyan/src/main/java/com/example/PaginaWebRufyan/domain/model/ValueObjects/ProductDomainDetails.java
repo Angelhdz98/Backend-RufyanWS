@@ -12,7 +12,7 @@ import lombok.Getter;
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
-    property = "productType"
+    property = "productTypeEnum"
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = PaintingDomainDetails.class, name = "PAINTING"),
