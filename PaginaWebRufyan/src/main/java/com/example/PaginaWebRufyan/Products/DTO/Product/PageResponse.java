@@ -9,4 +9,4 @@ public record PageResponse<T>(List<Product> content,
                               int size,
                               long totalElements,
                               int totalPages
-) {};
+) {}
