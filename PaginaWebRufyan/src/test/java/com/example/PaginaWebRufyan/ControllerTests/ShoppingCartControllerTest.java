@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,8 +84,8 @@ public class ShoppingCartControllerTest {
     @Autowired
     ImageInitializer imageInitializer;
 
-    Set<MultipartFile> initialImages;
-    Set<MultipartFile> editedImages;
+    List<MultipartFile> initialImages;
+    List<MultipartFile> editedImages;
     ProductDomain productDomain1;
     ProductDomain productDomain2;
     ShoppingCartDTO initialCartDTO;
@@ -133,8 +134,8 @@ public class ShoppingCartControllerTest {
         //Initializing Images
         imageInitializer.readFiles();
 
-        initialImages= imageInitializer.getSet1Files();
-        editedImages = imageInitializer.getSet2Files();
+        initialImages= imageInitializer.getSet1Files().stream().toList();
+        editedImages = imageInitializer.getSet2Files().stream().toList();
 
         PaintingStockDTO paintingStockDTO =  new PaintingStockDTO();
         PaintingPricingDTO paintingPricingDTO = new PaintingPricingDTO(PaintingPriceManager.MIN_ORIGINAL_PRICE, PaintingPriceManager.MIN_COPY_PRICE);
