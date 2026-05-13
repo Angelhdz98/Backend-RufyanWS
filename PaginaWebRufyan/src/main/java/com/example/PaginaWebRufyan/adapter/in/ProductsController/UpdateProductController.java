@@ -15,10 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("permitAll()")
 public class UpdateProductController {
 
     private final UpdateProductByIdUseCase updateProductByIdUseCase;
@@ -27,8 +29,8 @@ public class UpdateProductController {
         this.updateProductByIdUseCase = updateProductByIdUseCase;
     }
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ProductDTO> updateProductById(@RequestPart("updateCommand") UpdateProductCommand updateProductCommand, @RequestPart("addedImages") List<MultipartFile> addedImages){
-       return ResponseEntity.ok(ProductDTOMapper.toDTO(updateProductByIdUseCase.updateProductById(updateProductCommand, new HashSet<>(addedImages))));
+    ResponseEntity<ProductDTO> updateProductById(@RequestPart("updateCommand") UpdateProductCommand updateProductCommand, @RequestPart("addedImages") Optional<List<MultipartFile>>  addedImages){
+       return ResponseEntity.ok(ProductDTOMapper.toDTO(updateProductByIdUseCase.updateProductById(updateProductCommand, addedImages)));
     }
 
 }
