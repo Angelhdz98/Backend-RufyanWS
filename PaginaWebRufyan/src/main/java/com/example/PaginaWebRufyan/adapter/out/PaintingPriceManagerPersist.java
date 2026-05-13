@@ -1,6 +1,7 @@
 package com.example.PaginaWebRufyan.adapter.out;
 
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.PaintingPriceManager;
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.PricingTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,17 +19,15 @@ public class PaintingPriceManagerPersist extends PriceManagerPersist {
 
 
 protected PaintingPriceManagerPersist(){
-        this.pricePerCopy = PaintingPriceManager.MIN_COPY_PRICE;
+
+    this.pricePerCopy = PaintingPriceManager.MIN_COPY_PRICE;
         this.pricePerOriginal = PaintingPriceManager.MIN_ORIGINAL_PRICE;
+
     }
 
 
-
-
-
-
-
-
-
-
+    @Override
+    public PricingTypeEnum getPricingType() {
+        return PricingTypeEnum.ORIGINAL;
+    }
 }
