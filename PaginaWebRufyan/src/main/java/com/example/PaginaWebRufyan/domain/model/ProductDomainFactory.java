@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,16 +20,19 @@ import java.util.stream.Collectors;
 public class ProductDomainFactory {
 
      private  final ImageProcessor imageProcessor;
+     private final ImageMapper imageMapper;
 
-     public ProductDomainFactory(ImageProcessor imageProcessor){
+     public ProductDomainFactory(ImageProcessor imageProcessor, ImageMapper imageMapper){
          this.imageProcessor = imageProcessor;
+         this.imageMapper = imageMapper;
      }
 
     public  ProductDomain createProduct(ProductSpecs productSpecs,
-                                        ProductDomainDetails productDetails, Set<MultipartFile> images){
+                                        ProductDomainDetails productDetails, List<MultipartFile> images){
 
         Set<ImageDomain> imageDomains = imageProcessor.processImages(images.stream().toList(), productSpecs.name());
 
+        System.out.println("las imagenes después de procesar en domainFactory: "+ imageDomains.toString());
        return switch ( productSpecs.productTypeEnum()){
             case PAINTING ->   {
                if(!(productDetails instanceof PaintingDomainDetails paintingDetails)){
@@ -97,7 +101,7 @@ public class ProductDomainFactory {
                 yield new PaintingDomain(product.getId(),
                         product.getName() ,new PaintingStockManager(originalStockManager.getStockCopies(),
                         originalStockManager.getCopiesMade(),
-                        originalStockManager.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()),product.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(paintingEntity.getAlturaCm() ,paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(),product.getIsFavorite());
+                        originalStockManager.getIsOriginalAvailable()),new PaintingPriceManager(paintingPriceManagerPersist.getPricePerCopy(), paintingPriceManagerPersist.getPricePerOriginal()),product.getImages().stream().map(imageMapper::toDomain).collect(Collectors.toSet()), new PaintingDomainDetails(paintingEntity.getAlturaCm() ,paintingEntity.getLargoCm(),paintingEntity.getMedium(),paintingEntity.getSupportMaterial(),paintingEntity.getCreationDate()), product.getProductTypeEnum(), product.getDescription(),product.getIsFavorite());
             }
             case CUP -> null;
              case CLOTHING ->  {
@@ -109,7 +113,7 @@ public class ProductDomainFactory {
                  SinglePriceManagerPersist priceManager = (SinglePriceManagerPersist)  product.getPriceManagerPersist();
 
 
-                yield new BodyClothingDomain(0L, bodyClothing.getName(),new  BodyClothingStockManager(clothingStock.getStockPerSize()), new SinglePriceManager(priceManager.getPrice()),  bodyClothing.getImage().stream().map(ImageMapper::toDomain).collect(Collectors.toSet()), productDetails,product.getProductTypeEnum(), bodyClothing.getDescription(), bodyClothing.getIsFavorite() );
+                yield new BodyClothingDomain(0L, bodyClothing.getName(),new  BodyClothingStockManager(clothingStock.getStockPerSize()), new SinglePriceManager(priceManager.getPrice()),  bodyClothing.getImages().stream().map(imageMapper::toDomain).collect(Collectors.toSet()), productDetails,product.getProductTypeEnum(), bodyClothing.getDescription(), bodyClothing.getIsFavorite() );
 
             }
             case PRINT -> null;
@@ -117,11 +121,71 @@ public class ProductDomainFactory {
 
     }
 
-    public  ProductDomain updateProduct(UpdateProductCommand command, Set<MultipartFile> images){
+
+
+
+    public  ProductDomain updateProduct(UpdateProductCommand command, Set<MultipartFile>  images){
+
 
         Set<ImageDomain> imageDomains = imageProcessor.processImages(images.stream().toList(), command.productSpecs().name());
 
         imageDomains.addAll(command.images());
+
+
+        return switch ( command.productSpecs().productTypeEnum()){
+            case PAINTING ->   {
+                if(!(command.productDomainDetails() instanceof PaintingDomainDetails paintingDetails)){
+                    throw new IllegalArgumentException("No tiene los detalles necesarios:  " + Arrays.toString(PaintingDomainDetails.class.getDeclaredFields()));
+                }
+
+                if(!(command.productSpecs().productStock() instanceof PaintingStockDTO paintingStock)){
+                    throw new IllegalArgumentException("No tiene los datos necesarios para el stock"+ Arrays.toString(PaintingStockDTO.class.getDeclaredFields()));
+                }
+
+                if(!(command.productSpecs().productPricing() instanceof PaintingPricingDTO paintingPricing)){
+                    throw new IllegalArgumentException("La obra no tiene la información necesaria declarar sus precios: "+ Arrays.toString(PaintingStockDTO.class.getDeclaredFields()));
+                }
+
+
+
+                yield new PaintingDomain(command.productId(),command.productSpecs().name(),
+                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
+                        command.productSpecs().productTypeEnum(),command.productSpecs().description(),command.productSpecs().isFavorite());
+            }
+            case CUP -> null;
+            case CLOTHING ->  {
+
+                if(!(command.productDomainDetails() instanceof BodyClothingDomainDetails bodyClothingDomainDetails)){
+                    throw new IllegalArgumentException("No tiene los detalles necesarios:  " + Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+                }
+
+                if(!(command.productSpecs().productStock() instanceof BodyClothingStockManager bodyClothingStock)){
+                    throw new IllegalArgumentException("No tiene los datos necesarios para el stock"+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+                }
+
+                if(!(command.productSpecs().productPricing() instanceof SinglePriceManager singlePriceManager)){
+                    throw new IllegalArgumentException("El producto no tiene la información necesaria declarar sus precios: "+ Arrays.toString(BodyClothingStockDTO.class.getDeclaredFields()));
+                }
+                yield new BodyClothingDomain(0L, command.productSpecs().name(),new  BodyClothingStockManager(bodyClothingStock.getStockPerSize()), new SinglePriceManager(singlePriceManager.getPrice()), imageDomains, bodyClothingDomainDetails,command.productSpecs().productTypeEnum(), command.productSpecs().description(), command.productSpecs().isFavorite() );
+
+            }
+            case PRINT -> null;
+            default -> throw new IllegalArgumentException("No hay ningun tipo de producto llamado así las opciones son "+ Arrays.toString(ProductTypeEnum.values()) );
+        };
+
+
+    }
+
+    public  ProductDomain updateProduct(UpdateProductCommand command)//noImages
+    {
+
+
+        Set<ImageDomain> imageDomains = command.images();
+
+
+
+        System.out.println(" las imagenes son: "+ imageDomains);
 
         return switch ( command.productSpecs().productTypeEnum()){
             case PAINTING ->   {
