@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @RequiredArgsConstructor
@@ -81,15 +82,17 @@ public class SecurityConfig {
                                 ).permitAll()
                                 .requestMatchers("/shopping-cart/**", "/shopping-cart")
                                 .hasRole("CLIENT")
-                                .requestMatchers("/products", "/products/**")
-                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/products").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+
                                 .requestMatchers("/like","/like/")
                                 .hasRole("CLIENT")
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
                                 .requestMatchers("/user-register").permitAll()
                                 .requestMatchers("/users",
                                         "/users/**").authenticated()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/admin/**","/admin").permitAll()
+                                .anyRequest().permitAll()
 
 
 
