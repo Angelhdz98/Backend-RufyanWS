@@ -8,6 +8,8 @@ import com.example.PaginaWebRufyan.Products.Enums.ProductTypeEnum;
 import com.example.PaginaWebRufyan.adapter.out.PriceManagerPersist;
 import com.example.PaginaWebRufyan.adapter.out.StockManager;
 import com.example.PaginaWebRufyan.Image.Image;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +27,10 @@ public abstract class Product {
 	private String description;
 	private LocalDate creationDate;
 	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+	@JsonProperty("productPricing")
 	private PriceManagerPersist priceManagerPersist;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonProperty("productStock")
 	private StockManager stockManager;
 
 	private Boolean isAvailable;
@@ -34,9 +38,11 @@ public abstract class Product {
 	private Boolean isFavorite;
 
 
-	@OneToMany(fetch = FetchType.EAGER,
-			cascade = CascadeType.ALL,orphanRemoval = true)
-	private Set<Image> image = new HashSet<>();
+	@OneToMany(mappedBy = "product",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	@JsonManagedReference
+	private Set<Image> images = new HashSet<>();
     private ProductTypeEnum productTypeEnum;
 
 
@@ -48,7 +54,7 @@ public abstract class Product {
         this.stockManager = null; // will be set on subclass
         this.isAvailable = false;
         this.isFavorite = false;
-        this.image = new HashSet<>();
+        this.images = new HashSet<>();
         this.productTypeEnum = ProductTypeEnum.PAINTING;
     }
     //private StockManager stock;// a implementation of StockManager and PriceManager will be added on subclass
