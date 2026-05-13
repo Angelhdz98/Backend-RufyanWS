@@ -23,7 +23,7 @@ public class PaintingDomainDetails extends ProductDomainDetails {
     private final MediumEnum medium;
     private final SupportMaterialEnum supportMaterial;
     private final LocalDate creationDate;
-    private final ProductTypeEnum productType;
+    private final ProductTypeEnum productTypeEnum;
 
     public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate) {
         if(alturaCm<MIN_LARGE_CM ) throw  new IllegalArgumentException("la altura minima es de: "+MIN_HEIGHT_CM);
@@ -34,7 +34,7 @@ public class PaintingDomainDetails extends ProductDomainDetails {
         this.supportMaterial = supportMaterial;
         if(creationDate.isAfter(LocalDate.now())) throw new IllegalArgumentException("la fecha de creacion no puede ser del futuro");
         this.creationDate = creationDate;
-        this.productType = ProductTypeEnum.PAINTING;
+        this.productTypeEnum = ProductTypeEnum.PAINTING;
     }
 
     public PaintingDomainDetails(Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial, LocalDate creationDate, ProductTypeEnum productTypeEnum) {
@@ -43,7 +43,7 @@ public class PaintingDomainDetails extends ProductDomainDetails {
         this.medium = medium;
         this.supportMaterial = supportMaterial;
         this.creationDate = creationDate;
-        this.productType = ProductTypeEnum.PAINTING;
+        this.productTypeEnum = ProductTypeEnum.PAINTING;
     }
 
     public PaintingDomainDetails() {
@@ -53,7 +53,7 @@ public class PaintingDomainDetails extends ProductDomainDetails {
         this.medium = MediumEnum.OIL_PAINT;
         this.supportMaterial = SupportMaterialEnum.COTTON_PAPER;
         this.creationDate = LocalDate.now();
-        this.productType = ProductTypeEnum.PAINTING;
+        this.productTypeEnum = ProductTypeEnum.PAINTING;
 
     }
 
