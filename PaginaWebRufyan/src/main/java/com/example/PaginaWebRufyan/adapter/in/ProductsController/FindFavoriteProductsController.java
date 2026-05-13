@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/products/favorite")
 public class FindFavoriteProductsController {
     private final FindFavoriteProductsUseCase findFavoriteProductsUseCase;
 
     public FindFavoriteProductsController(FindFavoriteProductsUseCase findFavoriteProductsUseCase) {
         this.findFavoriteProductsUseCase = findFavoriteProductsUseCase;
     }
-    @GetMapping
+    @GetMapping("/products/favorite")
     ResponseEntity<Page<ProductDTO>> getFavoriteProducts(Pageable pageable){
         return ResponseEntity.ok(findFavoriteProductsUseCase.findFavoriteProducts(pageable).map(ProductDTOMapper::toDTO));
     }
