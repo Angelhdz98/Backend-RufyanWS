@@ -15,9 +15,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
 
 
-public interface ProductsRepository extends JpaRepository<Product, Integer> {
+public interface ProductsRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByName(String name);
-
 	
 	List<Product> findByNameContainingIgnoreCase(String namePart);
 	Page<Product> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
