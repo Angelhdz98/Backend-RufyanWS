@@ -14,10 +14,13 @@ import java.util.Optional;
 @Repository
 public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
+    private final ProductMapper productMapper;
+
 
     private final SpringDataProductRepository springDataProductRepository;
 
-    public ProductRepositoryJPAImpl(SpringDataProductRepository springDataProductRepository) {
+    public ProductRepositoryJPAImpl(ProductMapper productMapper, SpringDataProductRepository springDataProductRepository) {
+        this.productMapper = productMapper;
         this.springDataProductRepository = springDataProductRepository;
     }
 
@@ -29,13 +32,13 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
     @Override
     public ProductDomain saveProduct(ProductDomain product) {
-        return ProductMapper.toDomain(springDataProductRepository.save(Objects.requireNonNull(ProductMapper.toEntity(product)))) ;
+        return productMapper.toDomain(springDataProductRepository.save(Objects.requireNonNull(productMapper.toEntity(product)))) ;
     }
 
     @Override
     public ProductDomain updateProduct(ProductDomain product) {
         ProductDomain productDomain = retrieveProduct(product.getId());
-        return ProductMapper.toDomain(springDataProductRepository.save(ProductMapper.toEntity(product)));
+        return productMapper.toDomain(springDataProductRepository.save(productMapper.toEntity(product)));
     }
 
     @Override
@@ -46,7 +49,7 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
     @Override
     public Optional<ProductDomain> findProductById(Long productId) {
-        return springDataProductRepository.findById(productId).map(ProductMapper::toDomain);
+        return springDataProductRepository.findById(productId).map(productMapper::toDomain);
     }
 
     @Override
@@ -58,43 +61,43 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     // Este metodo trae todos los productos, sin paginacion. evitar su uso
     @Override
     public List<ProductDomain> findAllProducts() {
-        return springDataProductRepository.findAll().stream().map(ProductMapper::toDomain).toList();
+        return springDataProductRepository.findAll().stream().map(productMapper::toDomain).toList();
     }
 
     @Override
     public Page<ProductDomain> findPagedProducts(Pageable pageable) {
-       return springDataProductRepository.findAll(pageable).map(ProductMapper::toDomain);
+       return springDataProductRepository.findAll(pageable).map(productMapper::toDomain);
     }
 
     @Override
     public List<ProductDomain> findProductByType(ProductTypeEnum productType) {
-        return springDataProductRepository.findProductByProductTypeEnum(productType).stream().map(ProductMapper::toDomain).toList();
+        return springDataProductRepository.findProductByProductTypeEnum(productType).stream().map(productMapper::toDomain).toList();
     }
 
     @Override
     public Page<ProductDomain> findProductByType(ProductTypeEnum productTypeEnum, Pageable pageable) {
-        return springDataProductRepository.findProductByProductTypeEnum(productTypeEnum,pageable).map(ProductMapper::toDomain);
+        return springDataProductRepository.findProductByProductTypeEnum(productTypeEnum,pageable).map(productMapper::toDomain);
     }
 
 
     @Override
     public Page<ProductDomain> findAvailableProducts(Pageable page) {
-        return springDataProductRepository.findProductByIsAvailable(true, page).map(ProductMapper::toDomain);
+        return springDataProductRepository.findProductByIsAvailable(true, page).map(productMapper::toDomain);
     }
 
     @Override
     public Page<ProductDomain> findAvailableProductsByType(ProductTypeEnum productTypeEnum, Pageable pageable) {
-        return springDataProductRepository.findProductByIsAvailableAndProductTypeEnum(true,productTypeEnum ,pageable).map(ProductMapper::toDomain);
+        return springDataProductRepository.findProductByIsAvailableAndProductTypeEnum(true,productTypeEnum ,pageable).map(productMapper::toDomain);
     }
 
     @Override
     public Page<ProductDomain> findProductsLikedByUser(Long userId, Pageable pageable) {
-        return springDataProductRepository.findProductsLikedByUser(userId,pageable).map(ProductMapper::toDomain);
+        return springDataProductRepository.findProductsLikedByUser(userId,pageable).map(productMapper::toDomain);
     }
 
     @Override
     public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
-        return springDataProductRepository.findProductByIsFavorite(true, pageable).map(ProductMapper::toDomain);
+        return springDataProductRepository.findProductByIsFavorite(true, pageable).map(productMapper::toDomain);
     }
 
     @Override
