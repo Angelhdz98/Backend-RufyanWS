@@ -3,6 +3,7 @@ package com.example.PaginaWebRufyan.Security.Service;
 import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
 import com.example.PaginaWebRufyan.DTO.LoginCommand;
 import com.example.PaginaWebRufyan.DTO.RegisterUserDTO;
+import com.example.PaginaWebRufyan.Exceptions.InvalidTokenException;
 import com.example.PaginaWebRufyan.Security.Token;
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CreateUserService;
 import com.example.PaginaWebRufyan.adapter.in.ConverterUserEntityDomain;
@@ -84,17 +85,20 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
 
     public TokenResponse refreshToken(final String authHeader){
         if(authHeader == null|| !authHeader.startsWith("Bearer ")){
-            throw new IllegalArgumentException("Invalid Bearer token ");
+            throw new InvalidTokenException("Invalid Bearer " +
+                    "token: no empieza con bearer  ");
         }
         final String refreshToken= authHeader.substring(7);
         final String userEmail = jwtService.extractEmail(refreshToken);
         if(userEmail== null){
-            throw new IllegalArgumentException("Invalid refresh token ");
+            throw new InvalidTokenException("Invalid refresh token:" +
+                    " no tiene email");
         }
         final UserDomain user = userRepositoryPort.retrieveUserByEmail(userEmail);
 
         if( ! jwtService.isTokenValid(refreshToken, user)){
-          throw new IllegalArgumentException("Invalid refresh Token");
+          throw new InvalidTokenException("Invalid refresh Token no" +
+                  " es un token valido");
         }
         final String accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
