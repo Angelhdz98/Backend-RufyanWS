@@ -30,7 +30,8 @@ public class UpdateProductService implements UpdateProductByIdUseCase {
             Optional<Set<MultipartFile>> optionalImageSet = addedImages.map(list -> new HashSet<>(list));
            return productRepositoryPort.updateProduct(productDomainFactory.updateProduct(command, optionalImageSet.get()));
         }else{
-            return productRepositoryPort.updateProduct(productDomainFactory.updateProduct(command)) ;
+            ProductDomain updated = productDomainFactory.updateProduct(command);
+            return productRepositoryPort.updateProduct(updated) ;
         }
 
 
