@@ -84,7 +84,7 @@ public class SecurityConfig {
                                 .hasRole("CLIENT")
                                 .requestMatchers(HttpMethod.POST, "/api/products").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-
+                                .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
                                 .requestMatchers("/like","/like/")
                                 .hasRole("CLIENT")
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
