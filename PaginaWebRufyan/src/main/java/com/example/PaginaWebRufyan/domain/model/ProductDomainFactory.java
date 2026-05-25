@@ -50,7 +50,7 @@ public class ProductDomainFactory {
 
 
                 yield new PaintingDomain(null,productSpecs.name(),
-                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingStockManager(paintingStock.getStockCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
                         new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
                         productSpecs.productTypeEnum(),productSpecs.description(),productSpecs.isFavorite());
             }
@@ -134,10 +134,14 @@ public class ProductDomainFactory {
 
         return switch ( command.productSpecs().productTypeEnum()){
             case PAINTING ->   {
+
+
+
                 if(!(command.productDomainDetails() instanceof PaintingDomainDetails paintingDetails)){
                     throw new IllegalArgumentException("No tiene los detalles necesarios:  " + Arrays.toString(PaintingDomainDetails.class.getDeclaredFields()));
                 }
-
+                System.out.println("creation date in " +
+                        "ProductFactory: "+((PaintingDomainDetails) command.productDomainDetails()).getCreationDate());
                 if(!(command.productSpecs().productStock() instanceof PaintingStockDTO paintingStock)){
                     throw new IllegalArgumentException("No tiene los datos necesarios para el stock"+ Arrays.toString(PaintingStockDTO.class.getDeclaredFields()));
                 }
@@ -148,8 +152,9 @@ public class ProductDomainFactory {
 
 
 
+
                 yield new PaintingDomain(command.productId(),command.productSpecs().name(),
-                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingStockManager(paintingStock.getStockCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
                         new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
                         command.productSpecs().productTypeEnum(),command.productSpecs().description(),command.productSpecs().isFavorite());
             }
@@ -201,10 +206,11 @@ public class ProductDomainFactory {
                     throw new IllegalArgumentException("La obra no tiene la información necesaria declarar sus precios: "+ Arrays.toString(PaintingStockDTO.class.getDeclaredFields()));
                 }
 
-
+                System.out.println("creation date in " +
+                        "ProductFactory: "+ paintingDetails );
 
                 yield new PaintingDomain(command.productId(),command.productSpecs().name(),
-                        new PaintingStockManager(paintingStock.getAvailableCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
+                        new PaintingStockManager(paintingStock.getStockCopies(),paintingStock.getCopiesMade(),paintingStock.getIsOriginalAvailable()),
                         new PaintingPriceManager(paintingPricing.getPricePerCopy(),paintingPricing.getPricePerOriginal()), imageDomains, paintingDetails,
                         command.productSpecs().productTypeEnum(),command.productSpecs().description(),command.productSpecs().isFavorite());
             }
