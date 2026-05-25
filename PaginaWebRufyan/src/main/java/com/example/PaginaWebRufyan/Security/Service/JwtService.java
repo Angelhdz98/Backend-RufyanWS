@@ -61,9 +61,13 @@ return Jwts.builder()
      return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractEmail(final String refreshToken) {
-     final Claims jwtToken = Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(refreshToken).getBody();
-        return jwtToken.getSubject();
+    public String extractEmail(final String token) {
+        try {
+            return extractClaims(token).getSubject();
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+
+        }
     }
     public Claims extractClaims(final String token){
      return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
@@ -74,8 +78,13 @@ return Jwts.builder()
     }
 
     public boolean isTokenValid(final String token, final  UserDomain userDomain){
-     final String email  = extractEmail(token);
-     return email.equals(userDomain.getEmail())&& !isTokenExpired(token);
+        try {
+            final String email  = extractEmail(token);
+            return email.equals(userDomain.getEmail()) && !isTokenExpired(token);
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return false;
+
+        }
     }
 
     private boolean isTokenExpired(String token) {
