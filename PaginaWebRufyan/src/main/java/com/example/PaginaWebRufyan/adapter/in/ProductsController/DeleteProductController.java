@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products/{id}")
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("permitAll()")
 public class DeleteProductController {
 private final DeleteProductByIdUseCase deleteProductByIdUseCase;
 
     public DeleteProductController(DeleteProductByIdUseCase deleteProductByIdUseCase) {
         this.deleteProductByIdUseCase = deleteProductByIdUseCase;
     }
-    @DeleteMapping
+    @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id){
         deleteProductByIdUseCase.deleteProduct(id);
        return ResponseEntity.ok().build();
