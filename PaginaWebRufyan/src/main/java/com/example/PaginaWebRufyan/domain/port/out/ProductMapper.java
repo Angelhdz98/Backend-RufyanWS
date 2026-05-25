@@ -65,7 +65,7 @@ public class ProductMapper {
                 Painting painting = new Painting(productDomain.getId(),
                         productDomain.getName(),
                         productDomain.getDescription(),
-                        LocalDate.now(),
+                        ((PaintingDomainDetails) productDomain.getProductDetails()).getCreationDate(),
                         new PaintingPriceManagerPersist(priceManager.getId(),priceManager.getPricePerCopy(), priceManager.getPricePerOriginal()),
                         new OriginalStockManager(paintingStockManager.getStockCopies(), paintingStockManager.getCopiesMade(),paintingStockManager.getIsOriginalAvailable()),
                         paintingStockManager.isAvailable(),
