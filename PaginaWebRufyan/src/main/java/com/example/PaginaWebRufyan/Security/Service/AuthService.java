@@ -14,6 +14,7 @@ import com.example.PaginaWebRufyan.domain.port.in.userUseCase.RefreshTokenUseCas
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.RegisterUserUseCase;
 import com.example.PaginaWebRufyan.domain.port.out.UserEmailVerifiedRepositoryPort;
 import com.example.PaginaWebRufyan.domain.port.out.UserRepositoryPort;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -83,28 +84,35 @@ public class AuthService implements RegisterUserUseCase, LoginUserUseCase, Refre
         }
     }
 
-    public TokenResponse refreshToken(final String authHeader){
-        if(authHeader == null|| !authHeader.startsWith("Bearer ")){
-            throw new InvalidTokenException("Invalid Bearer " +
-                    "token: no empieza con bearer  ");
+    public TokenResponse refreshToken(final String refreshToken){
+        if(refreshToken == null || refreshToken.isEmpty()){
+            throw new InvalidTokenException("Refresh token no proporcionado");
         }
-        final String refreshToken= authHeader.substring(7);
-        final String userEmail = jwtService.extractEmail(refreshToken);
-        if(userEmail== null){
-            throw new InvalidTokenException("Invalid refresh token:" +
-                    " no tiene email");
-        }
-        final UserDomain user = userRepositoryPort.retrieveUserByEmail(userEmail);
 
-        if( ! jwtService.isTokenValid(refreshToken, user)){
-          throw new InvalidTokenException("Invalid refresh Token no" +
-                  " es un token valido");
-        }
-        final String accessToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user,accessToken);
-        return new TokenResponse(accessToken,refreshToken);
+        try {
+            final String userEmail = jwtService.extractEmail(refreshToken);
 
+            if(userEmail == null){
+                throw new InvalidTokenException("No se pudo extraer email del refresh token");
+            }
+
+            final UserDomain user = userRepositoryPort.retrieveUserByEmail(userEmail);
+
+            if(!jwtService.isTokenValid(refreshToken, user)){
+                throw new InvalidTokenException("Refresh token inválido o expirado");
+            }
+
+            final String accessToken = jwtService.generateToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user, accessToken);
+
+            return new TokenResponse(accessToken, refreshToken);
+
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new InvalidTokenException("Refresh token expirado");
+        } catch (JwtException e) {
+            throw new InvalidTokenException("Token JWT inválido: " + e.getMessage());
+        }
     }
 
     @Override
