@@ -87,16 +87,20 @@ public class SecurityConfig {
                                 ).permitAll()
                                 .requestMatchers("/shopping-cart/**", "/shopping-cart")
                                 .hasRole("CLIENT")
-                                .requestMatchers(HttpMethod.POST, "/api/products").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/api/products/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        "/api/products").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET,
+                                        "/api/products/**").permitAll()
+                                .requestMatchers(HttpMethod.DELETE,
+                                        "/api/products/**").hasRole("ADMIN")
                                 .requestMatchers("/like","/like/")
-                                .hasRole("CLIENT")
+                                .authenticated()
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
                                 .requestMatchers("/user-register").permitAll()
                                 .requestMatchers("/users",
-                                        "/users/**").authenticated()
-                                .requestMatchers("/admin/**","/admin").permitAll()
+                                        "/users/**").hasRole("ADMIN")
+                                .requestMatchers("/admin/**",
+                                        "/admin").hasRole("ADMIN")
                                 .anyRequest().permitAll()
 
 
