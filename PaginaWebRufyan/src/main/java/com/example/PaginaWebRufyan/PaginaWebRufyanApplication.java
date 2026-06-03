@@ -23,7 +23,7 @@ import java.time.LocalDate;
 public class PaginaWebRufyanApplication {
 	@Value("${spring.datasource.admin-password}")
 	private String adminPassword;
-	@Value("${spring.datasource.devloper-password}")
+	@Value("${spring.datasource.developer-password}")
 	private String developerAdminPassword;
 	@Value("${spring.datasource.developer-email}")
 	private String developerEmail;
