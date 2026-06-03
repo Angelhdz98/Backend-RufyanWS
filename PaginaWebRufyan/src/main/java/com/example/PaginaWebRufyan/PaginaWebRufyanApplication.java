@@ -23,6 +23,10 @@ import java.time.LocalDate;
 public class PaginaWebRufyanApplication {
 	@Value("${spring.datasource.admin-password}")
 	private String adminPassword;
+	@Value("${spring.datasource.devloper-password}")
+	private String developerAdminPassword;
+	@Value("${spring.datasource.developer-email}")
+	private String developerEmail;
 	public static void main(String[] args) {
 		SpringApplication.run(PaginaWebRufyanApplication.class, args);
 	}
@@ -43,6 +47,18 @@ public class PaginaWebRufyanApplication {
 						new FullName("Rodrigo", "", "Silva", ""), new BirthDate(LocalDate.of(1996, 3, 6)),
 						"RufyanSilva", "rufyanone@gmail.com", encoder.encode(adminPassword), RoleEnum.ROLE_ADMIN);
 				UserDomain saveUser = repo.saveUser(converterUserEntityDomain.convertToDomainWihRole(adminUser));
+
+			}
+			if(!repo.existsByUsername("PlonAngel")){
+				ConverterUserEntityDomain converterUserEntityDomain = new ConverterUserEntityDomain();
+				//System.out.println("Creando Admin");
+				UserEntity developerUser = new UserEntity(1L,
+						new FullName("José", "", "Pepe", ""),
+						new BirthDate(LocalDate.of(1998, 6, 10)),
+						"PlonAngel", developerEmail,
+						encoder.encode(developerAdminPassword), RoleEnum.ROLE_ADMIN);
+				UserDomain saveUser =
+						repo.saveUser(converterUserEntityDomain.convertToDomainWihRole(developerUser));
 
 			}
 		};
