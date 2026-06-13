@@ -1,0 +1,27 @@
+name: Deploy Backend
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Backend_Rufyan/**'
+      - 'docker-compose.yml'
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy backend via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /ruta/de/tu/proyecto
+            echo " Pull latest changes"
+            git pull origin main
+            echo " Build backend"
+            docker compose build backend
+            echo " Restart backend"
+            docker compose up -d backend
+            echo "Backend deployed"
+            
