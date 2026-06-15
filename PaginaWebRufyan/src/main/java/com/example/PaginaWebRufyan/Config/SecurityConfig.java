@@ -79,7 +79,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,  AuthenticationProvider authenticationProvider)throws Exception{
         http.csrf(csrf-> csrf.disable()).cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(req->
-                        req.requestMatchers("/auth/**")
+                        req.requestMatchers("/api/auth/**","/auth/**")
                                 .permitAll()
                                 .requestMatchers(
                                         "/swagger-ui/**",
@@ -133,7 +133,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://rufyansilva.com"));
+        configuration.setAllowedOrigins(Arrays.asList("https" +
+                "://rufyansilva.com", "http://localhost:81","http" +
+                "://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
