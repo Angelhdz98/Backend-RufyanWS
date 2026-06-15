@@ -1,7 +1,7 @@
 name: Deploy Backend
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'Backend_Rufyan/**'
       - 'docker-compose.yml'
@@ -16,9 +16,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /ruta/de/tu/proyecto
+            cd /RufyanWebSite/Backend-RufyanWS
             echo " Pull latest changes"
-            git pull origin main
+            git pull origin master
             echo " Build backend"
             docker compose build backend
             echo " Restart backend"
