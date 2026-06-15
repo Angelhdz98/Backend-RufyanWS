@@ -20,6 +20,8 @@ public class RegisterUserController {
 
     @PostMapping("/auth/user-register")
     public ResponseEntity<RegisterUserDTO> registerNewUser(@RequestBody CreateUserCommand createUserCommand){
+
+        System.out.println("Endpoint activado: ");
         return ResponseEntity.ok(registerUserUseCase.registerUserUseCase(createUserCommand));
     }
 
