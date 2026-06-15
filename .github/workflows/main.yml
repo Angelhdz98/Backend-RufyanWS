@@ -14,7 +14,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /RufyanWebSite/Backend-RufyanWS
+            set -e
+            cd /root/RufyanWebSite/Backend-RufyanWS
             echo " Pull latest changes"
             git pull origin master
             echo " Build backend"
