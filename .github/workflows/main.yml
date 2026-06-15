@@ -2,9 +2,7 @@ name: Deploy Backend
 on:
   push:
     branches: [ "master" ]
-    paths:
-      - 'Backend_Rufyan/**'
-      - 'docker-compose.yml'
+
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
