@@ -5,6 +5,7 @@ import com.example.PaginaWebRufyan.DTO.RegisterUserDTO;
 import com.example.PaginaWebRufyan.domain.port.in.userUseCase.RegisterUserUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class RegisterUserController {
     }
 
     @PostMapping("/auth/user-register")
-    public ResponseEntity<RegisterUserDTO> registerNewUser(@RequestPart CreateUserCommand createUserCommand){
+    public ResponseEntity<RegisterUserDTO> registerNewUser(@RequestBody CreateUserCommand createUserCommand){
         return ResponseEntity.ok(registerUserUseCase.registerUserUseCase(createUserCommand));
     }
 
