@@ -16,8 +16,12 @@ jobs:
           script: |
             set -e
             cd /root/RufyanWebSite/Backend-RufyanWS
+            
             echo " Pull latest changes"
             git pull origin master
+            
+            cd ../
+            
             echo " Build backend"
             docker compose build backend
             echo " Restart backend"
