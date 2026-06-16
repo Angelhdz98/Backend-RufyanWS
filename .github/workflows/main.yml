@@ -19,9 +19,6 @@ jobs:
             
             echo " Pull latest changes"
             git pull
-            
-            cd ../
-            
             echo " Build backend"
             docker compose build backend
             echo " Restart backend"
