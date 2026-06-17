@@ -15,6 +15,7 @@ jobs:
             java-version: 17
       - name: Run tests
         run: |
+            cd PaginaWebRufyan
             ls
             chmod +x mvnw
             ./mvnw clean test
