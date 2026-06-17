@@ -15,7 +15,8 @@ jobs:
             java-version: 17
       - name: Run tests
         run: |
-          ./mvnw clean test
+            cd /PaginaWebRufyan
+            ./mvnw clean test
           
   deploy-backend:
     needs: test
