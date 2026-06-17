@@ -15,10 +15,10 @@ jobs:
             java-version: 17
       - name: Run tests
         run: |
-          cd Backend-RufyanWS
           ./mvnw clean test
           
   deploy-backend:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Deploy backend via SSH
