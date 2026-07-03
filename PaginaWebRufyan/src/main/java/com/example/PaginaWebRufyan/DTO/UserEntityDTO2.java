@@ -1,7 +1,10 @@
 package com.example.PaginaWebRufyan.DTO;
 
 
-public record UserEntityDTO2(Long id, String fullname, String birthDate, String email, String username) {
+import com.example.PaginaWebRufyan.domain.model.ValueObjects.FullName;
+
+public record UserEntityDTO2(Long id, FullName fullname, String birthDate,
+                             String email, String username) {
 
 
  }
