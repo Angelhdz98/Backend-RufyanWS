@@ -8,9 +8,9 @@ import com.example.PaginaWebRufyan.domain.port.in.userUseCase.UpdateUserEmailUse
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 public class UpdateUserEmailController {
@@ -23,13 +23,14 @@ private final UserEntityMapper userEntityMapper;
         this.currentUserService = currentUserService;
         this.userEntityMapper = userEntityMapper;
     }
-    @PutMapping("/users/update-email")
-    public ResponseEntity<UserEntityDTO2> updateEmail(@RequestPart String newEmail, @RequestPart String password){
+    @PutMapping("/user/update-email")
+    public ResponseEntity<UserEntityDTO2> updateEmail(@RequestBody UpdateUserEmailCommand command)  {
 
         UserDomain currentUser = currentUserService.getCurrentUser();
-        if(!encoder.matches(password, currentUser.getHashedPassword())) throw new RuntimeException("No coincide la contraseña");
+        if(!encoder.matches(command.password(),
+                currentUser.getHashedPassword())) throw new RuntimeException("No coincide la contraseña");
 
-        return ResponseEntity.ok( userEntityMapper.toDto(updateUserEmailUseCase.updateEmail(currentUser.getId(), newEmail)));
+        return ResponseEntity.ok( userEntityMapper.toDto(updateUserEmailUseCase.updateEmail(currentUser.getId(), command.newEmail())));
 
     }
 
