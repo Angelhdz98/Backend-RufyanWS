@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.Service.UserServiceAdapter;
 
 import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
 import com.example.PaginaWebRufyan.DTO.UpdateUserCommand;
+import com.example.PaginaWebRufyan.DTO.UpdateUserInfoCommand;
 import com.example.PaginaWebRufyan.Exceptions.EmailAlreadyUsedException;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.BirthDate;
@@ -15,6 +16,7 @@ import java.util.Optional;
 //@Service
 public class UserHexaService implements CreateUserUseCase, DeleteUserByIdUseCase, FindUserByIdUseCase, UpdateUserUseCase, FindUserByUsernameUseCase {
 private final UserRepositoryPort userRepositoryPort;
+
 
 
     public UserHexaService(UserRepositoryPort userRepositoryPort) {
@@ -37,22 +39,6 @@ private final UserRepositoryPort userRepositoryPort;
         userRepositoryPort.deleteById(userId);
     }
 
-
-
-    @Override
-    public UserDomain updateUser(UpdateUserCommand command) {
-        Optional<UserDomain> foundUser = userRepositoryPort
-                .findUserById(command.getUserId());
-        if(foundUser.isEmpty()) throw new ResourceNotFoundException("no se encontró el usuario con el id: "+ command.getUserId());
-        if( !foundUser.get().getUsername().equals(command.getUsername()) && userRepositoryPort.existsByUsername(command.getUsername())) throw new UsernameAlreadyUsedException("el username: "+ command.getUsername()+" ya lo esta usando un usuario " );
-
-        if(!foundUser.get().getEmail().equals(command.getEmail()) && userRepositoryPort.existsByEmail(command.getEmail()) )
-            throw new EmailAlreadyUsedException("Ya existe una cuenta registrada con el email: "+ command.getEmail());
-
-        UserDomain updatedUser = new UserDomain(command.getUserId(), command.getFullName(),new BirthDate(command.getBirthDate()),command.getUsername(),command.getEmail(), command.getPassword());
-       return userRepositoryPort.saveUser(updatedUser);
-    }
-
     @Override
     public UserDomain findUserById(Long userId) {
         return userRepositoryPort.findUserById(userId)
@@ -63,5 +49,22 @@ private final UserRepositoryPort userRepositoryPort;
     @Override
     public UserDomain findUserByUsername(String username) {
        return userRepositoryPort.findUserByUsername(username).orElseThrow(()-> new ResourceNotFoundException("No existe el usuario con el nombre: "));
+    }
+
+    @Override
+    public UserDomain updateUser(UpdateUserInfoCommand command) {
+        UserDomain foundUser = userRepositoryPort
+                .findUserById(command.id()).orElseThrow(() -> {
+                    throw new IllegalArgumentException("El usuario " +
+                            "con el id: " + command.id() + " no existe");
+                });
+
+        UserDomain updatedUser = new UserDomain(
+                command.id(),
+                command.fullName(),
+                new BirthDate(command.birthDate()),
+                foundUser.getUsername(), foundUser.getEmail(),
+                foundUser.getHashedPassword());
+        return userRepositoryPort.updateUser(updatedUser);
     }
 }
