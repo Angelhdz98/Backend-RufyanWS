@@ -2,6 +2,7 @@ package com.example.PaginaWebRufyan.serviceTest;
 
 import com.example.PaginaWebRufyan.DTO.CreateUserCommand;
 import com.example.PaginaWebRufyan.DTO.UpdateUserCommand;
+import com.example.PaginaWebRufyan.DTO.UpdateUserInfoCommand;
 import com.example.PaginaWebRufyan.Exceptions.AlreadyExistIdenticatorException;
 import com.example.PaginaWebRufyan.Exceptions.EmailAlreadyUsedException;
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.*;
@@ -80,12 +81,19 @@ public class UserCRUDUseCasesTest {
             validBirthDate.getBirthDate()
                 );
    UpdateUserCommand updateCommandTest;
+
+   UpdateUserInfoCommand updateUserInfoCommand;
+
 @BeforeEach
 public void setUp(){
 
     updateCommandTest = new UpdateUserCommand("email@valido.com","password123", "hentrr", new FullName("hoadf","jkdfj","kjkdfjkdj","jdjkf"),LocalDate.now().minusYears(20),1L);
 
 
+    updateUserInfoCommand =
+            new UpdateUserInfoCommand(2L ,new FullName("hoadf","jkdfj"
+                    ,"kjkdfjkdj","jdjkf"),
+                    LocalDate.now().minusYears(20));
 
 
 }
@@ -235,7 +243,7 @@ public void setUp(){
         when(userRepositoryPort.existsByEmail(any())).thenReturn(false);
 
 
-        UserDomain userDomain = updateUserService.updateUser(updateCommandTest);
+        UserDomain userDomain = updateUserService.updateUser(updateUserInfoCommand);
         assertThat(userDomain).isNotNull();
 
         verify(userRepositoryPort, times(1)).saveUser(any());
@@ -266,7 +274,7 @@ public void setUp(){
         when(userRepositoryPort.existsByEmail(any())).thenReturn(false);
 
         assertThrows(AlreadyExistIdenticatorException.class, ()->{
-            updateUserService.updateUser(updateCommandTest);
+            updateUserService.updateUser(updateUserInfoCommand);
         });
 
 
@@ -291,7 +299,7 @@ public void setUp(){
 
 
         assertThrows(EmailAlreadyUsedException.class, ()->{
-            updateUserService.updateUser(updateCommandTest);
+            updateUserService.updateUser(updateUserInfoCommand);
         });
 
 
@@ -318,7 +326,7 @@ public void setUp(){
 
 
         assertThrows(IllegalArgumentException.class, ()->{
-            updateUserService.updateUser(updateCommandTest);
+            updateUserService.updateUser(updateUserInfoCommand);
         });
 
 
@@ -345,7 +353,7 @@ public void setUp(){
         when(userRepositoryPort.existsByUsername(any())).thenReturn(false);
 
         assertThrows(IllegalArgumentException.class, ()->{
-            updateUserService.updateUser(updateCommandTest);
+            updateUserService.updateUser(updateUserInfoCommand);
         });
 
 

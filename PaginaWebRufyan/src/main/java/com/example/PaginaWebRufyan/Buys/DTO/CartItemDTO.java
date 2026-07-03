@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 public class CartItemDTO {
 //private ProductDTO product;
     private String productName;
-    private String ImageUrl;
+    private String imageUrl;
 private Integer quantity;
-private Boolean isOriginalSelected;
+private String details;
 private BigDecimal  pricePerUnit;
 
 

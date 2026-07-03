@@ -98,7 +98,10 @@ public class SecurityConfig {
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
                                 .requestMatchers("/user-register").permitAll()
                                 .requestMatchers("/users",
-                                        "/users/**").hasRole("ADMIN")
+                                        "/users/**").hasRole("ADMIN").requestMatchers("/user",
+                                        "/user/**").authenticated()
+                                .requestMatchers(
+                                        "/user-info").authenticated()
                                 .requestMatchers("/admin/**",
                                         "/admin").hasRole("ADMIN")
                                 .anyRequest().permitAll()

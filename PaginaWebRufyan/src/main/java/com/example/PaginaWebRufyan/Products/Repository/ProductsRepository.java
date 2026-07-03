@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.PaginaWebRufyan.adapter.out.persistence.Product;
@@ -20,6 +21,8 @@ public interface ProductsRepository extends JpaRepository<Product, Long> {
 	
 	List<Product> findByNameContainingIgnoreCase(String namePart);
 	Page<Product> findByNameContainingIgnoreCase(String namePart, Pageable pageable);
-	
-		
+
+	List<Product> findByNameContainingIgnoreCase(String namePart, Sort sort);
+
+	Page<Product> findAll(Pageable pageable);
 }

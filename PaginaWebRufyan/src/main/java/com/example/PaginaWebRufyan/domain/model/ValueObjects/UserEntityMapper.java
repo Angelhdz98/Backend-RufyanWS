@@ -10,7 +10,7 @@ public class UserEntityMapper {
     public UserEntityMapper (){}
  public  UserEntityDTO2 toDto(UserDomain userDomain){
     return new UserEntityDTO2(userDomain.getId(),
-            userDomain.getFullname().getFullName(),
+            userDomain.getFullname(),
             userDomain.getBirthDate().getBirthDate().toString(),
             userDomain.getEmail(),
             userDomain.getUsername());
