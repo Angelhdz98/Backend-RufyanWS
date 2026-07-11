@@ -100,6 +100,9 @@ public class SecurityConfig {
                                 .requestMatchers("/users",
                                         "/users/**").hasRole("ADMIN").requestMatchers("/user",
                                         "/user/**").authenticated()
+                                .requestMatchers("/user-address",
+                                        "/user-address/",
+                                        "/user-address/**").authenticated()
                                 .requestMatchers(
                                         "/user-info").authenticated()
                                 .requestMatchers("/admin/**",
