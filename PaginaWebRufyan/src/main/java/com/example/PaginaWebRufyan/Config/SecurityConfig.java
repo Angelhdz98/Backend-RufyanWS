@@ -102,7 +102,7 @@ public class SecurityConfig {
                                         "/user/**").authenticated()
                                 .requestMatchers("/user-address",
                                         "/user-address/",
-                                        "/user-address/**").authenticated()
+                                        "/user-address/**").authenticated().requestMatchers("/banners","/banners/**").authenticated()
                                 .requestMatchers(
                                         "/user-info").authenticated()
                                 .requestMatchers("/admin/**",

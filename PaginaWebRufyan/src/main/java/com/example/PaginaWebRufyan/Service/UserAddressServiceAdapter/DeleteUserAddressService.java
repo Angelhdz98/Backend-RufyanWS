@@ -20,7 +20,7 @@ public class DeleteUserAddressService implements DeleteUserAddressUseCase {
     public void delete(Long addressId) {
         Long userId = currentUserService.getCurrentUser().getId();
         AddressDomain byId = addressRepositoryPort.findById(addressId);
-        if(byId.userId().equals(userId)){
+        if(!byId.userId().equals(userId)){
             throw new RuntimeException("You are not authorized to delete this address");
         }
      addressRepositoryPort.deleteById(addressId);
