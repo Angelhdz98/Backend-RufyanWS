@@ -36,7 +36,13 @@ public class Painting extends Product {
 
 
     public Painting(Long id, String name, String description, LocalDate creationDate, PaintingPriceManagerPersist priceManagerPersist , StockManager stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> image, ProductTypeEnum productTypeEnum, Integer alturaCm, Integer largoCm, MediumEnum medium, SupportMaterialEnum supportMaterial) {
-        super(id, name, description, creationDate, priceManagerPersist, stockManager, isAvailable, isFavorite, image, productTypeEnum);
+
+        super(id, name, description, creationDate,
+                priceManagerPersist,
+                priceManagerPersist.getPricePerOriginal(),
+                priceManagerPersist.getPricePerCopy() ,
+                stockManager, isAvailable,
+                isFavorite, image, productTypeEnum);
         this.alturaCm = alturaCm;
         this.largoCm = largoCm;
         this.medium = medium;
