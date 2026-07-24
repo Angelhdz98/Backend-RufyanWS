@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +24,15 @@ import java.util.Optional;
 public class UpdateProductController {
 
     private final UpdateProductByIdUseCase updateProductByIdUseCase;
+    private final ProductDTOMapper productDTOMapper;
 
-    public UpdateProductController(UpdateProductByIdUseCase updateProductByIdUseCase) {
+    public UpdateProductController(UpdateProductByIdUseCase updateProductByIdUseCase, ProductDTOMapper productDTOMapper) {
         this.updateProductByIdUseCase = updateProductByIdUseCase;
+        this.productDTOMapper = productDTOMapper;
     }
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ProductDTO> updateProductById(@RequestPart("updateCommand") UpdateProductCommand updateProductCommand, @RequestPart("addedImages") Optional<List<MultipartFile>>  addedImages){
-       return ResponseEntity.ok(ProductDTOMapper.toDTO(updateProductByIdUseCase.updateProductById(updateProductCommand, addedImages)));
+       return ResponseEntity.ok(productDTOMapper.toDTO(updateProductByIdUseCase.updateProductById(updateProductCommand, addedImages)));
     }
 
 }

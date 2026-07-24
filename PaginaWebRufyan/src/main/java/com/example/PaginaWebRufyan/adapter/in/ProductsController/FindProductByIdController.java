@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products/{id}")
 @PreAuthorize("permitAll()")
 public class FindProductByIdController {
     private final FindProductByIdUseCase findProductByIdUseCase;
+    private final ProductDTOMapper productDTOMapper;
 
-    public FindProductByIdController(FindProductByIdUseCase findProductByIdUseCase) {
+    public FindProductByIdController(FindProductByIdUseCase findProductByIdUseCase, ProductDTOMapper productDTOMapper) {
         this.findProductByIdUseCase = findProductByIdUseCase;
+        this.productDTOMapper = productDTOMapper;
     }
-    @GetMapping
+    @GetMapping("/products/{id}")
     ResponseEntity<ProductDTO> findProductById(@PathVariable Long id){
-        return ResponseEntity.ok(ProductDTOMapper.toDTO(findProductByIdUseCase.findProductById(id)));
+        return ResponseEntity.ok(productDTOMapper.toDTO(findProductByIdUseCase.findProductById(id)));
     }
 }

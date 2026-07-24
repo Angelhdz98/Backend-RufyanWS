@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("permitAll()")
 public class FindPagedProductsController {
     private final FindPagedProductsUseCase findPagedProductsUseCase;
+    private final ProductDTOMapper productDTOMapper;
 
-
-    public FindPagedProductsController(FindPagedProductsUseCase findPagedProductsUseCase) {
+    public FindPagedProductsController(FindPagedProductsUseCase findPagedProductsUseCase, ProductDTOMapper productDTOMapper) {
         this.findPagedProductsUseCase = findPagedProductsUseCase;
+        this.productDTOMapper = productDTOMapper;
     }
     @GetMapping
     ResponseEntity<Page<ProductDTO>> retrievePagedProducts(Pageable pageable){
-        return ResponseEntity.ok( findPagedProductsUseCase.findPagedProducts(pageable).map(ProductDTOMapper::toDTO));
+        return ResponseEntity.ok( findPagedProductsUseCase.findPagedProducts(pageable).map(productDTOMapper::toDTO));
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -18,13 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @PreAuthorize("permitAll()")
 public class FindFavoriteProductsController {
     private final FindFavoriteProductsUseCase findFavoriteProductsUseCase;
+    private final ProductDTOMapper productDTOMapper;
 
-    public FindFavoriteProductsController(FindFavoriteProductsUseCase findFavoriteProductsUseCase) {
+    public FindFavoriteProductsController(FindFavoriteProductsUseCase findFavoriteProductsUseCase, ProductDTOMapper productDTOMapper) {
         this.findFavoriteProductsUseCase = findFavoriteProductsUseCase;
+        this.productDTOMapper = productDTOMapper;
     }
     @GetMapping("/products/favorite")
     ResponseEntity<Page<ProductDTO>> getFavoriteProducts(Pageable pageable){
-        return ResponseEntity.ok(findFavoriteProductsUseCase.findFavoriteProducts(pageable).map(ProductDTOMapper::toDTO));
+        return ResponseEntity.ok(findFavoriteProductsUseCase.findFavoriteProducts(pageable).map(productDTOMapper::toDTO));
     }
 
 }
