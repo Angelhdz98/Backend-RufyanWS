@@ -31,10 +31,23 @@ public class FinPagedProductEntitiesController  {
     }
 
     @GetMapping("/admin/products-paged-custom")
-    public PageResponse<Product> getEntitiesPaged(@RequestParam Integer pageNumber, @RequestParam Integer pageSize, @RequestParam String sorterType, @RequestParam String sortOrder) {
+    public PageResponse<Product> getEntitiesPaged(
+            @RequestParam Integer pageNumber,
+            @RequestParam Integer pageSize,
+            @RequestParam String sorterType,
+            @RequestParam String sortOrder) {
+        String newSorterType;
+        if( sorterType.equals("price")){
+            if (sortOrder.equals(SortOrderEnum.DESCENDING.toString().toLowerCase())){
+                newSorterType = SorterTypeEnum.PRICE_LOW.getValue();
+            } else{
+                newSorterType = SorterTypeEnum.PRICE_HIGH.getValue();
+            }
+        }else{
+            newSorterType = sorterType;
+        }
 
-
-        SorterTypeEnum sorter = SorterTypeEnum.fromValue(sorterType);
+        SorterTypeEnum sorter = SorterTypeEnum.fromValue(newSorterType);
         SortOrderEnum order = SortOrderEnum.valueOf(sortOrder.toUpperCase());
 
         Pageable pageRequest = PageRequest.of(pageNumber,pageSize,
