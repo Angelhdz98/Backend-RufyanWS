@@ -92,7 +92,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,
                                         "/api/products/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,
-                                        "/api/products/**").hasRole("ADMIN")
+                                        "/api/products/**").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                                 .requestMatchers("/like","/like/")
                                 .authenticated()
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
@@ -102,7 +102,7 @@ public class SecurityConfig {
                                         "/user/**").authenticated()
                                 .requestMatchers("/user-address",
                                         "/user-address/",
-                                        "/user-address/**").authenticated().requestMatchers("/banners","/banners/**").authenticated()
+                                        "/user-address/**").authenticated().requestMatchers("/banners","/banners/**")   .authenticated()
                                 .requestMatchers(
                                         "/user-info").authenticated()
                                 .requestMatchers("/admin/**",
