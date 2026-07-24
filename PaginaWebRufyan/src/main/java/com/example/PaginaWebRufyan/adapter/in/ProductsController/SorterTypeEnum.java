@@ -2,7 +2,8 @@ package com.example.PaginaWebRufyan.adapter.in.ProductsController;
 
 public enum SorterTypeEnum {
     CREATION_DATE("creationDate"),
-    PRICE("price"),
+    PRICE_HIGH("priceHigh"),
+    PRICE_LOW("priceLow"),
     NAME("name");
     private final String value;
     SorterTypeEnum(String value) {

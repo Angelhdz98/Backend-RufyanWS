@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "price_manager_type", discriminatorType = DiscriminatorType.STRING)
@@ -21,5 +23,7 @@ public abstract class PriceManagerPersist {
     @JsonProperty("pricingTypeEnum")
     public abstract PricingTypeEnum getPricingType();
 
+    private BigDecimal highPrice;
+    private BigDecimal lowPrice;
 
 }

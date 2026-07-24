@@ -17,17 +17,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@PreAuthorize("permitAll()")
-//@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("permitAll()")
+@PreAuthorize("hasRole('ADMIN')")
 public class CreateProductController {
     private final CreateProductUseCase createProductUseCase;
+    private final ProductDTOMapper productDTOMapper;
 
-    public CreateProductController(CreateProductUseCase createProductUseCase) {
+    public CreateProductController(CreateProductUseCase createProductUseCase, ProductDTOMapper productDTOMapper) {
         this.createProductUseCase = createProductUseCase;
+        this.productDTOMapper = productDTOMapper;
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ProductDTO> createProduct(@RequestPart("command") CreateProductCommand command,  @RequestPart("images") List<MultipartFile> images) {
-        return ResponseEntity.ok(ProductDTOMapper.toDTO(
+        return ResponseEntity.ok(productDTOMapper.toDTO(
                 createProductUseCase.createProduct(command, images)));
     }
 

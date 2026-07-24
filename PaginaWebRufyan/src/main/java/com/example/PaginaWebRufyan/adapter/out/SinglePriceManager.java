@@ -20,6 +20,16 @@ public class SinglePriceManager extends PriceManagerBase {
         this.price = MIN_PRICE;
     }
 
+    @Override
+    public BigDecimal getLowerPrice() {
+        return price;
+    }
+
+    @Override
+    public BigDecimal getHigherPrice() {
+        return price;
+    }
+
 
     public SinglePriceManager(BigDecimal price) {
         if(price.compareTo(MIN_PRICE)<0)

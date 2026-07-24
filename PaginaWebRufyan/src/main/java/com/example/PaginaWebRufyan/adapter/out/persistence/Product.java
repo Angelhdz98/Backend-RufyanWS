@@ -1,6 +1,7 @@
 
 package com.example.PaginaWebRufyan.adapter.out.persistence;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -15,7 +16,7 @@ import lombok.*;
 
 @Data
 
-@AllArgsConstructor
+
 @DiscriminatorColumn(name = "product_type", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
@@ -29,6 +30,8 @@ public abstract class Product {
 	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
 	@JsonProperty("productPricing")
 	private PriceManagerPersist priceManagerPersist;
+	private BigDecimal priceHigh;
+	private BigDecimal priceLow;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonProperty("productStock")
 	private StockManager stockManager;
@@ -45,8 +48,24 @@ public abstract class Product {
 	private Set<Image> images = new HashSet<>();
     private ProductTypeEnum productTypeEnum;
 
+	public Product(Long id, String name, String description, LocalDate creationDate, PriceManagerPersist priceManagerPersist, BigDecimal priceHigh, BigDecimal priceLow, StockManager stockManager, Boolean isAvailable, Boolean isFavorite, Set<Image> images, ProductTypeEnum productTypeEnum) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.creationDate = creationDate;
+		this.priceManagerPersist = priceManagerPersist;
+		this.priceHigh = priceHigh;
+		this.priceLow = priceLow;
+		this.stockManager = stockManager;
+		this.isAvailable = isAvailable;
+		this.isFavorite = isFavorite;
+		this.images = images;
+		this.productTypeEnum = productTypeEnum;
+	}
 
-    protected Product(){
+
+
+	protected Product(){
         this.name = "No Name";
         this.description = "No Description";
         this.creationDate = LocalDate.now();

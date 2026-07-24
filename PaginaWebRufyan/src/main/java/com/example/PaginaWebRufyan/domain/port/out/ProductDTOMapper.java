@@ -4,10 +4,12 @@ import com.example.PaginaWebRufyan.adapter.in.ProductDTO;
 import com.example.PaginaWebRufyan.adapter.out.SinglePriceManager;
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.*;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductDTOMapper {
 
-    public static ProductDTO toDTO(ProductDomain productDomain){
+    public  ProductDTO toDTO(ProductDomain productDomain){
       return  switch (productDomain.getProductType()){
             case PAINTING -> {
                 PaintingStockManager paintingStockManager = (PaintingStockManager) productDomain.getStockManagerBase();
