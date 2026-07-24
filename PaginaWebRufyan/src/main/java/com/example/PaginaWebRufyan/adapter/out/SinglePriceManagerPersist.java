@@ -19,6 +19,7 @@ public class SinglePriceManagerPersist extends PriceManagerPersist {
     }
 
     public SinglePriceManagerPersist(Long id,BigDecimal price) {
+        super(id,price, price);
         this.price = price;
     }
 

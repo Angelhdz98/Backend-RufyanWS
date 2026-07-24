@@ -27,6 +27,17 @@ public class PaintingPriceManager extends PriceManagerBase {
         this.pricePerCopy = MIN_COPY_PRICE;
         this.pricePerOriginal = MIN_ORIGINAL_PRICE;
     }
+
+    @Override
+    public BigDecimal getLowerPrice() {
+        return pricePerCopy;
+    }
+
+    @Override
+    public BigDecimal getHigherPrice() {
+        return pricePerOriginal;
+    }
+
     @Override
     public BigDecimal getPriceWithDetails(CartItemDetails details) {
         if(!(details instanceof PaintingItemDetails paintingDetails))
@@ -38,6 +49,6 @@ public class PaintingPriceManager extends PriceManagerBase {
 
     @Override
     public Map<String, Object> getPriceMap() {
-        return Map.of();
+        return Map.of("precio por copia: ",pricePerCopy, "precio por obra original: ", pricePerOriginal);
     }
 }

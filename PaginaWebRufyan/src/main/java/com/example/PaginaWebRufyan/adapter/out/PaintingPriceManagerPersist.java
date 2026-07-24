@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 
 @Entity
 @Getter
-@AllArgsConstructor
 public class PaintingPriceManagerPersist extends PriceManagerPersist {
 
     private Long id;
@@ -17,6 +16,14 @@ public class PaintingPriceManagerPersist extends PriceManagerPersist {
     private BigDecimal pricePerOriginal;
     // A no args paintingPriceManager will saveUser PaintingPriceManager with min values of Painting
 
+    public PaintingPriceManagerPersist(Long id,
+                                       BigDecimal pricePerCopy,
+                                       BigDecimal pricePerOriginal) {
+        super(id,pricePerOriginal, pricePerCopy);
+        this.pricePerCopy = pricePerCopy;
+        this.pricePerOriginal = pricePerOriginal;
+
+    }
 
 protected PaintingPriceManagerPersist(){
 

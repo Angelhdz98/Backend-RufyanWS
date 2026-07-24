@@ -16,4 +16,7 @@ public abstract class PriceManagerBase {
          this.id = null;
     }
 
+    public abstract BigDecimal getLowerPrice();
+    public  abstract BigDecimal getHigherPrice();
+
 }
