@@ -21,10 +21,10 @@ public class UnmarkAsLikedController {
     }
 
     @DeleteMapping("/like/{productId}")
-    public ResponseEntity<Void> dislike(@PathVariable Long productId){
+    public ResponseEntity<Boolean> dislike(@PathVariable Long productId){
 
         UserDomain currentUser = currentUserService.getCurrentUser();
         dislikeUseCase.dislike(new LikeCommand(currentUser.getId(), productId));
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(true);
     }
 }
