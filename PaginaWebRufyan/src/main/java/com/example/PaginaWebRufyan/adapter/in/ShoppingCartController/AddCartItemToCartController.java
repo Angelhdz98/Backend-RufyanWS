@@ -3,15 +3,11 @@ package com.example.PaginaWebRufyan.adapter.in.ShoppingCartController;
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CurrentUserService;
 import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
-import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
 import com.example.PaginaWebRufyan.domain.port.in.ShoppingCartUseCase.AddCartItemUseCase;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-
 public class AddCartItemToCartController {
     private final AddCartItemUseCase addCartItemUseCase;
     private final CurrentUserService currentUserService;
@@ -23,10 +19,12 @@ public class AddCartItemToCartController {
     }
 
     @PutMapping("/shopping-cart/add-item")
-    ResponseEntity<ShoppingCartDTO> addCartItem(@RequestPart Long productId,
-                                                @RequestPart CartItemDetails cartItemDetails){
+    ResponseEntity<ShoppingCartDTO> addCartItem(@RequestBody AddCartItemRequestDTO addCartItemRequestDTO){
+        //System.out.println("Entrada al controller: " +
+        // addCartItemRequestDTO);
         UserDomain currentUser = currentUserService.getCurrentUser();
-        ShoppingCartDomain shoppingCartDomainUpdated = addCartItemUseCase.addCartItem(new CartItemCommand(currentUser.getId(),productId,cartItemDetails));
+        ShoppingCartDomain shoppingCartDomainUpdated =
+                addCartItemUseCase.addCartItem(new CartItemCommand(currentUser.getId(), addCartItemRequestDTO.productId(), addCartItemRequestDTO.cartItemDetails()));
 
         return ResponseEntity.ok( shoppingCartDomainToDTO.toDTO(shoppingCartDomainUpdated));
 
