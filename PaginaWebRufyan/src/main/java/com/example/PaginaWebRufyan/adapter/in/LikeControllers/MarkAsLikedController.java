@@ -21,10 +21,12 @@ public class MarkAsLikedController {
     }
 
     @PostMapping("/like/{productId}")
-    ResponseEntity<ProductLikedDto> markProductAsLiked(@PathVariable Long productId){
+    ResponseEntity<Boolean> markProductAsLiked(@PathVariable Long productId){
         UserDomain currentUser = currentUserService.getCurrentUser();
 
-        return ResponseEntity.ok( new ProductLikedDto(createLikeUseCase.markAsLiked( new LikeCommand(currentUser.getId(), productId)).getProductId()));
+         createLikeUseCase.markAsLiked(new LikeCommand(currentUser.getId(),productId));
+
+        return ResponseEntity.ok(true);
     }
 
 }
