@@ -95,6 +95,8 @@ public class SecurityConfig {
                                         "/api/products/**").permitAll()
                                 .requestMatchers(HttpMethod.DELETE,
                                         "/api/products/**").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                                .requestMatchers("/products-liked/"
+                                        , "/products-liked/**").hasRole("CLIENT")
                                 .requestMatchers("/like","/like/")
                                 .authenticated()
                                 .requestMatchers("/find-users/**").hasRole("ADMIN")
