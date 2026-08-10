@@ -6,6 +6,7 @@ import com.example.PaginaWebRufyan.domain.model.ValueObjects.PriceManagerBase;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.ProductDomainDetails;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.StockManagerBase;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Set;
@@ -22,6 +23,7 @@ private final Set<ImageDomain> images;
 private ProductDomainDetails productDetails;
 private ProductTypeEnum productType;
 private String description;
+@Setter
 private Boolean isFavorite;
 
 private final static Integer MIN_DESCRIPTION_LENGTH = 10;
