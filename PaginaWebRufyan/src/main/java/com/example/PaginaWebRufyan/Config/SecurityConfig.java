@@ -85,8 +85,10 @@ public class SecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
-                                .requestMatchers("/shopping-cart/**", "/shopping-cart")
-                                .hasRole("CLIENT")
+                                .requestMatchers("/shopping-cart/**", "/shopping-cart",
+                                        "/shopping-cart/add-item",
+                                        "/shopping-cart/add-item/**").permitAll()
+                                /*.hasRole("CLIENT")*/
                                 .requestMatchers(HttpMethod.POST,
                                         "/api/products").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET,
