@@ -4,6 +4,7 @@ import com.example.PaginaWebRufyan.Buys.Repository.JpaShoppingCartRepository;
 import com.example.PaginaWebRufyan.Exceptions.ResourceNotFoundException;
 import com.example.PaginaWebRufyan.domain.model.CartItemDomain;
 import com.example.PaginaWebRufyan.domain.model.ShoppingCartDomain;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.Set;
@@ -31,7 +32,7 @@ public class ShoppingCartRepositoryJpaImpl implements ShoppingCartRepositoryPort
     public ShoppingCartDomain retrieveShoppingCart(Long userId) {
         return  retrieveShoppingCartByUserId(userId);
     }
-
+    @Transactional
     @Override
     public ShoppingCartDomain updateShoppingCart(Long userId, ShoppingCartDomain shoppingCartDomain) {
         retrieveShoppingCartByUserId(userId);

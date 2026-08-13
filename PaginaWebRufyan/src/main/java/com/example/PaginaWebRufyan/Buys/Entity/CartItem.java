@@ -18,7 +18,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="product_id")
     @JsonBackReference
     private Product product;
