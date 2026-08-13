@@ -14,7 +14,7 @@ public class CartItemDetailsMapper {
      case PAINTING -> {
         PaintingItemDetails paintingItemDetails = (PaintingItemDetails) cartItemDetailsDomain;
 
-         yield new PaintingItemDetailsAdapter(paintingItemDetails.getItemQuantity().getQuantity(),paintingItemDetails.getIsOriginalSelected().getIsOriginalSelected());
+         yield new PaintingItemDetailsAdapter(paintingItemDetails.getItemQuantity().getQuantity(),paintingItemDetails.getIsOriginalSelected());
      }
      case CLOTHING -> {
          ClothingItemDetails clothingItemDetails = (ClothingItemDetails) cartItemDetailsDomain;

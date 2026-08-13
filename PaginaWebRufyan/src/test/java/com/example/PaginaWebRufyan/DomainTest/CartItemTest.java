@@ -118,11 +118,11 @@ public void setUp(){
 
         PaintingItemDetails paintingItemDetails = new PaintingItemDetails(1,true);
         assertThat(paintingItemDetails.getItemQuantity().getQuantity()).isEqualTo(1);
-        assertThat(paintingItemDetails.getIsOriginalSelected().getIsOriginalSelected()).isTrue();
+        assertThat(paintingItemDetails.getIsOriginalSelected()).isTrue();
 
         PaintingItemDetails paintingItemDetails1Copy = new PaintingItemDetails(correctStockValue,false);
         assertThat(paintingItemDetails1Copy.getItemQuantity().getQuantity()).isEqualTo(correctStockValue);
-        assertThat(paintingItemDetails1Copy.getIsOriginalSelected().getIsOriginalSelected()).isFalse();
+        assertThat(paintingItemDetails1Copy.getIsOriginalSelected()).isFalse();
 
         ClothingItemDetails clothingItemDetails = new ClothingItemDetails(correctStockValue, ClothingColorEnum.BLACK, ClothingSizeEnum.M);
 

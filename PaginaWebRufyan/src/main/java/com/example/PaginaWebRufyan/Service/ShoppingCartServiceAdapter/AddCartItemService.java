@@ -38,7 +38,7 @@ public class AddCartItemService implements AddCartItemUseCase {
                   PaintingItemDetails paintingItemDetails = (PaintingItemDetails) cartItemDetails;
                   PaintingDomain paintingDomain = (PaintingDomain) productDomain;
                   PaintingItemDetails paintingItemDetail = (PaintingItemDetails) item.getDetails();
-                  yield (item.getProduct().equals(paintingDomain) && paintingItemDetails.getIsOriginalSelected().getIsOriginalSelected().equals(paintingItemDetail.getIsOriginalSelected().getIsOriginalSelected()));
+                  yield (item.getProduct().equals(paintingDomain) && paintingItemDetails.getIsOriginalSelected().equals(paintingItemDetail.getIsOriginalSelected()));
               }
               case CLOTHING -> {
                   assert cartItemDetails instanceof ClothingItemDetails;
@@ -50,8 +50,10 @@ public class AddCartItemService implements AddCartItemUseCase {
               case PRINT,   CUP -> false;
           });
 
-        shoppingCartDomain.addItem(cartItemDomain);
-        return shoppingCartRepositoryPort.updateShoppingCart(cartItemCommand.userId(), shoppingCartDomain);
+        ShoppingCartDomain shoppingCartDomain1 = shoppingCartRepositoryPort.updateShoppingCart(cartItemCommand.userId(), shoppingCartDomain);
+
+        shoppingCartDomain1.addItem(cartItemDomain);
+        return shoppingCartRepositoryPort.updateShoppingCart(cartItemCommand.userId(), shoppingCartDomain1);
     }
 
 

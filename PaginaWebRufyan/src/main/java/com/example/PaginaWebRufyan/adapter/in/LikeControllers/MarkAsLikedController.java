@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.adapter.in.LikeControllers;
 
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CurrentUserService;
-import com.example.PaginaWebRufyan.adapter.in.ProductLikedDto;
 import com.example.PaginaWebRufyan.domain.model.UserDomain;
 import com.example.PaginaWebRufyan.domain.port.in.LikesUseCase.CreateLikeUseCase;
 import org.springframework.http.ResponseEntity;

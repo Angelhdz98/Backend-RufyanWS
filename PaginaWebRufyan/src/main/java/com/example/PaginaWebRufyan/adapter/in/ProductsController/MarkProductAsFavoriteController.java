@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MarkProductAsFavoriteController {
     private final MarkProductAsFavoriteService markProductAsFavoriteService;
 
-    public MarkProductAsFavoriteController(MarkProductAsFavoriteService markProductAsFavoriteService, CurrentUserService currentUserService) {
+    public MarkProductAsFavoriteController(MarkProductAsFavoriteService markProductAsFavoriteService) {
         this.markProductAsFavoriteService = markProductAsFavoriteService;
     }
 

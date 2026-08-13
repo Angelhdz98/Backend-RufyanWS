@@ -42,9 +42,9 @@ public class PaintingPriceManager extends PriceManagerBase {
     public BigDecimal getPriceWithDetails(CartItemDetails details) {
         if(!(details instanceof PaintingItemDetails paintingDetails))
             throw new IllegalArgumentException("Los detalles deben ser de tipo PaintingDetails");
-        if(paintingDetails.getIsOriginalSelected().getIsOriginalSelected()&& paintingDetails.getItemQuantity().getQuantity()>1)
+        if(paintingDetails.getIsOriginalSelected()&& paintingDetails.getItemQuantity().getQuantity()>1)
             throw new IllegalArgumentException("No se puede seleccionar obra original con cantidad mayor a 1");
-        return paintingDetails.getIsOriginalSelected().getIsOriginalSelected() ? pricePerOriginal : (pricePerCopy.multiply(new BigDecimal(paintingDetails.getItemQuantity().getQuantity())));
+        return paintingDetails.getIsOriginalSelected() ? pricePerOriginal : (pricePerCopy.multiply(new BigDecimal(paintingDetails.getItemQuantity().getQuantity())));
     }
 
     @Override
