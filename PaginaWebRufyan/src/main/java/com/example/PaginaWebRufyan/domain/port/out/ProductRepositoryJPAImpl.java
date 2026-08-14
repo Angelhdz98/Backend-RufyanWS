@@ -54,7 +54,7 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
 
     @Override
     public ProductDomain retrieveProductById(Long productId) {
-        return findProductById(productId).orElseThrow(()->new ResourceNotFoundException("No se encontró el usuario con el Id: "+ productId));
+        return findProductById(productId).orElseThrow(()->new ResourceNotFoundException("No se encontró el producto con el Id: "+ productId));
     }
 
 

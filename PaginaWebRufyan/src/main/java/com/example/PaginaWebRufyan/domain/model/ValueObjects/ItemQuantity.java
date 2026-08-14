@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.ToString;
 
 
 @Getter
 @Embeddable
+@ToString
 public class ItemQuantity {
     private final Integer quantity;
     @JsonCreator
