@@ -1,5 +1,6 @@
 package com.example.PaginaWebRufyan.Service.ShoppingCartServiceAdapter;
 
+import com.example.PaginaWebRufyan.Exceptions.NoStockException;
 import com.example.PaginaWebRufyan.adapter.in.ShoppingCartController.CartItemCommand;
 import com.example.PaginaWebRufyan.domain.model.*;
 import com.example.PaginaWebRufyan.domain.model.ValueObjects.CartItemDetails;
@@ -15,11 +16,13 @@ public class AddCartItemService implements AddCartItemUseCase {
 
     private final ShoppingCartRepositoryPort shoppingCartRepositoryPort;
     private final ProductRepositoryPort productRepositoryPort;
+    private final CheckAvailabilityService checkAvailabilityService;
 
 
-    public AddCartItemService(ShoppingCartRepositoryPort shoppingCartRepositoryPort, ProductRepositoryPort productRepositoryPort) {
+    public AddCartItemService(ShoppingCartRepositoryPort shoppingCartRepositoryPort, ProductRepositoryPort productRepositoryPort, CheckAvailabilityService checkAvailabilityService) {
         this.shoppingCartRepositoryPort = shoppingCartRepositoryPort;
         this.productRepositoryPort = productRepositoryPort;
+        this.checkAvailabilityService = checkAvailabilityService;
     }
 
     @Override
@@ -38,7 +41,7 @@ public class AddCartItemService implements AddCartItemUseCase {
                   PaintingItemDetails paintingItemDetails = (PaintingItemDetails) cartItemDetails;
                   PaintingDomain paintingDomain = (PaintingDomain) productDomain;
                   PaintingItemDetails paintingItemDetail = (PaintingItemDetails) item.getDetails();
-                  yield (item.getProduct().equals(paintingDomain) && paintingItemDetails.getIsOriginalSelected().equals(paintingItemDetail.getIsOriginalSelected()));
+                  yield (item.getProduct().getId().equals(paintingDomain.getId()) && paintingItemDetails.getIsOriginalSelected().equals(paintingItemDetail.getIsOriginalSelected()));
               }
               case CLOTHING -> {
                   assert cartItemDetails instanceof ClothingItemDetails;
@@ -49,8 +52,13 @@ public class AddCartItemService implements AddCartItemUseCase {
               }
               case PRINT,   CUP -> false;
           });
+        if(!checkAvailabilityService.isStockAvailable(cartItemDomain)){
+            throw new NoStockException("No hay suficientes piezas " +
+                    "de stock para el pedido");
+        }
 
         ShoppingCartDomain shoppingCartDomain1 = shoppingCartRepositoryPort.updateShoppingCart(cartItemCommand.userId(), shoppingCartDomain);
+
 
         shoppingCartDomain1.addItem(cartItemDomain);
         return shoppingCartRepositoryPort.updateShoppingCart(cartItemCommand.userId(), shoppingCartDomain1);
