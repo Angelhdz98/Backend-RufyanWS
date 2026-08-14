@@ -3,6 +3,7 @@ package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import java.util.Map;
                 @JsonSubTypes.Type(value = StockableProductItemDetails.class, name = "STOCKABLE" )})
 
 @Getter
+@ToString
 public abstract class CartItemDetails {
     private final ItemQuantity itemQuantity;
 

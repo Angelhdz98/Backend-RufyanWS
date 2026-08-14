@@ -1,7 +1,7 @@
 package com.example.PaginaWebRufyan.domain.model.ValueObjects;
 
 import lombok.Getter;
-import lombok.ToString;
+
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -10,7 +10,6 @@ import java.util.Map;
 
 @Component
 @Getter
-@ToString
 public class PaintingItemDetails extends CartItemDetails {
     private final Boolean isOriginalSelected;
 
@@ -49,4 +48,8 @@ public class PaintingItemDetails extends CartItemDetails {
         return paintingItemDetails.getIsOriginalSelected()== isOriginalSelected;
     }
 
+    @Override
+    public String toString() {
+        return super.toString()+ "isOriginalSelected="+ isOriginalSelected.toString();
+    }
 }
