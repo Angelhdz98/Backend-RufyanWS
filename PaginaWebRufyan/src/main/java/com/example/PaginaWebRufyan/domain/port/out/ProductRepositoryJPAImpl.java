@@ -96,6 +96,11 @@ public class ProductRepositoryJPAImpl implements ProductRepositoryPort{
     }
 
     @Override
+    public ProductDomain getReferenceById(Long userId) {
+        return productMapper.toDomain(springDataProductRepository.getReferenceById(userId));
+    }
+
+    @Override
     public Page<ProductDomain> findFavoriteProducts(Pageable pageable) {
         return springDataProductRepository.findProductByIsFavorite(true, pageable).map(productMapper::toDomain);
     }

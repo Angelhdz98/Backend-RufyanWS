@@ -3,7 +3,6 @@ package com.example.PaginaWebRufyan.adapter.in.LikeControllers;
 import com.example.PaginaWebRufyan.Service.LikesServiceAdapter.FindPagedProductsLikedByUserService;
 import com.example.PaginaWebRufyan.Service.UserServiceAdapter.CurrentUserService;
 import com.example.PaginaWebRufyan.adapter.in.ProductDTO;
-import com.example.PaginaWebRufyan.domain.model.ProductDomain;
 import com.example.PaginaWebRufyan.domain.port.out.ProductDTOMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

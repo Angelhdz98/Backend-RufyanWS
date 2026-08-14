@@ -16,7 +16,10 @@ public class ShoppingCartDomainToDTO {
         Set<CartItemDTORecord> cartItemDTORecordSet = shoppingCartDomain.getItems().stream().map((CartItemDomain item) -> {
             Set<ImageDomain> images = item.getProduct().getImages();
             ImageDomain firstImage = images.stream().findFirst().orElseThrow(() -> new ResourceNotFoundException("El producto no tiene imagenes"));
-            return new CartItemDTORecord(item.getProduct().getName(), firstImage.url(), item.getDetails());
+            return new CartItemDTORecord(item.getId(),
+             item.getProduct().getId(),
+                    item.getProduct().getName(),
+                    firstImage.url(), item.getDetails(), item.getItemTotalAmount());
         }).collect(Collectors.toSet());
         return new ShoppingCartDTO(cartItemDTORecordSet,shoppingCartDomain.getSubtotalAmount());
     }

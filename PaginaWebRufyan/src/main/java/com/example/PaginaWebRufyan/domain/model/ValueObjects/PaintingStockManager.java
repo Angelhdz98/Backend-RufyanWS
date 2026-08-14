@@ -42,9 +42,8 @@ public class PaintingStockManager extends StockManagerBase {
     @Override
     public void decreaseStock(ProductDomain productDomain, CartItemDetails details) {
         PaintingItemDetails paintingDetails = (PaintingItemDetails) details;
-        PaintingDomain painting = (PaintingDomain)
-                productDomain;
-        if (paintingDetails.getIsOriginalSelected().getIsOriginalSelected()) {
+        PaintingDomain painting = (PaintingDomain)productDomain;
+        if (paintingDetails.getIsOriginalSelected()) {
             if (!isOriginalAvailable) {
                 throw new IllegalArgumentException("La pintura con id: " + productDomain.getId() + " no esta disponible original");
             }
@@ -67,7 +66,7 @@ public class PaintingStockManager extends StockManagerBase {
         PaintingItemDetails paintingDetails = (PaintingItemDetails) details;
         PaintingDomain painting = (PaintingDomain)
                 productDomain;
-        if (paintingDetails.getIsOriginalSelected().getIsOriginalSelected()) {
+        if (paintingDetails.getIsOriginalSelected()) {
             if (isOriginalAvailable) {
                 throw new IllegalArgumentException("La pintura original con id: " + productDomain.getId() + " ya se encuentra  disponible");
             }

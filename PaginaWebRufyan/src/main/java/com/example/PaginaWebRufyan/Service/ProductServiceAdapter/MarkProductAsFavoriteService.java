@@ -1,7 +1,6 @@
 package com.example.PaginaWebRufyan.Service.ProductServiceAdapter;
 
 import com.example.PaginaWebRufyan.domain.model.ProductDomain;
-import com.example.PaginaWebRufyan.domain.model.ProductDomainFactory;
 import com.example.PaginaWebRufyan.domain.port.out.ProductRepositoryPort;
 
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MarkProductAsFavoriteService {
 private final ProductRepositoryPort productRepositoryPort;
 
-    public MarkProductAsFavoriteService(ProductRepositoryPort productRepositoryPort, ProductDomainFactory productDomainFactory) {
+    public MarkProductAsFavoriteService(ProductRepositoryPort productRepositoryPort) {
         this.productRepositoryPort = productRepositoryPort;
     }
 
