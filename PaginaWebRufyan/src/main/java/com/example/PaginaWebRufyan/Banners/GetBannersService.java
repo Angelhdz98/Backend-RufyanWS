@@ -17,7 +17,14 @@ public class GetBannersService {
         this.bannerMapper = bannerMapper;
     }
     public ArrayList<BannerDTO> getBanners(){
-        List<BannerDTO> bannerDTOList =
-                bannerJPARepository.findAll().stream().map(bannerMapper::toDTO).toList();return new ArrayList<>(bannerDTOList);
+
+        List<BannerEntity> allBanners = bannerJPARepository.findAll();
+        // Filtrar solo los banners que NO sean estáticos
+        List<BannerDTO> bannerDTOList = allBanners.stream()
+                .filter(banner -> !banner.getIsStatic())
+                .map(bannerMapper::toDTO)
+                .toList();
+
+        return  new ArrayList<>(bannerDTOList);
     }
 }
