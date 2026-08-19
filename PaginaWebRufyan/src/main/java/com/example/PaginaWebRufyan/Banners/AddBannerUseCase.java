@@ -6,5 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface AddBannerUseCase {
    BannerDTO addBanner(
                        AddBannerDTO addBannerDTO,
-                       MultipartFile imageFile);
+                       MultipartFile imageFile,
+                       Boolean isStatic);
 }

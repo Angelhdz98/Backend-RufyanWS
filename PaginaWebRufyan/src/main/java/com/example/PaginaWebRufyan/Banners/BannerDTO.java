@@ -4,5 +4,6 @@ public record BannerDTO(Long id,
                         Long imageId,
                         String goTo,
                         String imageUrl,
-                        String bannerName) {
+                        String bannerName,
+                        String message) {
 }

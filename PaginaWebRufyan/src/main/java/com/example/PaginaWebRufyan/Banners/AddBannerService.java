@@ -22,7 +22,8 @@ public class AddBannerService implements AddBannerUseCase {
 
     @Override
     public BannerDTO addBanner(AddBannerDTO addBannerDTO,
-                               MultipartFile file) {
+                               MultipartFile file,
+                               Boolean isStatic) {
 
         Set<ImageDomain> imageDomains =
                 imageProcessor.processImages(List.of(file),
@@ -36,10 +37,12 @@ public class AddBannerService implements AddBannerUseCase {
         BannerEntity newBanner =
                 bannerRepo.save(new BannerEntity(0L,
                         bannerImage.id(), addBannerDTO.bannerName(),
-                addBannerDTO.goTo(), bannerImage.url()));
+                addBannerDTO.goTo(), bannerImage.url(),
+                        addBannerDTO.message(), isStatic));
 
         return new BannerDTO(newBanner.getId(),bannerImage.id(),
-                newBanner.getGoToLink(), bannerImage.url(), newBanner.getBannerName());
+                newBanner.getGoToLink(), bannerImage.url(),
+                newBanner.getBannerName(), newBanner.getMessage());
             }
 
 }

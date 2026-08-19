@@ -23,7 +23,7 @@ public class AddBannerController {
     @PostMapping(value= "/banners",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BannerDTO> addBanner(@RequestPart("imageFile") MultipartFile imageFile, @RequestPart("addBannerCommand") AddBannerDTO addBannerCommand) {
 
-        return ResponseEntity.ok(addBannerService.addBanner(addBannerCommand, imageFile));
+        return ResponseEntity.ok(addBannerService.addBanner(addBannerCommand, imageFile, false));
     }
 
 }
