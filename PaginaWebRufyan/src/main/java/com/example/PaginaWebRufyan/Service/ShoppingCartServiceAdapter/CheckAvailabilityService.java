@@ -17,8 +17,8 @@ public class CheckAvailabilityService {
 
                 PaintingItemDetails paintingDetails =
                         (PaintingItemDetails) cartItemDomain.getDetails();
-                if(paintingDetails.getIsOriginalSelected()&& stockManager.getIsOriginalAvailable()){
-                    return true;
+                if(paintingDetails.getIsOriginalSelected() && !stockManager.getIsOriginalAvailable()){
+                    return false;
                 }
 
                 return stockManager.getStockCopies() >= cartItemDomain.getDetails().getItemQuantity().getQuantity();
